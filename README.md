@@ -41,6 +41,7 @@ Output goes to `runs/<timestamp>/<instance>/<task>/`: `task.json`, `fixture.json
 | `harness/` | runner, verifier context, fixtures, task set |
 | `tests/` | hand-written tests only |
 | `GAP_REPORT.md` | week-one gap report (benchmark: Carbon) |
+| `docs/ARCHITECTURE.md` | how the agent and harness fit together, and where to change things |
 | `docs/BUGS_FILED.md` | platform bugs filed by the team |
 
 ## How the agent stays safe in a shared book
