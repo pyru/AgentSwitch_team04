@@ -49,6 +49,26 @@ tenant to one pseudo-user.
 B8 (whether `BugReport.create` honours a spoofed `reporter`) remains unconfirmed and is not filed, because
 confirming it would write a row attributed to another team into the shared triage queue.
 
-Distinct defects: about 13 (B1a, B2a and B5a are follow-ups or duplicates).
+| B16 | Suryodaya | ae363fd5-de93-466e-9cdb-c4503c6f2617 | M3 incomplete: SubcontractOrder page still offers Approve, Reject, Cancel and delete to the Production seat | — | Medium | Filed 21 Sep |
+| B17 | Suryodaya | de7b45d3-8b00-4b12-9253-db33df2c1fe3 | SubcontractOrder detail labels `vendor_id` as "Customer", and labels both warehouse fields "Store" | — | Medium | Filed 21 Sep |
+
+**B16 detail.** Filed as a follow-up to M3, not a new defect. M3's fix removed the admin-only transitions
+from `tools/list` and that part holds, but the web UI was not covered, so the same permission is still
+offered through the other door. Verified unavailable on three doors: `SubcontractOrder.permissions` gives
+`manufacturing_user` only read/create/write/submit; our MCP catalogue has only
+`SubcontractOrder.approval.submit` (submit *for* approval); and `ApprovalRequest.permissions` omits
+`manufacturing_user` entirely, with `/api/ApprovalRequest` and `/api/ApprovalPolicy` both 403.
+
+**B17 detail.** `SubcontractOrder` has no customer field — the value shown as "Customer" is `vendor_id`,
+which names the wrong side of the transaction on an order whose whole point is sending material out. The
+two fields both rendered "Store" are `vendor_warehouse_id` and `target_warehouse_id`.
+
+**Considered and not filed.** The Keystone agent dashboard tile reads "SCHEDULED TASKS 0" beside a list of
+2 (both `AgentTask` rows are `paused`, confirmed over REST) — real but cosmetic, and likely to be triaged
+into the known Keystone AgentTask item. The Keystone dashboard's "TOOL CALLS 96" happens to equal
+Suryodaya's `AgentTask` row count; almost certainly coincidence, and we will not file a cross-tenant claim
+we cannot substantiate.
+
+Distinct defects: about 15 (B1a, B2a and B5a are follow-ups or duplicates).
 
 Status from the class Bug Board, 17 Sep: the first 10 reports were all accepted; 8 live in Release 1 (17 Sep 2026, 18:40 IST), 2 fixed and shipping in the next release. Re-tested live on both instances the same day. B10-B12 were filed after the 14:35 cutoff, so they are queued for the next release and carry no board id yet.
