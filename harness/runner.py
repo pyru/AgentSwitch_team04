@@ -13,6 +13,7 @@ import email.utils
 import importlib
 import json
 import os
+import time
 import traceback
 import urllib.error
 import urllib.request
@@ -28,11 +29,24 @@ from .verify import Verdict, VerifyContext, normalise
 TASK_DIR = Path(__file__).parent / "tasks"
 
 
+COLLISION_WAIT_SECONDS = 0.5
+
+
 def _new_run_root(base: Path) -> Path:
     # Run output is grading evidence, and reusing a collision silently produces merged artifacts that still parse.
-    root = base / dt.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
-    root.mkdir(parents=True)
-    return root
+    # datetime.now() resolves to ~16ms on Windows, so %f alone does not separate two runs started in the same tick.
+    # Wait for the clock to advance rather than reusing a directory or suffixing a name the checker cannot glob.
+    # A clock that never advances exhausts the budget and still raises, so a genuine collision is never absorbed.
+    deadline = time.monotonic() + COLLISION_WAIT_SECONDS
+    while True:
+        root = base / dt.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
+        try:
+            root.mkdir(parents=True)
+            return root
+        except FileExistsError:
+            if time.monotonic() >= deadline:
+                raise
+            time.sleep(0.005)
 
 
 def _write(path: Path, data) -> None:
