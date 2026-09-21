@@ -12,6 +12,32 @@ from prod_agent import config
 from prod_agent.mcp_client import RestClient
 
 
+NULL_LIKE_STRINGS = {"", "n/a", "na", "nil", "none", "null"}
+TOP_LEVEL_NULLABLE_FIELDS = ("work_order", "is_late", "currency", "cost", "refusal_reason")
+NESTED_NULLABLE_FIELDS = {
+    "rescheduled": ("new_start", "new_end"),
+    "escalations": ("number", "assignee", "reason_code"),
+}
+
+
+def _normalise_null_like_strings(payload: dict) -> None:
+    for field in TOP_LEVEL_NULLABLE_FIELDS:
+        value = payload.get(field)
+        if field in payload and isinstance(value, str) and value.strip().casefold() in NULL_LIKE_STRINGS:
+            payload[field] = None
+    for container, fields in NESTED_NULLABLE_FIELDS.items():
+        items = payload.get(container)
+        if not isinstance(items, list):
+            continue
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            for field in fields:
+                value = item.get(field)
+                if field in item and isinstance(value, str) and value.strip().casefold() in NULL_LIKE_STRINGS:
+                    item[field] = None
+
+
 class Verdict(str, enum.Enum):
     APPROVE = "approve"
     REVISE = "revise"
@@ -49,6 +75,8 @@ class VerifyContext:
             if content.startswith(config.FINDING_PREFIX):
                 payload = json.loads(content[len(config.FINDING_PREFIX):])
                 if payload.get("run_id") == self.run_id:
+                    # Some models emit JSON null as a quoted string in otherwise valid findings.
+                    _normalise_null_like_strings(payload)
                     return {**payload, "_agent_memory_id": row["id"], "_created_by": row.get("created_by")}
         return None
 

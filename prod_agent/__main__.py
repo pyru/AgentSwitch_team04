@@ -16,9 +16,9 @@ def main():
     ap.add_argument("--escalate", action="store_true", help="allow the agent to raise one escalation to a person")
     args = ap.parse_args()
 
-    run_dir = config.ROOT / "runs" / "adhoc" / f"{dt.datetime.now():%Y%m%d-%H%M%S}-{args.instance}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    trace_file = (run_dir / "trace.jsonl").open("a", encoding="utf-8")
+    run_dir = config.ROOT / "runs" / "adhoc" / f"{dt.datetime.now():%Y%m%d-%H%M%S-%f}-{args.instance}"
+    run_dir.mkdir(parents=True, exist_ok=False)
+    trace_file = (run_dir / "trace.jsonl").open("x", encoding="utf-8")
 
     def trace(event):
         trace_file.write(json.dumps(event, default=str) + "\n")

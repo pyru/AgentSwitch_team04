@@ -7,8 +7,11 @@ Written with Claude (AI-assisted).
 """
 import ast
 import json
+import os
 import subprocess
 import sys
+import tempfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -23,6 +26,9 @@ def check(name, ok, detail=""):
 
 def main():
     offline = "--offline" in sys.argv
+    if os.environ.get("AGENT_OFFLINE") == "1" and not offline:
+        print("ERROR: AGENT_OFFLINE=1 requires --offline; pass --offline or unset AGENT_OFFLINE")
+        return 1
 
     print("\n== A. Gap report")
     gap = ROOT / "GAP_REPORT.md"
@@ -87,9 +93,40 @@ def main():
     check("hand-written tests exist in tests/", n_tests > 0, f"{n_tests} test functions (10 points each if hand-written)")
     labelled = [f.name for f in test_files if "claude" in f.read_text(encoding="utf-8").lower()]
     check("no AI-authorship label inside tests/", not labelled, ", ".join(labelled))
+    offline_skipped = None
     if n_tests:
-        rc = subprocess.run([sys.executable, "-m", "pytest", "tests", "-q"], cwd=ROOT).returncode
-        check("pytest passes", rc == 0)
+        env = os.environ.copy()
+        if offline:
+            env["AGENT_OFFLINE"] = "1"
+        with tempfile.TemporaryDirectory() as report_dir:
+            report = Path(report_dir) / "report.xml"
+            rc = subprocess.run(
+                [sys.executable, "-m", "pytest", "tests", "-q", f"--junitxml={report}"],
+                cwd=ROOT,
+                env=env,
+            ).returncode
+            if rc != 0:
+                check("pytest passes", False, f"pytest exited with code {rc}")
+            elif offline:
+                try:
+                    suite = ET.parse(report).getroot().find("testsuite")
+                    if suite is None:
+                        raise ValueError("testsuite element missing")
+                    tests = int(suite.attrib["tests"])
+                    skipped = int(suite.attrib["skipped"])
+                except (OSError, ET.ParseError, KeyError, TypeError, ValueError) as exc:
+                    check("pytest report readable", False, f"pytest report could not be read: {exc}")
+                else:
+                    if skipped > 0:
+                        offline_skipped = skipped
+                        print(
+                            f"skip  pytest: {tests - skipped} ran, {skipped} skipped "
+                            "(live tenant fixtures; AGENT_OFFLINE=1)"
+                        )
+                    else:
+                        check("offline gate engaged", False, "pytest report recorded zero skipped tests")
+            else:
+                check("pytest passes", True)
 
     print("\n== E. Bugs")
     if offline:
@@ -114,6 +151,12 @@ def main():
                 leaked.append(str(p.relative_to(ROOT)))
     check("no API key or password in committable files", not leaked, ", ".join(leaked))
 
+    if offline:
+        if offline_skipped:
+            print(f"\nThis is not full submission verification: {offline_skipped} live graded tests and "
+                  "section E bug reports were skipped.")
+        else:
+            print("\nThis is not full submission verification: section E bug reports were skipped.")
     print(f"\n{sum(results)}/{len(results)} checks passed")
     return 0 if all(results) else 1
 

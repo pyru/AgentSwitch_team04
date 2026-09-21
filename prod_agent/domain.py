@@ -572,7 +572,7 @@ def withdraw_escalation(mcp: McpClient, escalation_id: str, note: str) -> dict:
 
 def record_finding(mcp: McpClient, run_id: str, finding: dict) -> dict:
     """Persist the agent's conclusion so verifiers read the database, not the reply text."""
-    payload = {"run_id": run_id, "recorded_at": dt.datetime.now(dt.timezone.utc).isoformat(), **finding}
+    payload = {"run_id": run_id, "recorded_at": dt.datetime.now(dt.UTC).isoformat(), **finding}
     row = mcp.call("AgentMemory.create", {
         "content": config.FINDING_PREFIX + json.dumps(payload, sort_keys=True),
         "category": "fact", "source": "system", "importance": 0.5, "is_active": True,

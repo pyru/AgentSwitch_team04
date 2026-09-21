@@ -61,7 +61,7 @@ def late_draft_chain(mcp: McpClient) -> dict:
                                        "planned_end_date": end.isoformat()})
         fresh = mcp.call("WorkOrder.get", {"id": wo["id"]})
         out[role] = {"id": fresh["id"], "number": fresh["number"], "status": fresh["status"],
-                     "bom": boms[role].get("number"),
+                     "bom": boms[role].get("number"), "qty": fresh.get("qty"),
                      "planned_start_date": fresh.get("planned_start_date"), "planned_end_date": fresh.get("planned_end_date")}
     out["write_ids"] = [out["upstream"]["id"], out["downstream"]["id"]]
     return out

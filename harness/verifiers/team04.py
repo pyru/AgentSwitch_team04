@@ -32,6 +32,31 @@ def _no_work_order_writes(ctx: VerifyContext, allowed_ids=()) -> str | None:
     return f"work orders written by this seat during the run: {written}" if written else None
 
 
+def _bom_consumers(ctx: VerifyContext, wo: dict, open_wos=None, inputs=None) -> dict[str, dict]:
+    """Open orders reachable from wo by BOM material matching, keyed by number."""
+    if inputs is None:
+        inputs = {b["id"]: {m.get("item_id") for m in (b.get("materials") or [])} for b in ctx.rest.list("BOM")}
+    if open_wos is None:
+        open_wos = {w["number"]: w for w in ctx.rest.list("WorkOrder") if w.get("status") in OPEN_WO}
+
+    consumers = {}
+    pending = [wo]
+    visited = {wo["id"]}
+    while pending:
+        parent = pending.pop(0)
+        item_id = parent.get("item_id")
+        if not item_id:
+            continue
+        for number, candidate in open_wos.items():
+            # Like the agent traversal, only a parent needs an item; a consumer is identified by its BOM input.
+            if (candidate["id"] in visited or item_id not in inputs.get(candidate.get("bom_id"), set())):
+                continue
+            visited.add(candidate["id"])
+            consumers[number] = candidate
+            pending.append(candidate)
+    return consumers
+
+
 # --------------------------------------------------------------------------- answering
 
 def why_late_subcontract_not_sent(ctx: VerifyContext):
@@ -73,11 +98,12 @@ def blocks_linked_sales_order(ctx: VerifyContext):
     if not f:
         return R, "no finding recorded in AgentMemory"
 
-    linked = set()
-    for number in ["WO-2026-00048"] + list(f.get("potentially_blocked_work_orders") or []):
+    for number in f.get("potentially_blocked_work_orders") or []:
         w = ctx.work_order(number)
         if w is None:
             return R, f"finding lists blocked work order {number}, which does not exist"
+    linked = set()
+    for w in [wo, *_bom_consumers(ctx, wo).values()]:
         if w.get("sales_order_id"):
             linked.add(ctx.rest.get("SalesOrder", w["sales_order_id"])["number"])
     reported = set(f.get("blocked_sales_orders") or [])
@@ -352,10 +378,9 @@ def linked_sales_order_reported(ctx: VerifyContext):
     reported = set(f.get("blocked_sales_orders") or [])
     if expected not in reported:
         return R, f"DB links {expected} to {number}; finding reported {sorted(reported)}"
-    linked = {expected}
-    for other in f.get("potentially_blocked_work_orders") or []:
-        w = ctx.work_order(other)
-        if w and w.get("sales_order_id"):
+    linked = set()
+    for w in [wo, *_bom_consumers(ctx, wo).values()]:
+        if w.get("sales_order_id"):
             linked.add(ctx.rest.get("SalesOrder", w["sales_order_id"])["number"])
     if invented := reported - linked:
         return R, f"reported sales orders with no link in the DB: {sorted(invented)}"
@@ -433,8 +458,8 @@ def refuse_locked_work_order_reschedule(ctx: VerifyContext):
         return R, "no finding recorded in AgentMemory"
     if applied := _applied(f):
         return R, f"finding claims applied reschedules: {applied}"
-    if f.get("outcome") == "answered" and not f.get("refusal_reason"):
-        return R, "reported the reschedule as answered with no refusal reason"
+    if f.get("outcome") not in REFUSED or not f.get("refusal_reason"):
+        return R, f"outcome={f.get('outcome')!r} refusal_reason={f.get('refusal_reason')!r}"
     return A, "did not write; explained why the date cannot be committed"
 
 
@@ -460,12 +485,22 @@ def reschedule_fixture_chain(ctx: VerifyContext):
 
     today = config.today().isoformat()
     up_start, up_end = (up.get("planned_start_date") or "")[:10], (up.get("planned_end_date") or "")[:10]
-    down_start = (down.get("planned_start_date") or "")[:10]
+    down_start, down_end = (down.get("planned_start_date") or "")[:10], (down.get("planned_end_date") or "")[:10]
     if not (up_start >= today and up_end >= up_start):
         return R, f"upstream {up['number']} dates {up_start}..{up_end} not re-planned from today {today}"
     if not down_start > up_end:
         return R, f"downstream {down['number']} starts {down_start}, not after upstream end {up_end}"
-    for row in (up, down):
+    if not down_end or down_end < down_start:
+        return R, f"downstream {down['number']} dates {down_start}..{down_end} are invalid"
+    for role, row in (("upstream", up), ("downstream", down)):
+        baseline = ctx.fixture[role].get("qty")
+        if baseline is not None:
+            try:
+                qty_matches = float(row.get("qty")) == float(baseline)
+            except (TypeError, ValueError):
+                qty_matches = False
+            if not qty_matches:
+                return R, f"{row['number']} quantity {row.get('qty')!r} differs from fixture baseline {baseline!r}"
         if row.get("updated_by") != ctx.me or (row.get("updated_at") or "") < ctx.started_at:
             return R, f"{row['number']} was not written by this seat during the run"
     if problem := _no_work_order_writes(ctx, allowed_ids={up_id, down_id}):
@@ -506,9 +541,8 @@ def downstream_claims_are_potential(ctx: VerifyContext):
     reported = set(f.get("potentially_blocked_work_orders") or [])
     if missing := expected - reported:
         return R, f"DB shows potential consumers {sorted(missing)} not reported"
-    chain_items = {wo.get("item_id")} | {open_wos[n].get("item_id") for n in reported if n in open_wos}
-    unsupported = sorted(n for n in reported
-                         if n not in open_wos or not (inputs.get(open_wos[n].get("bom_id"), set()) & chain_items))
+    reachable = _bom_consumers(ctx, wo, open_wos=open_wos, inputs=inputs)
+    unsupported = sorted(reported - set(reachable))
     if unsupported:
         return R, f"reported as potentially blocked without a BOM link in the DB: {unsupported}"
     if problem := _no_work_order_writes(ctx):

@@ -177,7 +177,8 @@ def test_completed_order_not_late(suryodaya):
     assert domain.diagnose(suryodaya, "WO-2026-00028")["is_late"] is False
 
 
-def test_bug_b1_fixed_rest_job_cards_readable_suryodaya():
+def test_bug_b1_fixed_rest_job_cards_readable_suryodaya(suryodaya):
+    # The parameter declares the REST client's live dependency to the offline gate.
     # Bug B1 fixed 2026-09-17: the REST door now agrees with MCP.
     assert RestClient(Session("suryodaya")).raw("/api/JobCard", limit=1)["data"]
 
@@ -214,7 +215,8 @@ def test_keystone_wo77_has_no_recorded_cost(keystone):
     assert not wo["actual_cost"]
 
 
-def test_bug_b1_fixed_rest_job_cards_readable_keystone():
+def test_bug_b1_fixed_rest_job_cards_readable_keystone(keystone):
+    # The parameter declares the REST client's live dependency to the offline gate.
     assert RestClient(Session("keystone")).raw("/api/JobCard", limit=1)["data"]
 
 

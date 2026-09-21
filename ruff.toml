@@ -1,0 +1,31 @@
+# Correctness-only linting. Style and formatting rules are deliberately off:
+# the codebase uses ~120-char lines and double quotes, and reformatting it
+# would bury real changes in noise.
+
+target-version = "py311"
+line-length = 120
+
+[lint]
+select = [
+    "F",      # pyflakes: undefined names, unused imports/variables
+    "E4",     # import errors
+    "E7",     # syntax-adjacent mistakes (comparisons to None/True, etc.)
+    "E9",     # syntax errors and IO errors
+    "B",      # flake8-bugbear: likely bugs (mutable defaults, unused loop vars)
+    "UP",     # pyupgrade: outdated syntax for the target version
+]
+ignore = [
+    "E501",   # line length: existing code runs to ~140 chars
+    "B008",   # function call in default arg: used intentionally here
+    "UP042",  # str+Enum -> StrEnum: an unsafe fix on graded code. Verdict is
+              # serialised via explicit .value, so the current form is correct.
+]
+
+[format]
+# Not used; no formatter is run on this repo.
+quote-style = "double"
+
+[lint.per-file-ignores]
+# tests/ is human-authored and graded; its deliberate mid-file section imports
+# are not defects and the file must not be edited.
+"tests/*" = ["E402", "F811", "F401"]

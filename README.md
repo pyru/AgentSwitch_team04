@@ -11,6 +11,23 @@ pip install -r requirements.txt
 cp .env.example .env   # fill in both passwords and OPENAI_API_KEY; .env is git-ignored
 ```
 
+By default the loop talks to OpenAI (`OPENAI_MODEL`, default `gpt-4.1`). To run it against
+a model hosted on OpenRouter instead, set all three in `.env`:
+
+```bash
+LLM_PROVIDER=openrouter
+OPENROUTER_API_KEY=...
+# the model is a vendor/model slug; a bare gpt-4.1 is not a valid id on OpenRouter
+OPENROUTER_MODEL=anthropic/claude-sonnet-4.5
+```
+
+`.env` is parsed by splitting on the first `=` and nothing else, so a trailing `#` comment
+becomes part of the value. Keep comments on their own line.
+
+Nothing falls back across providers, so leaving `LLM_PROVIDER` unset keeps the OpenAI path
+exactly as it was. Whichever model you pick must support tool calling and a forced
+`tool_choice` — the loop relies on both to get a finding into the database.
+
 ## Run the agent
 
 ```bash

@@ -1,9 +1,47 @@
+# Secrets and local config
 .env
+.env.local
 .tokens/
+
+# Run output
 runs/
-__pycache__/
-*.pyc
-.pytest_cache/
+
 # Unfiled security findings: keep out of the public repo until reported
 notes/bug_candidates.md
+
+# Local working drafts: not part of the submission
+drafts/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test, coverage and type-check caches
 .pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.tox/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
