@@ -19,6 +19,17 @@ All reports were filed through `POST /api/bug-report` as team04 (Production seat
 | B11 | Suryodaya (also Keystone) | 64772b8a-4d5e-4cbb-b245-a45b7c995f21 | Every `.delete` tool returns `{"deleted": true}` for an id that does not exist | — | Medium | Filed 17 Sep, after cutoff |
 | B12 | Suryodaya (also Keystone) | 4a41704c-7308-4611-bf8b-da08a2446fee | `finite_schedule` `recorded_downtime` cites downtime linked to neither the order nor the cause's workstation (follow-up to M4) | — | Medium | Filed 17 Sep, after cutoff |
 
-Distinct defects: about 10 (B1a, B2a and B5a are follow-ups or duplicates).
+| B13 | Suryodaya | d7263aae-f93e-4501-b55d-8d62ce126703 | SalesOrder read lost by the Production seat on 20 Sep; `sales_viewer` still granted in `/api/auth/me` but absent from every permission map | — | High | Filed 21 Sep |
+| B13a | Keystone | b961b3a9-036f-4617-9793-2c3575588f5f | Same defect, filed separately on Keystone | — | High | Filed 21 Sep |
+
+**B13 detail.** Between 07:52 and 08:35 IST on 2026-09-20, mid-harness-run, `SalesOrder` stopped being
+readable from the Production seat on both instances: REST 403 on the collection *and* on 49 distinct ids
+taken from `WorkOrder.sales_order_id`, and every `SalesOrder.*` tool disappeared from `tools/list`. The
+entity is still in `/api/schemas`, and `/api/auth/me` still grants `sales_viewer` — but no entity's
+permission map references that role, so it now grants nothing anywhere. Same class as B1. In the same
+window the seat's tool count went 301 -> 310 and the schema entity count 424 -> 428, so a release landed.
+Cost: 3 of 30 harness tasks unevaluated and 2 of 40 hand-written tests failing, all customer-impact.
+
+Distinct defects: about 11 (B1a, B2a and B5a are follow-ups or duplicates).
 
 Status from the class Bug Board, 17 Sep: the first 10 reports were all accepted; 8 live in Release 1 (17 Sep 2026, 18:40 IST), 2 fixed and shipping in the next release. Re-tested live on both instances the same day. B10-B12 were filed after the 14:35 cutoff, so they are queued for the next release and carry no board id yet.
