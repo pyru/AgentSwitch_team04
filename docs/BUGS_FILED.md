@@ -30,6 +30,25 @@ permission map references that role, so it now grants nothing anywhere. Same cla
 window the seat's tool count went 301 -> 310 and the schema entity count 424 -> 428, so a release landed.
 Cost: 3 of 30 harness tasks unevaluated and 2 of 40 hand-written tests failing, all customer-impact.
 
-Distinct defects: about 11 (B1a, B2a and B5a are follow-ups or duplicates).
+| B14 | Suryodaya + Keystone | a89f99b5-9496-4510-9d96-280409dcafb3 / 7eb3b883-6fd4-4156-aabf-a35a1e8c6480 | Invalid `sort_order` silently accepted and treated as `asc`, while invalid `sort_by` correctly 400s | — | Medium | Filed 21 Sep |
+| B15 | Suryodaya | 40e36812-246a-4920-abe5-bf14d76d516d | `BugReport.created_by` is always `"system"`; every other entity records the real user id | — | Medium | Filed 21 Sep |
+
+**B14 detail.** `sort_order=sideways` returns 200 and ascending rows, identical to `sort_order=asc`, on both
+instances. `sort_by=nonexistent_field` correctly returns 400, and `limit=-1 / 99999 / abc` and `offset=-5`
+all return 422, so this one value is the gap. It matters because "most recent N" on an agent-driven platform
+is `sort_by=created_at&sort_order=desc&limit=N`: a wrong enum silently returns the OLDEST rows with no error
+the caller can detect.
+
+**B15 detail.** Rows we create on `WorkOrder` (9) and `AgentMemory` (192) carry our real user id in
+`created_by`. All 13 of our `BugReport` rows carry `"system"`, with `updated_by` null. Attribution survives
+only in the free-text `reporter` column, so anything joining on `created_by` attributes every report in the
+tenant to one pseudo-user.
+
+**Closed without filing.** B7 (every team could read every other team's bug reports via the generic
+`BugReport` API) was re-tested on 21 Sep and is **fixed**: `/api/BugReport` now returns only our own 13 rows.
+B8 (whether `BugReport.create` honours a spoofed `reporter`) remains unconfirmed and is not filed, because
+confirming it would write a row attributed to another team into the shared triage queue.
+
+Distinct defects: about 13 (B1a, B2a and B5a are follow-ups or duplicates).
 
 Status from the class Bug Board, 17 Sep: the first 10 reports were all accepted; 8 live in Release 1 (17 Sep 2026, 18:40 IST), 2 fixed and shipping in the next release. Re-tested live on both instances the same day. B10-B12 were filed after the 14:35 cutoff, so they are queued for the next release and carry no board id yet.
