@@ -69,9 +69,31 @@ into the known Keystone AgentTask item. The Keystone dashboard's "TOOL CALLS 96"
 Suryodaya's `AgentTask` row count; almost certainly coincidence, and we will not file a cross-tenant claim
 we cannot substantiate.
 
-Distinct defects: about 15 (B1a, B2a and B5a are follow-ups or duplicates).
+Distinct defects: about 17 (B1a, B2a and B5a are follow-ups or duplicates).
 
 Status from the class Bug Board, 17 Sep: the first 10 reports were all accepted; 8 live in Release 1 (17 Sep 2026, 18:40 IST), 2 fixed and shipping in the next release. Re-tested live on both instances the same day. B10-B12 were filed after the 14:35 cutoff, so they are queued for the next release and carry no board id yet.
+
+| B18 | Suryodaya | 06a8c178-e905-4ec5-8727-a6744bbbe8a6 | Dashboard reports ON-TIME 100% while 65 of 83 open work orders are past due; Schedule page says "Late 57" | — | High | Filed 21 Sep |
+| B19 | Suryodaya | 5b24a45e-2804-469c-9c56-4460dc8891ab | `WS-2026-00010` declares a 44-hour working day; 5 of 14 workstations are item rows with item prices as hour rates | — | High | Filed 21 Sep |
+
+**B18 detail.** The tile's own denominator, "46 of 46", is the completed set; all 83 open orders are excluded,
+65 of them already overdue (worst: WO-2026-00047 due 2026-02-25). Counted over REST on 21 Sep: 129 total,
+46 completed (none finished late), 83 open, 65 open and past `planned_end_date`. The Schedule page reports
+"Late 57" on the same login and data, so the app contradicts itself on its headline KPI.
+
+**B19 detail.** `working_hours_per_day = 44` is accepted with no validation, and the Schedule page states it
+places job cards on "its workstation's declared daily minutes" — so the field feeds the finite scheduler,
+making 2,640 min/day of capacity possible against a 1,440-minute ceiling. Separately, WS-2026-00010..00014
+are measuring-tool item rows (names carrying units of issue — Pair/Set/Kg/Mtr, hour rates 22,638–90,932
+against 900–2,400 for the nine real machines, assets including a Dell server and an air compressor).
+
+**Considered and not filed from the same sweep.** All 100 Suryodaya routings are mis-seeded (names are item
+names with units; descriptions hold quality-disposition text from another entity) — real, but likely to be
+absorbed into the known "odd demo names" item. Keystone BOM names say `rev A`/`rev B` while every `revision`
+field is 1.0 — Low. KPI tiles on Subcontracting and Cost Analysis aggregate only the visible page
+("OVERDUE 25 of 25 shown" beside "TOTAL 100 all 100") — misleading but self-disclosed. Overhead Rates shows
+₹0.00 for every workstation with no explanation while the dashboard's OEE tile says "Not available in your
+permission scope"; possibly the same class as S29, but we did not confirm the cause and will not file a guess.
 
 ## Board acceptance, 21 September
 
