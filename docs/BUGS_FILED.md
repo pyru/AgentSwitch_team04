@@ -19,7 +19,7 @@ All reports were filed through `POST /api/bug-report` as team04 (Production seat
 | B11 | Suryodaya (also Keystone) | 64772b8a-4d5e-4cbb-b245-a45b7c995f21 | Every `.delete` tool returns `{"deleted": true}` for an id that does not exist | — | Medium | Filed 17 Sep, after cutoff |
 | B12 | Suryodaya (also Keystone) | 4a41704c-7308-4611-bf8b-da08a2446fee | `finite_schedule` `recorded_downtime` cites downtime linked to neither the order nor the cause's workstation (follow-up to M4) | — | Medium | Filed 17 Sep, after cutoff |
 
-| B13 | Suryodaya | d7263aae-f93e-4501-b55d-8d62ce126703 | SalesOrder read lost by the Production seat on 20 Sep; `sales_viewer` still granted in `/api/auth/me` but absent from every permission map | — | High | Filed 21 Sep |
+| B13 = board **N140** | Suryodaya | d7263aae-f93e-4501-b55d-8d62ce126703 | SalesOrder read lost by the Production seat on 20 Sep; `sales_viewer` still granted in `/api/auth/me` but absent from every permission map | — | High | Filed 21 Sep |
 | B13a | Keystone | b961b3a9-036f-4617-9793-2c3575588f5f | Same defect, filed separately on Keystone | — | High | Filed 21 Sep |
 
 **B13 detail.** Between 07:52 and 08:35 IST on 2026-09-20, mid-harness-run, `SalesOrder` stopped being
@@ -30,8 +30,8 @@ permission map references that role, so it now grants nothing anywhere. Same cla
 window the seat's tool count went 301 -> 310 and the schema entity count 424 -> 428, so a release landed.
 Cost: 3 of 30 harness tasks unevaluated and 2 of 40 hand-written tests failing, all customer-impact.
 
-| B14 | Suryodaya + Keystone | a89f99b5-9496-4510-9d96-280409dcafb3 / 7eb3b883-6fd4-4156-aabf-a35a1e8c6480 | Invalid `sort_order` silently accepted and treated as `asc`, while invalid `sort_by` correctly 400s | — | Medium | Filed 21 Sep |
-| B15 | Suryodaya | 40e36812-246a-4920-abe5-bf14d76d516d | `BugReport.created_by` is always `"system"`; every other entity records the real user id | — | Medium | Filed 21 Sep |
+| B14 = board **N144** | Suryodaya + Keystone | a89f99b5-9496-4510-9d96-280409dcafb3 / 7eb3b883-6fd4-4156-aabf-a35a1e8c6480 | Invalid `sort_order` silently accepted and treated as `asc`, while invalid `sort_by` correctly 400s | — | Medium | Filed 21 Sep |
+| B15 = board **N145** | Suryodaya | 40e36812-246a-4920-abe5-bf14d76d516d | `BugReport.created_by` is always `"system"`; every other entity records the real user id | — | Medium | Filed 21 Sep |
 
 **B14 detail.** `sort_order=sideways` returns 200 and ascending rows, identical to `sort_order=asc`, on both
 instances. `sort_by=nonexistent_field` correctly returns 400, and `limit=-1 / 99999 / abc` and `offset=-5`
@@ -49,8 +49,8 @@ tenant to one pseudo-user.
 B8 (whether `BugReport.create` honours a spoofed `reporter`) remains unconfirmed and is not filed, because
 confirming it would write a row attributed to another team into the shared triage queue.
 
-| B16 | Suryodaya | ae363fd5-de93-466e-9cdb-c4503c6f2617 | M3 incomplete: SubcontractOrder page still offers Approve, Reject, Cancel and delete to the Production seat | — | Medium | Filed 21 Sep |
-| B17 | Suryodaya | de7b45d3-8b00-4b12-9253-db33df2c1fe3 | SubcontractOrder detail labels `vendor_id` as "Customer", and labels both warehouse fields "Store" | — | Medium | Filed 21 Sep |
+| B16 = board **N141** | Suryodaya | ae363fd5-de93-466e-9cdb-c4503c6f2617 | M3 incomplete: SubcontractOrder page still offers Approve, Reject, Cancel and delete to the Production seat | — | Medium | Filed 21 Sep |
+| B17 = board **N143** | Suryodaya | de7b45d3-8b00-4b12-9253-db33df2c1fe3 | SubcontractOrder detail labels `vendor_id` as "Customer", and labels both warehouse fields "Store" | — | Medium | Filed 21 Sep |
 
 **B16 detail.** Filed as a follow-up to M3, not a new defect. M3's fix removed the admin-only transitions
 from `tools/list` and that part holds, but the web UI was not covered, so the same permission is still
@@ -72,3 +72,29 @@ we cannot substantiate.
 Distinct defects: about 15 (B1a, B2a and B5a are follow-ups or duplicates).
 
 Status from the class Bug Board, 17 Sep: the first 10 reports were all accepted; 8 live in Release 1 (17 Sep 2026, 18:40 IST), 2 fixed and shipping in the next release. Re-tested live on both instances the same day. B10-B12 were filed after the 14:35 cutoff, so they are queued for the next release and carry no board id yet.
+
+## Board acceptance, 21 September
+
+All five reports filed on 21 Sep were accepted and are Open on the class Bug Board, queued for the next
+release. Team 04 now has 16 board entries: 10 Live on server, 6 Open.
+
+| Ours | Board | Area | Severity | Owner's note |
+|---|---|---|---|---|
+| B13 | N140 | Access | High | "We are restoring it, because that access was given on purpose." |
+| B16 | N141 | Manufacturing | High | Accepted as a follow-up to M3, not a duplicate. "We will check whether the server refuses the action if clicked." |
+| B15 | N145 | Bug reports | Medium | "The team who filed each report is still recorded separately... no team has lost credit - but the audit trail should agree." |
+| B17 | N143 | Manufacturing | Low | "Checked against the schema." |
+| B14 | N144 | API | Low | "An invalid value should be refused the same way." |
+
+**N140 unblocks our red tests.** Once SalesOrder read is restored, re-run `tests/test_downstream_sales_order`
+and `tests/test_keystone_sales_order_permission` (both currently failing), and the three harness tasks that
+are `unevaluated` (`blocks_wo48_sales_order`, `keystone_customer_impact_wo4`,
+`refuse_sales_order_date_change`). Also revisit the worked example in GAP_REPORT.md, which cites
+SO-2026-00092.
+
+**Severity calibration.** We pitched B17 as a material-movement hazard and it was rated Low; B16 we expected
+Medium and it was rated High. The board weights *whether the platform lets you do the wrong thing* above
+*whether a label reads wrongly*.
+
+**N142 (downtime entries that end before they start, Medium, Open)** is also credited to Team 04 but was not
+filed from this session - another team04 session filed it. Not one of B13-B17.
