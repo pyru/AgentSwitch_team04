@@ -69,7 +69,7 @@ into the known Keystone AgentTask item. The Keystone dashboard's "TOOL CALLS 96"
 Suryodaya's `AgentTask` row count; almost certainly coincidence, and we will not file a cross-tenant claim
 we cannot substantiate.
 
-Distinct defects: about 17 (B1a, B2a and B5a are follow-ups or duplicates).
+Distinct defects: about 20 (B1a, B2a and B5a are follow-ups or duplicates).
 
 Status from the class Bug Board, 17 Sep: the first 10 reports were all accepted; 8 live in Release 1 (17 Sep 2026, 18:40 IST), 2 fixed and shipping in the next release. Re-tested live on both instances the same day. B10-B12 were filed after the 14:35 cutoff, so they are queued for the next release and carry no board id yet.
 
@@ -94,6 +94,42 @@ field is 1.0 — Low. KPI tiles on Subcontracting and Cost Analysis aggregate on
 ("OVERDUE 25 of 25 shown" beside "TOTAL 100 all 100") — misleading but self-disclosed. Overhead Rates shows
 ₹0.00 for every workstation with no explanation while the dashboard's OEE tile says "Not available in your
 permission scope"; possibly the same class as S29, but we did not confirm the cause and will not file a guess.
+
+| B20 | Suryodaya | 4f949f4d-68c1-4ee3-86ac-3d9d1c820979 | `make.orders` flags 4 of 29 "late" lines that are fully delivered; 3 have a promise date still in the future | - | High | Filed 23 Sep |
+| B21 | Suryodaya + Keystone | c5b54e81-2f90-47c6-85c5-c1e7da033875 / 12c9b6c0-2990-45d9-97c9-8bec42913193 | OEE returns null with `source_state: "complete"`; the dashboard explains it as a permission limit the API never reports | - | High | Filed 23 Sep |
+| B22 | Suryodaya | 0e2a7f2d-f195-4e2d-9813-848c9d15baae | `make.orders` returns 200 of 542 rows with no pagination argument and no truncation flag | - | Medium | Filed 23 Sep |
+
+**B20 detail.** Audited all 29 `late=true` rows: 25 genuinely late, 4 not. SO-2026-00049:1 (43/43 delivered,
+promised 2026-10-06), SO-2026-00056:2 (270/270, promised 2026-10-06), SO-2026-00052:2 (64/64, promised
+2026-09-25) and SO-2026-00050:1 (216/216, promised 2026-09-16) are all fully delivered, and the first three
+have a promise date *after* their projected date. Root cause traced: each sits on a sales order whose linked
+work order is past `planned_end` with `produced_qty` 0, and the line inherits that work order's lateness and
+blocker instead of using its own delivery state. One of those work orders, WO-2026-00113, is still a draft.
+
+**B21 detail.** `oee_pct` returns `value/numerator/denominator: null` with `source_state: "complete"` and all
+five sources `complete`, `reason: null`, on both instances - while the UI tile reads "Not available in your
+permission scope", a cause the payload contradicts. OEE is computable from readable data: 180 completed job
+cards, all non-backflushed, all carrying `actual_time_in_mins`, and the sibling metrics using the same inputs
+all compute (`utilisation_pct` 1.3 from 41490/3114000, `scrap_rate_pct` 0.0 from 4845, `first_pass_yield_pct`
+99.4 from 3334/3354). Same family as S29, plus a fabricated explanation on top.
+
+**B22 detail.** `total: 542`, rows 200; `stage=invoiced` gives `total: 433`, rows 200. No `truncated`/
+`has_more`/`next_offset` key, and the closed inputSchema declares only `stage` and `late` - `offset`, `limit`
+and `page` each return `-32602`. So 342 of 542 lines are unreachable, and a partial answer is
+indistinguishable from a complete one.
+
+**Verified fixed on 23 Sep (Release 6).** N140 (SalesOrder read restored - the agent, the 2 graded tests and
+the 3 harness tasks all recovered with no code change), N150 (on-time now reads 44.2% and the payload
+documents its basis as "late open orders count against"), N151 (no working day longer than 24 hours), and
+N145 (the 4 reports filed today carry our real user id in `created_by`; the 19 earlier ones still read
+`system` and were not backfilled). Team 04 stands at 19 Live on server.
+
+**Checked and not filed from this sweep.** Invoiced lines carrying a live blocker looked wrong but is
+correct - those 433 are billed-but-undelivered (`delivered_qty` 0), so a blocker belongs there. The
+dashboard's draft-count drift was our own harness fixtures moving between two reads. `endpoint.people_directory`
+serving names the `Employee` entity refuses is deliberate and already tracked as N146 ("a names-only people
+directory any member may read ... and NOTHING else"), with no pivot: the ids it returns give 403 on Employee
+and 404 elsewhere.
 
 ## Board acceptance, 21 September
 
