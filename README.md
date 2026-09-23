@@ -60,6 +60,7 @@ Output goes to `runs/<timestamp>/<instance>/<task>/`: `task.json`, `fixture.json
 | `GAP_REPORT.md` | week-one gap report (benchmark: Carbon) |
 | `docs/ARCHITECTURE.md` | how the agent and harness fit together, and where to change things |
 | `docs/BUGS_FILED.md` | platform bugs filed by the team |
+| `docs/FEATURE_REQUESTS.md` | platform capabilities we asked for, for the Carbon upgrade list |
 
 ## How the agent stays safe in a shared book
 
