@@ -69,7 +69,7 @@ into the known Keystone AgentTask item. The Keystone dashboard's "TOOL CALLS 96"
 Suryodaya's `AgentTask` row count; almost certainly coincidence, and we will not file a cross-tenant claim
 we cannot substantiate.
 
-Distinct defects: about 20 (B1a, B2a and B5a are follow-ups or duplicates).
+Distinct defects: about 22 (B1a, B2a and B5a are follow-ups or duplicates).
 
 Status from the class Bug Board, 17 Sep: the first 10 reports were all accepted; 8 live in Release 1 (17 Sep 2026, 18:40 IST), 2 fixed and shipping in the next release. Re-tested live on both instances the same day. B10-B12 were filed after the 14:35 cutoff, so they are queued for the next release and carry no board id yet.
 
@@ -130,6 +130,44 @@ dashboard's draft-count drift was our own harness fixtures moving between two re
 serving names the `Employee` entity refuses is deliberate and already tracked as N146 ("a names-only people
 directory any member may read ... and NOTHING else"), with no pivot: the ids it returns give 403 on Employee
 and 404 elsewhere.
+
+| B23 | Suryodaya (both verified) | ac17e40d-6297-4765-af01-0d563115e3b2 | SPA catch-all returns 200 + index.html for static-file paths, incl. `/service-worker.js` and `/robots.txt` | - | Low-Medium | Filed 23 Sep |
+| B24 | Suryodaya (both verified) | 92fd2536-c8d2-473b-8127-ed321af943ed | Manufacturing UI calls `/api/accounting/locale` and `/api/payroll/locale` on every page load and swallows two 403s | - | Low | Filed 23 Sep |
+
+**B23 detail.** Any path outside `/assets/` and `/api/` is absorbed by the catch-all and answered with the
+SPA shell under HTTP 200 regardless of file extension: `/service-worker.js`, `/robots.txt`, `/foo/bar.js`
+and `/totally-random-xyz.js` all return `200 text/html`. `/manifest.webmanifest` and
+`/assets/does-not-exist.js` correctly return 404, so the right behaviour already exists in the routing.
+The real service worker at `/sw.js` is served correctly as `application/javascript`. Not a security issue -
+`nosniff` prevents execution - filed as correctness and hygiene.
+
+**B24 detail.** Every Manufacturing page load fires `GET /api/accounting/locale` and `GET /api/payroll/locale`
+from bundle `api-CNm7t7R0.js`, both 403 for a seat holding neither app, both discarded silently. Filed
+leading with that (the frontend requesting endpoints its own seat cannot use), with the secondary
+observation that a Production seat has no seat-neutral way to read the tax or accounting regime: those two
+endpoints are 403 and `/api/locale`, `/api/manufacturing/locale` and `/api/company/locale` are all 404,
+while `/api/Company` gives country, `default_currency` and `fiscal_year_start` but no regime or standard.
+The report explicitly concedes the section 3 seat boundary rather than disputing it.
+
+**Security sweep, 23 Sep - nothing to report.** Verified hardened on both instances: HSTS 2yr + preload,
+nonce CSP with `strict-dynamic` and `frame-ancestors 'none'`, session cookie `HttpOnly; Secure; SameSite=lax`,
+opaque (non-JWT) bearer token, cross-instance token reuse 401 both directions, cross-tenant IDOR 404,
+anonymous 401 on `/api/auth/me`, `/api/WorkOrder`, `/api/schemas` and `/api/mcp`, no stack traces and no
+enumeration oracle in errors, `_redacted_fields` working, TRACE/OPTIONS 405, `/api/Company` scoped to our
+own tenant, no CORS wildcard, no version disclosure. We did not test login user-enumeration: two failed
+logins risk a lockout before submission for a Low-severity finding.
+
+**Brief-conformance audit, 23 Sep - platform matches its documentation.** All 365 tools carry a closed
+JSON Schema (0 missing, 0 with `additionalProperties` other than false); malformed JSON, missing method,
+unknown method, wrong jsonrpc version, non-object params and batching all return HTTP 200 with correct
+JSON-RPC error codes, and only auth answers at the HTTP layer, exactly as section 6 states; batching is
+refused by name; `notifications/initialized` correctly returns 202 with no body as a notification and
+-32601 when sent with an id; `/api/agent/tools` returns exactly 13 tools, all with schemas; `SalarySlip`,
+`Contract` and `EsignDocument` are 403 on both instances; `/docs`, `/redoc` and `/openapi.json` are live
+when authenticated; `GET /api/mcp` returns 405 with `Allow: POST`. The eight new manufacturing entities
+(`QualityIssue`, `EightDReport`, `SupplierCorrectiveActionRequest`, `AQLAcceptancePlan`, `AQLSampleSizeCode`,
+`ChangeoverTime`, `ManufacturingPreferences`, `QualityPreferences`) all read cleanly with no truncation and
+sane permissions.
 
 ## Board acceptance, 21 September
 
