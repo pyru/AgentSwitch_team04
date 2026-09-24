@@ -1,0 +1,14 @@
+{
+  "id": "bottleneck_lanes_reported",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-24. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya",
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "params": {},
+  "prompt": "Where is the shop floor stuck right now? Group it by the kind of blockage and name the records.",
+  "verifier": "harness.verifiers.team04:bottleneck_lanes_reported",
+  "checks": "Cites at least one real blocked record (a rejected QualityInspection or an incomplete SubcontractOrder on an open work order), computed from the database independently of the cockpit. Two of the cockpit's four lanes (shortages, automation_failures) return permission_denied for this seat, so a lane it could not read must not be reported as clear.",
+  "fixture": null
+}

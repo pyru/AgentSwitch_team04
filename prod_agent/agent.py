@@ -20,6 +20,10 @@ How you work:
 - For "why is it late": run diagnose_work_order. Separate BLOCKING causes (no known ready date) from contributing ones. Use current_operation to say where the order is stuck (job card number, operation, workstation), and cite recorded downtime (reason, minutes) and pending engineering changes when present.
 - For machine downtime questions ("which machine had the most breakdown downtime"): run downtime_summary with the window and reason asked. Put the top workstation's number and name, plus any job cards or engineering changes you rely on, in evidence_records. If the seat cannot see something (listed in not_visible_to_this_seat), say so plainly instead of guessing.
 - For "what does it block": run downstream_impact. Work orders there are POTENTIAL consumers found by BOM matching (confidence "potential"): call them "may be affected", never "blocked", because stock or another order may cover the demand. A sales order linked on the late order itself (confidence "linked") is recorded exposure; one reached through a potential consumer is potential exposure. Report customer, delivery date and value. Read customer_impact literally: only say no customer is affected when it starts with "none linked". If it is "undeterminable" or "partly unknown", say the customer impact is unknown and why.
+- For "can we take/finish this order by <date>": run order_feasible_by. Report its verdict verbatim. The verdict is never "yes": the platform models no work calendar and no labour capacity, so committing a date would be inventing one. Give the remaining work content in hours, the blockers, and say plainly what is missing.
+- For shop load or "are we overloaded": run capacity_outlook. It returns TWO load figures. When board_understates_load is true they disagree, and you must report BOTH and say they disagree: the capacity board's own figure, and the work content in the same job cards computed as time_in_mins x for_qty (the platform's own OEE basis). Never present one as the answer. Say which workstations are over declared capacity on the work-content figure, and that the platform's board does not currently show them. Put both figures in record_finding's capacity field (board_load_pct, work_content_load_pct, figures_disagree): only what you record there counts.
+- For "where is the shop floor stuck": run shop_floor_exceptions. Report per lane with record numbers. Check lane_states: a lane the platform could not fill is unknown, NOT clear, and truncated=true means you are seeing part of the list.
+- For questions about what this seat is allowed to do or reach: run seat_policy_conformance. Those rows configure the platform's hosted persona, not this seat, so never cite them as your own permission and never call a divergence a bug. A real limit is one seat_capability confirms.
 - For "reschedule": run propose_reschedule. Only proposals with writable_by_seat=true can be written, and only if apply_reschedule is available. Everything else is a recommendation that needs a person (explain why_not_writable).
 - If apply_reschedule returns changed_underneath, someone else edited that order during this run. Do not retry or re-propose: every further write in this run is refused. Report the conflict, and escalate if escalate is available.
 - Escalation: when something needs a person (a locked order, a blocker with no known date, data this seat cannot see, a conflicting edit) and the escalate tool is available, call escalate ONCE for the request with: the work order, records checked, what is missing, and the action requested. Record the result in escalations. If it returns raised=false (for example no assignee), say plainly that no one could be assigned and who should be contacted; never claim an escalation that was not raised.
@@ -52,6 +56,12 @@ RECORD_FINDING_SCHEMA = {
             "number": {"type": "string"}, "new_start": {"type": ["string", "null"]},
             "new_end": {"type": ["string", "null"]}, "outcome": {"type": "string"}}, "required": ["number", "outcome"]}},
         "customer_impact": {"type": "string", "description": "customer_impact value from downstream_impact, verbatim"},
+        "capacity": {"type": ["object", "null"],
+                     "description": "only for shop-load questions: BOTH load figures from capacity_outlook. "
+                                    "The reply text is not graded, so a figure you do not put here is not recorded.",
+                     "properties": {"board_load_pct": {"type": ["number", "null"], "description": "board_reported.load_pct"},
+                                    "work_content_load_pct": {"type": ["number", "null"], "description": "work_content.load_pct"},
+                                    "figures_disagree": {"type": "boolean", "description": "board_understates_load"}}},
         "not_visible": {"type": "array", "items": {"type": "string"}},
         "escalations": {"type": "array", "description": "result of each escalate call, as returned", "items": {"type": "object", "properties": {
             "raised": {"type": "boolean"}, "number": {"type": ["string", "null"]}, "assignee": {"type": ["string", "null"]},
@@ -151,9 +161,17 @@ class ProductionAgent:
                  "reason": {"type": ["string", "null"], "enum": ["breakdown", "planned_maintenance", "setup_change", "material_shortage",
                                                                "power_failure", "quality_issue", "tool_change", "operator_unavailable",
                                                                "other", None]}}, ["days"]),
+            _fn("capacity_outlook", "Shop load over a horizon: the capacity board's own figure alongside the work content in the same job cards, and whether they disagree.",
+                {"horizon_days": {"type": "integer", "minimum": 1, "maximum": 90}}, []),
+            _fn("order_feasible_by", "Whether one order's remaining work can credibly finish by a date: work content, blockers and shop load.",
+                {**WO_REF, "due": {"type": "string", "description": "the date asked about, YYYY-MM-DD"}},
+                ["work_order", "due"]),
+            _fn("shop_floor_exceptions", "Where the shop floor is stuck: shortages, quality blocks, subcontract blocks and automation failures, by lane.",
+                {"limit": {"type": "integer", "minimum": 1, "maximum": 200}}, []),
             _fn("seat_entities", "Exact entity names in this seat's tool catalogue. Use these names; never invent one."),
             _fn("seat_capability", "Check whether this seat can use a platform tool, e.g. 'SalesOrder.update', 'DowntimeEntry.list', 'SalarySlip.list'.",
                 {"tool": {"type": "string"}}, ["tool"]),
+            _fn("seat_policy_conformance", "The agent policy the platform DECLARES for this seat (allowed domains, denied entities, what needs human approval) and where this seat's observed reach diverges from it."),
             _fn("record_finding", "Persist the structured result. Call exactly once, before the final answer.",
                 RECORD_FINDING_SCHEMA["properties"], RECORD_FINDING_SCHEMA["required"]),
         ]
@@ -171,7 +189,8 @@ class ProductionAgent:
     # Reads whose answer cannot usefully change within one run. propose_reschedule is left out on purpose:
     # re-proposing refreshes updated_at in a shared book.
     REPEAT_GUARDED = {"company_context", "list_late_work_orders", "diagnose_work_order", "downstream_impact",
-                      "downtime_summary", "seat_entities", "seat_capability"}
+                      "downtime_summary", "seat_entities", "seat_capability", "capacity_outlook",
+                      "order_feasible_by", "shop_floor_exceptions", "seat_policy_conformance"}
 
     def _repeat_note(self, name: str, args: dict, step: int) -> dict | None:
         """Stop the model looping on an identical read (seen live: 9 identical seat_capability calls)."""
@@ -222,10 +241,18 @@ class ProductionAgent:
             return result
         if name == "downtime_summary":
             return domain.downtime_summary(self.mcp, args.get("days", 30), args.get("reason"))
+        if name == "capacity_outlook":
+            return domain.capacity_outlook(self.mcp, args.get("horizon_days", 21))
+        if name == "order_feasible_by":
+            return domain.order_feasible_by(self.mcp, ref, args["due"])
+        if name == "shop_floor_exceptions":
+            return domain.shop_floor_exceptions(self.mcp, args.get("limit", 50))
         if name == "seat_entities":
             return {"entities": domain.seat_entities(self.mcp)}
         if name == "seat_capability":
             return domain.seat_capability(self.mcp, args["tool"])
+        if name == "seat_policy_conformance":
+            return domain.seat_policy_conformance(self.mcp)
         if name == "apply_reschedule" and self.apply_mode:
             if self.conflicts:
                 return {"outcome": "refused", "detail": f"not retrying: {', '.join(self.conflicts)} changed underneath this run; "

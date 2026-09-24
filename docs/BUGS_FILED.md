@@ -194,3 +194,60 @@ Medium and it was rated High. The board weights *whether the platform lets you d
 
 **N142 (downtime entries that end before they start, Medium, Open)** is also credited to Team 04 but was not
 filed from this session - another team04 session filed it. Not one of B13-B17.
+
+## 24 September — the capacity layer
+
+Release 6/7 added a finite-capacity read model (`capacity_board`, and a rebuilt `finite_schedule`
+returning per-order verdicts and causes). Auditing it produced one defect that invalidates its output.
+
+| C1 | Suryodaya + Keystone | 290c63d5-a44e-41c1-a282-bd7bc7cce7df / fc632303-c70e-4f45-be12-d3fe8edccfbb | `capacity_board` and `finite_schedule` charge a job card's per-piece minutes as the whole job, understating load 94x (Suryodaya) / 84x (Keystone) | - | Critical-High | Filed 24 Sep |
+
+**C1 detail.** The platform's own OEE basis string defines a card's standard work content as
+`(time_in_mins x for_qty) / actual_time_in_mins` for performance — so `time_in_mins` is **per piece**.
+Both capacity endpoints charge it raw: `capacity_board`'s `booked_minutes` of 1381.0 equals
+`sum(JobCard.time_in_mins)` over the 149 open cards to the decimal, and `finite_schedule` charges the
+unscaled value on 149 of 149 scheduled operations. Consequences: the board reports **1.25% load and 0
+workstations overloaded** where the same cards are **117% of its own declared `available_minutes`** with
+ASSY-01 at 2.4x; `work_content_exceeds_due_date` fires on 1 of 61 orders while `due_date_passed` fires on
+57; and every operation returns `scheduled_start == scheduled_finish == 2026-09-24`.
+
+**C1 supersedes part of N263.** The identical-`projected_finish` symptom we filed as FR1 and the board
+queued as N263 ("projected finish dates that respect capacity, downtime and operators", Release 7, a work
+calendar plus a labour model) has this as its root cause. A work calendar will not separate the dates while
+work content is understated ~94x. Flagged inside the report so N263 does not ship and miss.
+
+**What we deliberately did not claim.** `actual_time_in_mins == time_in_mins x for_qty` holds on 180/180
+(Suryodaya) and 240/240 (Keystone) completed cards, but that implies OEE performance is exactly 1.0 on every
+card, which points at the actuals being seeded from the standard. The report says so itself and rests the
+argument on the OEE formula and the schema text (`actual_time_in_mins` is "the minutes the shop floor
+ACTUALLY booked ... a completion path never writes a standard-time estimate here"), not on the data. An
+earlier draft leant on the WIP posting as corroboration; that was dropped, because costing reads
+`actual_time_in_mins` and so sits downstream of the same values.
+
+**Open question carried in the report.** BOM and Routing operation lines carry `batch_size` (default 1)
+next to `time_in_mins`. If work content is meant to be `time_in_mins x for_qty / batch_size` the magnitudes
+change. The OEE basis string does not divide by it, so that is what we used.
+
+### Drafted, not filed
+
+- **C2** — Suryodaya `Routing` operation lines carry seeded noise: `sequence` non-integer on 187/224 and
+  above 100 on 175/224 (range 1 … 1991.59), `batch_size` fractional on 185/224, `time_in_mins` over 24h on
+  42/224, and 42/100 routings return operations out of sequence order. Keystone's 2 routings are clean.
+  Latent: all 329 job cards have `instruction_source: bom_operation` and clean sequences 1–4, so no routing
+  currently reaches a job card — but 74 of 143 work orders are for items that have a Routing row.
+- **C4** — two `AgentProvider` rows hold impossible settings (`temperature` 78.39 / 39.75, `max_tokens`
+  102.75 / 16.75, model strings "Surface Plate 342" / "Feeler Gauge Set 341", `api_key_ref` not matching the
+  provider), and two rows carry `is_default = 1` on both instances. Low: the malformed rows are
+  `is_active = 0` and the duplicate default is masked because only one row is active.
+- **C5** — 35 of 102 `AgentSkill` rows instruct the agent to use `delegate_to_agent` and `ask_human`;
+  neither appears in the seat's 365-tool catalogue. Probably injected into hosted agent runs rather than
+  exposed over MCP, so likely correct behaviour — worth confirming, not yet worth filing.
+
+### Negative results, 24 September
+
+Swept and clean, recorded so we do not re-check: `planned_end < planned_start` (0 of 143 / 77),
+`produced_qty > qty` (0), JobCard actual end-before-start (0), negative durations (0), QualityInspection
+`accepted + rejected != inspected` (0 of 157), and `exception_cockpit` truncation behaviour (correct
+`total_items` / `limit` / `offset` / `complete` at limit 1, 50 and 500). The new endpoints report their own
+limits honestly — `capacity_board` publishes `malformed_workstation_ids`, `finite_schedule` publishes
+`uncosted_item_change_pairs` and a `generic_late_cause_rate` — which is the discipline S29 and N233 asked for.

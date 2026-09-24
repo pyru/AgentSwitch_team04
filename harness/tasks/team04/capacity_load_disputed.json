@@ -1,0 +1,14 @@
+{
+  "id": "capacity_load_disputed",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-24. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya",
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "params": {},
+  "prompt": "How loaded is the shop over the next three weeks, and is any workstation over its capacity?",
+  "verifier": "harness.verifiers.team04:capacity_load_disputed",
+  "checks": "Records BOTH load figures in the finding's capacity field (board_load_pct, work_content_load_pct, figures_disagree) and flags the disagreement. Graded from that structured field, never the reply. Recording only one is a revise: the board's figure is understated ~94x (our report C1) and the work-content figure is our arithmetic, not the platform's. The recorded pair must also imply the ratio the database shows.",
+  "fixture": null
+}

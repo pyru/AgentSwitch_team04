@@ -582,6 +582,186 @@ def withdraw_escalation(mcp: McpClient, escalation_id: str, note: str) -> dict:
     return res.get("result", res)
 
 
+# --------------------------------------------------------------------------- shop floor and capacity
+
+# The platform's own OEE basis (endpoint.manufacturing.kpis) defines a card's standard work content as
+# (time_in_mins x for_qty) / actual_time_in_mins for performance, so time_in_mins is PER PIECE. capacity_board
+# and finite_schedule charge it unscaled, understating load ~94x on Suryodaya and ~84x on Keystone (our report
+# C1, 2026-09-24). Both figures are reported rather than silently substituting ours: the board's number is what
+# the platform stands behind, and the divergence is itself the finding.
+OPEN_JOB_CARD = {"open", "not_started", "in_progress", "paused"}
+
+
+def _work_content_minutes(cards: list[dict]) -> float:
+    """Standard work content per the platform's own OEE formula: sum(time_in_mins x for_qty)."""
+    return round(sum((c.get("time_in_mins") or 0) * (c.get("for_qty") or 0) for c in cards), 2)
+
+
+def capacity_outlook(mcp: McpClient, horizon_days: int = 21) -> dict:
+    """Load against declared capacity over a horizon, with the board's figure and the work content it omits."""
+    denied = _probe_denied(mcp, "JobCard.list")
+    if denied:
+        return {"available": False, "not_visible_to_this_seat": [f"JobCard: {denied}"]}
+    res = mcp.call("endpoint.manufacturing.capacity_board", {"horizon_days": int(horizon_days)})
+    board = res.get("result", res) or {}
+    counts = board.get("counts") or {}
+    cards = [c for c in mcp.list_all("JobCard") if c.get("status") in OPEN_JOB_CARD]
+    stations = {w["id"]: w for w in mcp.list_all("Workstation")}
+
+    booked = counts.get("booked_minutes")
+    available = counts.get("available_minutes")
+    content = _work_content_minutes(cards)
+    per_ws: dict[str, float] = {}
+    for c in cards:
+        minutes = (c.get("time_in_mins") or 0) * (c.get("for_qty") or 0)
+        per_ws[c.get("workstation_id")] = per_ws.get(c.get("workstation_id"), 0.0) + minutes
+    overloaded = []
+    for ws_id, minutes in sorted(per_ws.items(), key=lambda kv: -kv[1]):
+        ws = stations.get(ws_id) or {}
+        capacity = (ws.get("working_hours_per_day") or 0) * 60.0 * (ws.get("capacity") or 1) * int(horizon_days)
+        if capacity and minutes > capacity:
+            overloaded.append({"workstation": ws.get("number"), "name": ws.get("name"),
+                               "work_content_minutes": round(minutes, 1),
+                               "declared_capacity_minutes": round(capacity, 1),
+                               "times_over": round(minutes / capacity, 2)})
+
+    understated = bool(booked) and content > booked * 1.5
+    return {
+        "available": True, "horizon_days": int(horizon_days), "open_job_cards": len(cards),
+        "board_reported": {"booked_minutes": booked, "available_minutes": available,
+                           "workstations_overloaded": counts.get("workstations_overloaded"),
+                           "periods_overloaded": counts.get("periods_overloaded"),
+                           "load_pct": round(100 * booked / available, 2) if booked and available else None},
+        "work_content": {"minutes": content,
+                         "basis": "sum(JobCard.time_in_mins x for_qty), the platform's own OEE basis",
+                         "load_pct": round(100 * content / available, 1) if available else None,
+                         "workstations_over_declared_capacity": overloaded},
+        "board_understates_load": understated,
+        "confidence": "disputed" if understated else "board_agrees",
+        "note": ("capacity_board charges time_in_mins unscaled while the platform's OEE basis defines work "
+                 f"content as time_in_mins x for_qty; the two disagree by {round(content / booked, 1)}x here. "
+                 "Report both figures and do not present either as settled."
+                 if understated else "the board's booked minutes agree with the work content in the same cards"),
+    }
+
+
+def order_feasible_by(mcp: McpClient, ref: str, due: str) -> dict:
+    """Whether an order's remaining work can credibly finish by a date. The seat charter's first question."""
+    wo = resolve_work_order(mcp, ref)
+    if not wo:
+        return {"found": False, "work_order": ref, "reason": "no work order with that number or id"}
+    target = _date(due)
+    if not target:
+        return {"found": True, "work_order": wo.get("number"), "verdict": "unknown",
+                "reason": f"could not read {due!r} as a date"}
+    today = config.today()
+    cards = [c for c in mcp.list_all("JobCard", work_order_id=wo["id"]) if c.get("status") in OPEN_JOB_CARD]
+    remaining = _work_content_minutes(cards)
+    diag = diagnose(mcp, wo.get("number") or ref)
+    blocking = list(diag.get("blocking_causes") or [])
+    outlook = capacity_outlook(mcp)
+    days = (target - today).days
+
+    if blocking:
+        # An undated blocker is the honest stop: no arithmetic can promise a date behind it.
+        verdict = "no"
+        reason = f"blocked with no known ready date: {', '.join(blocking)}"
+    elif days < 0:
+        verdict, reason = "no", f"the date asked for ({due}) is already past"
+    elif not cards:
+        verdict, reason = "unknown", "no open job cards on this order, so there is no work content to size"
+    else:
+        verdict = "unknown"
+        reason = ("remaining work content is known but the platform cannot place it: finite_schedule models no "
+                  "work calendar and no labour capacity, and capacity_board's own load figure is disputed "
+                  "(capacity_outlook.board_understates_load)")
+    return {
+        "found": True, "work_order": wo.get("number"), "asked_by": due, "today": _iso(today),
+        "days_available": days, "open_job_cards": len(cards),
+        "remaining_work_content_minutes": remaining,
+        "remaining_work_content_hours": round(remaining / 60.0, 1),
+        "blocking_causes": blocking, "contributing_causes": diag.get("contributing_causes") or [],
+        "shop_load": {"board_load_pct": (outlook.get("board_reported") or {}).get("load_pct"),
+                      "work_content_load_pct": (outlook.get("work_content") or {}).get("load_pct"),
+                      "disputed": outlook.get("board_understates_load")},
+        "verdict": verdict, "reason": reason,
+        "note": "a yes verdict is deliberately not offered: the platform models no work calendar or labour "
+                "capacity, so a committed date would be a number the platform itself would not stand behind",
+    }
+
+
+def shop_floor_exceptions(mcp: McpClient, limit: int = 50) -> dict:
+    """Where the shop floor is stuck, from the platform's exception cockpit. The charter's second question."""
+    if not mcp.has_tool("endpoint.manufacturing.exception_cockpit"):
+        return {"available": False, "not_visible_to_this_seat": ["endpoint.manufacturing.exception_cockpit"]}
+    res = mcp.call("endpoint.manufacturing.exception_cockpit", {"limit": int(limit), "offset": 0})
+    cockpit = res.get("result", res) or {}
+    items = cockpit.get("items") or []
+    lanes: dict[str, dict] = {}
+    for it in items:
+        lane = lanes.setdefault(it.get("kind") or "unknown",
+                                {"kind": it.get("kind"), "count": 0, "severities": {}, "examples": []})
+        lane["count"] += 1
+        sev = it.get("severity") or "unknown"
+        lane["severities"][sev] = lane["severities"].get(sev, 0) + 1
+        if len(lane["examples"]) < 3:
+            lane["examples"].append({"record": it.get("record_label"), "entity": it.get("entity"),
+                                     "severity": sev, "state": it.get("state"),
+                                     "diagnostic": (it.get("diagnostic") or {}).get("code")})
+    total = cockpit.get("total_items")
+    return {
+        "available": True, "total_items": total, "returned": len(items),
+        "truncated": bool(total is not None and len(items) < total),
+        "complete": cockpit.get("complete"),
+        # lane_states says which lanes the platform could not fill; a lane missing for that reason is not "clear".
+        "lane_states": cockpit.get("lane_states"),
+        "lanes": sorted(lanes.values(), key=lambda r: -r["count"]),
+    }
+
+
+# --------------------------------------------------------------------------- declared policy
+
+def seat_policy_conformance(mcp: McpClient) -> dict:
+    """Compare the platform's DECLARED agent policy with what this seat can observably reach.
+
+    AgentToolPolicy and AgentPersona.require_approval configure the platform's own hosted persona, not this
+    API user, so a divergence is not automatically a defect. It is reported as a divergence, never as a
+    permission: what this seat may actually do is decided by seat_capability probes, not by these rows.
+    """
+    if not mcp.has_tool("AgentToolPolicy.list"):
+        return {"available": False, "not_visible_to_this_seat": ["AgentToolPolicy"]}
+    seats = [s for s in mcp.list_all("AgentSeat") if (s.get("module") or "").lower() == "manufacturing"]
+    if not seats:
+        return {"available": False, "reason": "no manufacturing AgentSeat declared on this instance"}
+    seat = seats[0]
+    personas = {p["id"]: p for p in mcp.list_all("AgentPersona")}
+    policies = {p["id"]: p for p in mcp.list_all("AgentToolPolicy")}
+    persona = personas.get(seat.get("persona_id")) or {}
+    policy = policies.get(persona.get("tool_policy_id")) or {}
+
+    denied_entities = [e.strip() for e in (policy.get("denied_entities") or "").split(",") if e.strip()]
+    allowed_domains = [d.strip() for d in (policy.get("allowed_domains") or "").split(",") if d.strip()]
+    observed = []
+    for entity in denied_entities:
+        reachable = _rest_status(mcp, entity) == 200
+        observed.append({"entity": entity, "declared": "denied", "this_seat_reads_it": reachable,
+                         "divergence": reachable})
+    return {
+        "available": True,
+        "seat": {"name": seat.get("name"), "charter": seat.get("charter"),
+                 "goal_keys": seat.get("goal_keys"), "tier": seat.get("tier")},
+        "declared_policy": {"name": policy.get("name"), "allowed_domains": allowed_domains,
+                            "denied_entities": denied_entities, "read_only": policy.get("read_only"),
+                            "max_records_per_query": policy.get("max_records_per_query")},
+        "requires_human_approval": [r.get("action_pattern") for r in (persona.get("require_approval") or [])],
+        "denied_entity_observations": observed,
+        "divergences": [o["entity"] for o in observed if o["divergence"]],
+        "caveat": "these rows configure the platform's hosted persona, not this API user. A divergence is a "
+                  "question for the platform owners, not permission for this seat to act: confirm every real "
+                  "limit with seat_capability before reporting it.",
+    }
+
+
 # --------------------------------------------------------------------------- findings
 
 def record_finding(mcp: McpClient, run_id: str, finding: dict) -> dict:
