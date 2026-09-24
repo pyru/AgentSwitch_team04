@@ -28,6 +28,67 @@ Nothing falls back across providers, so leaving `LLM_PROVIDER` unset keeps the O
 exactly as it was. Whichever model you pick must support tool calling and a forced
 `tool_choice` — the loop relies on both to get a finding into the database.
 
+## Integrating your own model
+
+Both paths above need **your** API key. If you want to drive this agent with a model we have
+no key for — AgentSwitch's own provider, your evaluation harness, a local server — hand the
+agent a client instead and skip the provider logic entirely:
+
+```python
+from prod_agent.agent import ProductionAgent
+from prod_agent.mcp_client import McpClient, Session
+
+agent = ProductionAgent(McpClient(Session("suryodaya")), llm=your_client, model="your-model-id")
+result = agent.run("WO-2026-00048 is late. Why, and what does it block?")
+```
+
+**Passing `llm=` needs no credentials of ours.** `OPENAI_API_KEY`, `OPENROUTER_API_KEY` and
+`LLM_PROVIDER` are only read when `llm` is `None`, so an injected client bypasses all of it.
+(Tenant passwords are still needed — that is AgentSwitch access, not model access.)
+
+### What your client has to implement
+
+One method, the OpenAI chat-completions shape:
+
+```python
+resp = llm.chat.completions.create(model=..., messages=[...], tools=[...], **sampling)
+```
+
+and the response must offer:
+
+| what the loop reads | why |
+|---|---|
+| `resp.choices[0].message.content` | the final answer when no tool is called |
+| `resp.choices[0].message.tool_calls[].id` / `.function.name` / `.function.arguments` | dispatching each tool call |
+| `resp.choices[0].message.model_dump(exclude_none=True)` | appended to `messages` for the next turn |
+| `resp.usage.model_dump()` | optional; traced when present, skipped when absent |
+
+`sampling` carries `temperature=0` only for `gpt-4*`/`gpt-3*` ids (reasoning models reject it),
+and `tool_choice` when the loop forces `record_finding` near the step budget.
+
+**Your model must support tool calling *and* a forced `tool_choice`.** Without the second, the
+loop cannot make it record a finding before the budget ends, and a run with no finding in the
+database scores nothing — the verifiers read state, never the reply text.
+
+### Running the harness against your model
+
+`harness/adapters.py:run_agent(llm, mcp, ...)` already takes the client as its first argument.
+`harness/runner.py` constructs `ProductionAgent` without `llm`, so it uses the `.env` provider;
+pass `llm=` at [harness/runner.py:159](harness/runner.py#L159) to point a full harness run at
+your own client.
+
+### Using the model AgentSwitch already hosts
+
+`AgentProvider.list` shows what the platform has configured — on both tenants the default is
+`AgentSwitch AI` (`fireworks`, `accounts/fireworks/models/deepseek-v4p1-flash`,
+`supports_tools: 1`), alongside GPT-4o, Claude Sonnet and Gemini entries. The API keys are
+held platform-side under `api_key_ref`, so that model cannot be called directly from here.
+The route that does work is to let the platform run it: `AgentTask.create` with a `persona_id`
+and `provider_id`, then `AgentTask.run_now`, then read the trace back from `AgentMessage`
+(`role`, `tool_name`, `tool_status`, token counts). That trace is database state, which is
+what our verifiers already grade. **We have not run that path yet** — it creates a real agent
+job against a shared tenant and spends its daily budget, so it needs the owners' go-ahead.
+
 ## Run the agent
 
 ```bash
