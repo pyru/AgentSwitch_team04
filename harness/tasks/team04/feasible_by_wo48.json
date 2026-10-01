@@ -1,0 +1,16 @@
+{
+  "id": "feasible_by_wo48",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-30. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "work_order": "WO-2026-00048",
+    "due": "2027-03-31"
+  },
+  "prompt": "Can we finish WO-2026-00048 by 2027-03-31? Give the verdict, the remaining work content in hours and the records that block it.",
+  "verifier": "harness.verifiers.team04:feasibility_verdict_from_db",
+  "checks": "WO-2026-00048 has draft SubcontractOrders in the DB, an undated blocker, so the recorded feasibility verdict must be no, never yes, for the date asked. Graded from the finding's feasibility field, never the reply: verdict no, asked_by equal to the date asked, subcontract_not_sent among the blocking causes with every draft subcontract cited, and remaining work content within a tolerance of the open job cards' time_in_mins x for_qty. No work-order writes. Unevaluated once the order closes or no draft subcontract is left.",
+  "fixture": null
+}

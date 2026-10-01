@@ -1,0 +1,47 @@
+{
+  "run_id": "20c7c572aa3c",
+  "stop_reason": "final_answer",
+  "final_answer": "WO-2026-00028 (Battery Tray Side Rail, formed) \u2014 completed, not late.\n\n**Cost vs plan**\n- Expected cost: **INR 39,913.80**\n- Actual cost: **INR 24,678.48**\n- Variance: **\u2212INR 15,235.32** (actual came in about 38% under plan)\n\n**Currency:** INR (Suryodaya Precision Works, India).\n\nNotes: costs are recorded on the work order itself (WO-2026-00028), covering job cards JC-2026-00084 and JC-2026-00085. Separately, diagnose shows open signals on this order \u2014 draft subcontracts (SCO-2026-00023, SCO-2026-00020) and pending engineering changes (ECO-2026-00084, ECO-2026-00077, ECO-2026-00044) \u2014 say the word if you want those chased down.",
+  "finding": {
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "workstation_downtime_recorded"
+    ],
+    "cost": {
+      "actual": 24678.48,
+      "expected": 39913.8,
+      "variance": -15235.32
+    },
+    "currency": "INR",
+    "evidence_records": [
+      "WO-2026-00028",
+      "JC-2026-00084",
+      "JC-2026-00085",
+      "SCO-2026-00023",
+      "SCO-2026-00020",
+      "ECO-2026-00084",
+      "ECO-2026-00077",
+      "ECO-2026-00044"
+    ],
+    "is_late": false,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": null,
+    "rescheduled": [],
+    "work_order": "WO-2026-00028"
+  },
+  "finding_record": {
+    "agent_memory_id": "cb2943f5-f22a-4dba-b104-e4db639ca1bd",
+    "run_id": "20c7c572aa3c"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 53.0,
+  "instance": "suryodaya",
+  "task_id": "cost_variance_wo28_suryodaya"
+}

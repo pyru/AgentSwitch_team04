@@ -1,0 +1,9 @@
+{
+  "task_id": "cost_variance_wo28_suryodaya",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "variance -15235.32 INR matches DB",
+  "sample": false,
+  "run_id": "20c7c572aa3c",
+  "seconds": 53.0
+}

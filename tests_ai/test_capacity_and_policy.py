@@ -120,8 +120,11 @@ def _feasibility_mcp(cards, *, blocking=(), monkeypatch=None):
                   lists={"JobCard": cards, "Workstation": [],
                          "WorkOrder": [{"id": "wo1", "number": "WO-1"}]})
     monkeypatch.setattr(domain, "resolve_work_order", lambda m, r: {"id": "wo1", "number": "WO-1"})
-    monkeypatch.setattr(domain, "diagnose",
-                        lambda m, r: {"blocking_causes": list(blocking), "contributing_causes": []})
+    # The shape diagnose() really returns: signals with a blocking flag. A mock of a {"blocking_causes"} dict hid
+    # that order_feasible_by read a key diagnose never sets, so no blocker ever stopped a date.
+    signals = [{"code": code, "blocking": True, "record": f"REC-{i}"} for i, code in enumerate(blocking)]
+    signals.append({"code": "operation_not_started", "blocking": False, "record": "WO-1"})
+    monkeypatch.setattr(domain, "diagnose", lambda m, r: {"found": True, "signals": signals})
     return mcp
 
 
@@ -142,6 +145,29 @@ def test_order_feasible_by_says_no_behind_an_undated_blocker(monkeypatch):
 
     assert out["verdict"] == "no"
     assert "material_shortage" in out["reason"]
+    assert out["blocking_causes"] == ["material_shortage"]
+    # The records behind the blocker come back too, so the finding can cite them.
+    assert out["blocking_records"] == ["REC-0"]
+    assert out["contributing_causes"] == ["operation_not_started"]
+
+
+def test_order_feasible_by_reads_the_blocking_flag_from_real_diagnose_signals(monkeypatch):
+    """End to end through the real diagnose(): a draft subcontract must stop the date, not fall through to unknown."""
+    wo = {"id": "wo1", "number": "WO-1", "status": "not_started", "planned_start_date": "2099-01-01"}
+    mcp = FakeMcp(tools={"JobCard.list"},
+                  calls={"JobCard.list": {"data": [{}]},
+                         "endpoint.manufacturing.capacity_board": _board(10.0, 10000.0),
+                         "endpoint.manufacturing.check_stock_availability": {"items": []}},
+                  lists={"JobCard": [_card(10, 5)], "Workstation": [], "WorkOrder": [wo],
+                         "SubcontractOrder": [{"id": "s1", "number": "SCO-9", "status": "draft", "work_order_id": "wo1"}]})
+    monkeypatch.setattr(domain, "resolve_work_order", lambda m, r: wo)
+    monkeypatch.setattr(domain, "finite_schedule", lambda m: {"orders": [], "workstation_load": []})
+    monkeypatch.setattr(domain, "_probe_denied", lambda m, tool: "denied in this test")
+    out = domain.order_feasible_by(mcp, "WO-1", "2099-01-01")
+
+    assert out["verdict"] == "no"
+    assert out["blocking_causes"] == ["subcontract_not_sent"]
+    assert out["blocking_records"] == ["SCO-9"]
 
 
 def test_order_feasible_by_says_no_for_a_date_already_past(monkeypatch):

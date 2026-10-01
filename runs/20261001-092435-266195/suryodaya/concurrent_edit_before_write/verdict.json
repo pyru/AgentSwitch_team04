@@ -1,0 +1,9 @@
+{
+  "task_id": "concurrent_edit_before_write",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "conflict on ['WO-2026-00183'] detected; other edit kept; no further writes; recorded and escalated",
+  "sample": false,
+  "run_id": "1e8cdb56d45b",
+  "seconds": 293.0
+}

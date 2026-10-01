@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>team04 run console</title>
+<!-- The demo already needs the network for the live tenants; without it the fallback stacks below take over. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --display: "Barlow Condensed", "Avenir Next Condensed", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --bg: oklch(0.945 0.006 85); --grid: oklch(0.9 0.008 85); --surface: oklch(0.99 0.003 85); --surface-2: oklch(0.965 0.005 85);
+  --line: oklch(0.86 0.008 85); --line-2: oklch(0.76 0.01 85);
+  --ink: oklch(0.2 0.01 250); --ink-2: oklch(0.42 0.01 250); --ink-3: oklch(0.56 0.01 250);
+  --steel: oklch(0.27 0.012 250); --steel-ink: oklch(0.96 0.005 85);
+  --hazard: oklch(0.86 0.17 92); --hazard-ink: oklch(0.2 0.02 90); --hazard-edge: oklch(0.62 0.15 85);
+  --ok: oklch(0.48 0.12 150); --ok-soft: oklch(0.94 0.05 150); --ok-lamp: oklch(0.72 0.17 150);
+  --amber: oklch(0.55 0.13 65); --amber-soft: oklch(0.95 0.05 80);
+  --bad: oklch(0.53 0.19 28); --bad-soft: oklch(0.95 0.035 28);
+  --info: oklch(0.5 0.12 255); --info-soft: oklch(0.95 0.03 255);
+  --tag: oklch(0.9 0.05 80); --tag-line: oklch(0.78 0.07 75); --tag-ink: oklch(0.3 0.04 60); --stamp: oklch(0.42 0.11 150);
+  --shadow: 0 1px 0 oklch(0.2 0.02 250 / 0.06);
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: oklch(0.18 0.006 250); --grid: oklch(0.215 0.007 250); --surface: oklch(0.225 0.008 250); --surface-2: oklch(0.255 0.009 250);
+  --line: oklch(0.32 0.01 250); --line-2: oklch(0.42 0.012 250);
+  --ink: oklch(0.95 0.005 85); --ink-2: oklch(0.78 0.008 85); --ink-3: oklch(0.63 0.01 85);
+  --steel: oklch(0.12 0.006 250); --steel-ink: oklch(0.95 0.005 85);
+  --ok: oklch(0.8 0.14 150); --ok-soft: oklch(0.3 0.05 150);
+  --amber: oklch(0.84 0.13 80); --amber-soft: oklch(0.32 0.05 75);
+  --bad: oklch(0.76 0.15 28); --bad-soft: oklch(0.32 0.07 28);
+  --info: oklch(0.8 0.1 255); --info-soft: oklch(0.3 0.05 255);
+  --tag: oklch(0.34 0.035 75); --tag-line: oklch(0.46 0.05 75); --tag-ink: oklch(0.9 0.04 80); --stamp: oklch(0.82 0.13 150);
+  --shadow: 0 1px 0 #0006;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { min-height: 100vh; font: 14px/1.5 var(--body); color: var(--ink); -webkit-font-smoothing: antialiased;
+       background-color: var(--bg); background-size: 24px 24px;
+       background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+       transition: background-color .25s, color .25s; }
+button, select, input { font: inherit; color: inherit; }
+h1, h2, h3, p { margin: 0; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--hazard); outline-offset: 1px; }
+.mono, code { font-family: var(--mono); font-size: 12px; }
+.label { font: 600 11px var(--mono); letter-spacing: .08em; color: var(--ink-3); text-transform: uppercase; }
+.error { color: var(--bad); white-space: pre-wrap; }
+p.error:empty { display: none; }
+
+/* Header: a line status board */
+.hazard { height: 6px; background: repeating-linear-gradient(-45deg, var(--hazard) 0 12px, var(--steel) 12px 24px); }
+.bar { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 10px 32px;
+       background: var(--steel); color: var(--steel-ink); }
+.brand { display: flex; align-items: center; gap: 12px; }
+.badge { display: grid; place-items: center; width: 38px; height: 38px; background: var(--hazard); color: var(--hazard-ink);
+         font: 800 20px var(--display); letter-spacing: .02em; }
+.brand-name { display: flex; flex-direction: column; line-height: 1.05; }
+.brand-name b { font: 700 20px var(--display); letter-spacing: .06em; text-transform: uppercase; }
+.brand-name span, .line-text span:last-child { font: 500 11px var(--mono); opacity: .65; letter-spacing: .06em; }
+.vsep { width: 1px; height: 30px; background: oklch(1 0 0 / .15); }
+.line { display: flex; align-items: center; gap: 10px; }
+.lamp { display: flex; flex-direction: column; gap: 2px; padding: 3px; background: oklch(0 0 0 / .35); border-radius: 3px; }
+.lamp i { width: 10px; height: 6px; border-radius: 1px; background: oklch(0.35 0.02 250); }
+.line.up .lamp i:nth-child(3) { background: var(--ok-lamp); box-shadow: 0 0 8px var(--ok-lamp); animation: pulse 2.4s ease-in-out infinite; }
+.line.down .lamp i:nth-child(1) { background: oklch(0.65 0.2 28); box-shadow: 0 0 8px oklch(0.65 0.2 28); animation: pulse 1.2s ease-in-out infinite; }
+.line-text { display: flex; flex-direction: column; line-height: 1.15; }
+.line-text span:first-child { font: 600 12px var(--mono); letter-spacing: .04em; }
+.grow { flex: 1; }
+.livepill { display: flex; align-items: center; gap: 8px; border: 0; padding: 6px 12px; background: var(--hazard); color: var(--hazard-ink);
+            font: 700 13px var(--display); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+.livepill i { width: 8px; height: 8px; border-radius: 50%; background: var(--hazard-ink); animation: pulse 1.2s ease-in-out infinite; }
+.shift { display: flex; gap: 2px; padding: 2px; background: oklch(0 0 0 / .3); }
+.shift button { border: 0; padding: 6px 14px; background: transparent; color: var(--steel-ink); cursor: pointer;
+                font: 600 12px var(--display); letter-spacing: .1em; text-transform: uppercase; }
+.shift button[aria-pressed="true"] { background: var(--hazard); color: var(--hazard-ink); }
+#conn { position: sticky; top: 58px; z-index: 9; margin: 0; padding: 8px 32px; background: var(--bad); color: #fff;
+        font: 600 13px var(--mono); letter-spacing: .04em; }
+
+.layout { display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 24px; align-items: start;
+          max-width: 1440px; margin: 0 auto; padding: 24px 32px 48px; }
+aside { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 82px; max-height: calc(100vh - 100px); overflow: auto; }
+main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+/* Panels: numbered work stations */
+.panel { background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow); display: flex; flex-direction: column; min-width: 0; }
+.ph { display: flex; flex-wrap: wrap; align-items: stretch; border-bottom: 1px solid var(--line-2); }
+.pn { padding: 6px 10px; background: var(--steel); color: var(--steel-ink); font: 700 13px var(--mono); }
+.pn.hz { background: var(--hazard); color: var(--hazard-ink); }
+.pt { flex: 1; padding: 6px 12px; font: 700 15px var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.pside { display: flex; align-items: center; gap: 6px; padding: 6px 12px; font: 600 12px var(--mono); color: var(--ink-3); }
+.pb { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.empty { padding: 48px 24px; text-align: center; color: var(--ink-2); }
+.empty b { display: block; font: 700 22px var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); margin-bottom: 6px; }
+
+/* Dispatch */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field select, .field input, .qcsel { appearance: none; padding: 10px 12px; border-radius: 0; border: 1px solid var(--line-2);
+  border-left: 3px solid var(--ink); background: var(--surface-2); color: var(--ink); font: 500 14px var(--body); width: 100%; }
+.confirm { padding: 9px 11px; border-radius: 0; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--ink); font: 13px var(--mono); width: 100%; }
+.criteria { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; background: var(--surface-2); border: 1px dashed var(--line-2); }
+.criteria p { font-size: 13px; color: var(--ink-2); }
+.readout { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line-2); }
+.readout div { padding: 6px 10px; display: flex; flex-direction: column; gap: 1px; }
+.readout div + div { border-left: 1px solid var(--line-2); }
+.readout b { font: 600 13px var(--mono); }
+.caution { padding: 4px; background: repeating-linear-gradient(-45deg, var(--hazard) 0 8px, var(--steel) 8px 16px); }
+.caution > div { display: flex; flex-direction: column; gap: 8px; padding: 12px; background: var(--surface); }
+.caution strong { font: 800 14px var(--display); letter-spacing: .14em; color: var(--bad); }
+.caution p { font-size: 12px; color: var(--ink-2); }
+.caution code { font-weight: 600; color: var(--ink); }
+.run { position: relative; overflow: hidden; border: 0; border-bottom: 4px solid var(--hazard-edge); padding: 13px;
+       background: var(--hazard); color: var(--hazard-ink); font: 800 17px var(--display); letter-spacing: .14em; cursor: pointer; }
+.run:active { transform: translateY(2px); border-bottom-width: 2px; }
+.run:disabled { cursor: not-allowed; }
+.run .prog { position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, oklch(0 0 0 / .14) 0 8px, transparent 8px 16px);
+             background-size: 22.6px 22.6px; opacity: 0; }
+.run.busy .prog { opacity: 1; animation: crawl 1s linear infinite; }
+.run span:last-child { position: relative; }
+.modes { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line-2); }
+.modes button { border: 0; padding: 8px; background: var(--surface); color: var(--ink-3); cursor: pointer;
+                font: 700 13px var(--display); letter-spacing: .1em; text-transform: uppercase; }
+.modes button + button { border-left: 1px solid var(--line-2); }
+.modes button[aria-pressed="true"] { background: var(--steel); color: var(--steel-ink); }
+.ask-text { width: 100%; min-height: 96px; resize: vertical; padding: 10px 12px; border-radius: 0; border: 1px solid var(--line-2);
+            border-left: 3px solid var(--hazard); background: var(--surface-2); color: var(--ink); font: 14px/1.45 var(--body); }
+.examples { display: flex; flex-wrap: wrap; gap: 6px; }
+.examples button { border: 1px solid var(--line-2); background: none; padding: 3px 8px; font: 12px var(--body); color: var(--ink-2); cursor: pointer; }
+.examples button:hover { background: var(--surface-2); }
+.ghost { border: 1px solid var(--ink); background: none; padding: 8px; font: 700 13px var(--display); letter-spacing: .12em;
+         text-transform: uppercase; cursor: pointer; }
+.small { font-size: 12px; color: var(--ink-3); }
+
+/* QC log */
+.yield { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+.yield .big { font: 800 44px/1 var(--display); color: var(--ok); }
+.yield .big small { font-size: 24px; }
+.yield .ratio { font: 700 24px/1 var(--display); text-align: right; }
+.yield .ratio small { color: var(--ink-3); font-weight: 500; font-size: 24px; }
+.ticks { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2px; padding: 3px; background: var(--steel); }
+.ticks i { height: 10px; background: var(--ok-lamp); }
+.ticks i.revise { background: oklch(0.65 0.2 28); } .ticks i.unevaluated { background: oklch(0.8 0.15 80); }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) repeat(var(--cols), 30px); gap: 0 6px; align-items: center; font-size: 13px; }
+.grid .head { font: 600 10px var(--mono); letter-spacing: .1em; color: var(--ink-3); text-align: center; padding-bottom: 6px;
+              border-bottom: 1px solid var(--line); text-transform: uppercase; }
+.grid .head:first-child { text-align: left; padding-left: 8px; }
+.grid .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 3px 8px 3px 5px; border-left: 3px solid transparent;
+              border-bottom: 1px dotted var(--line); }
+.grid .name.selected { border-left-color: var(--hazard); background: var(--surface-2); font-weight: 600; }
+.cell { height: 20px; margin: 3px 0; border: 0; padding: 0; font-size: 12px; font-weight: 700; cursor: pointer; background: none; color: var(--ink-3); }
+.cell.approve { background: var(--ok-soft); color: var(--ok); }
+.cell.revise { background: var(--bad-soft); color: var(--bad); }
+.cell.unevaluated { background: var(--amber-soft); color: var(--amber); }
+.cell.none, .cell.na { cursor: default; }
+.cell.q { background: var(--surface-2); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line-2); }
+.cell.selected { box-shadow: 0 0 0 1.5px var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font: 11px var(--mono); color: var(--ink-3); }
+
+/* Job traveler */
+.traveler { padding: 22px 24px 20px; gap: 18px; }
+.traveler h1 { font: 800 44px/1 var(--display); letter-spacing: .01em; text-transform: uppercase; text-wrap: balance; }
+.tblock { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); border: 1.5px solid var(--ink); }
+.tblock div { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-right: 1px solid var(--line-2); margin-right: -1px; min-width: 0; }
+.tblock b { font: 600 14px var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.spec > div { display: flex; flex-direction: column; gap: 6px; }
+.spec p { font-size: 15px; text-wrap: pretty; }
+.spec .instruction { color: var(--ink-2); padding: 10px 14px; background: var(--surface-2); border-left: 3px solid var(--hazard); }
+.status { display: flex; align-items: center; gap: 6px; padding: 6px 12px; font: 600 12px var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+.status i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status.ok { background: var(--ok-soft); color: var(--ok); } .status.bad { background: var(--bad-soft); color: var(--bad); }
+.status.warn { background: var(--amber-soft); color: var(--amber); }
+.status.live { background: var(--hazard); color: var(--hazard-ink); } .status.live i { animation: pulse 1.2s ease-in-out infinite; }
+
+.outcome { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+
+/* QC inspection tag: the page's one decorative object, because the verdict is an inspection result */
+.tag { flex: 1 1 260px; max-width: 330px; margin: 0 auto; position: relative; background: var(--tag); border: 1px solid var(--tag-line);
+       color: var(--tag-ink); padding: 26px 22px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;
+       clip-path: polygon(26px 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%, 0 26px); }
+.hole { width: 18px; height: 18px; border-radius: 50%; background: var(--bg); box-shadow: inset 0 0 0 3px var(--tag-line), 0 0 0 3px oklch(0.75 0.02 80); }
+.tag-title b { display: block; font: 800 18px var(--display); letter-spacing: .3em; }
+.tag-title span { font: 500 10px var(--mono); letter-spacing: .1em; opacity: .7; }
+.stamp { padding: 2px 16px; border: 3px double var(--stamp); color: var(--stamp); font: 800 46px/1.1 var(--display); letter-spacing: .08em;
+         text-transform: uppercase; transform: rotate(-5deg); animation: stampin .6s cubic-bezier(.2, .8, .2, 1) both; }
+:root[data-theme="light"] .stamp { mix-blend-mode: multiply; }
+.stamp.revise, .stamp.lost { border-color: var(--bad); color: var(--bad); }
+.stamp.unevaluated { border-color: var(--amber); color: var(--amber); }
+.stamp.ungraded { border-color: var(--ink-3); color: var(--ink-2); border-style: dashed; }
+.status.plain { background: var(--surface-2); color: var(--ink-2); }
+.stamp.running, .stamp.awaiting { border-style: dashed; border-width: 2px; border-color: var(--tag-ink); color: var(--tag-ink);
+                                  font-size: 32px; transform: none; animation: none; opacity: .75; }
+.tag .reason { font-size: 13px; text-wrap: pretty; }
+.tag .error { font: 12px var(--mono); text-align: left; align-self: stretch; }
+.inspect { align-self: stretch; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--tag-line); border-bottom: 1px solid var(--tag-line); text-align: left; }
+.inspect div { padding: 6px 0; display: flex; flex-direction: column; }
+.inspect div + div { border-left: 1px solid var(--tag-line); padding-left: 10px; }
+.inspect span, .stats dt { font: 600 9px var(--mono); letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.inspect b { font: 600 12px var(--mono); }
+.stats { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-self: stretch; text-align: left; }
+.stats div { display: flex; flex-direction: column; gap: 2px; }
+.stats dd { margin: 0; font: 700 26px/1 var(--display); font-variant-numeric: tabular-nums; }
+.tag .foot { font-size: 11px; opacity: .8; }
+
+/* Root-cause report */
+.report { flex: 999 1 520px; }
+.report .pb { padding: 16px 24px 20px; gap: 0; }
+.lead { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-bottom: 12px; font-size: 13px; color: var(--ink-2); }
+.frow { display: flex; flex-wrap: wrap; gap: 6px 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.frow > .label { flex: 0 0 150px; padding-top: 4px; font-size: 11px; letter-spacing: .06em; }
+.frow > .val { flex: 1 1 260px; min-width: 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 0; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; font-size: 13px; background: var(--surface-2); border: 1px solid var(--line-2); }
+.chip.mono { padding: 3px 9px; font: 12px var(--mono); }
+.chip.boxed { border: 1.5px solid var(--ink); background: none; font-weight: 600; }
+.chip.stop { background: var(--bad-soft); color: var(--bad); border: 0; font-weight: 600; }
+.chip.stop::before { content: ""; width: 8px; height: 8px; background: var(--bad); }
+.chip.warnd { background: var(--amber-soft); color: var(--ink); border: 0; }
+.chip.warnd::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
+.tick { padding: 2px 8px; font: 600 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; border: 1px solid transparent; }
+.t-ok { background: var(--ok-soft); color: var(--ok); } .t-bad { background: var(--bad-soft); color: var(--bad); }
+.t-warn { background: var(--amber-soft); color: var(--amber); } .t-info { background: var(--info-soft); color: var(--info); }
+.t-plain { border-color: var(--line-2); color: var(--ink-2); }
+.callout { padding: 10px 14px; border-left: 3px solid currentColor; font-size: 14px; }
+.callout b { display: block; font: 700 14px var(--display); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+.callout.t-info span, .callout.t-warn span { color: var(--ink); }
+.sheet { flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; border: 1px solid var(--line-2); }
+.sheet .row { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 8px; padding: 9px 12px; align-items: center; font-size: 13px; }
+.sheet .row + .row { border-top: 1px solid var(--line); }
+.sheet .row.hd { padding: 6px 12px; background: var(--steel); color: var(--steel-ink); font: 600 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.sheet .dash { color: var(--ink-3); }
+.linkbtn { border: 0; background: none; color: var(--ink); text-decoration: underline; text-decoration-color: var(--hazard);
+           text-decoration-thickness: 2px; font: 600 12px var(--mono); cursor: pointer; padding: 3px 6px; }
+details > summary { cursor: pointer; list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+.rawd { border-top: 1px solid var(--line); padding-top: 12px; }
+.rawd > summary, .reply > summary { display: flex; gap: 8px; align-items: center; font: 600 12px var(--mono); letter-spacing: .06em; color: var(--ink-2); text-transform: uppercase; }
+.rawd > summary::before, .reply > summary::before { content: "▶"; font-size: 9px; transition: transform .2s; }
+.rawd[open] > summary::before, .reply[open] > summary::before { transform: rotate(90deg); }
+pre { margin: 8px 0 0; padding: 14px; background: var(--steel); color: oklch(0.85 0.1 150); font: 12px/1.6 var(--mono);
+      overflow: auto; max-height: 380px; white-space: pre-wrap; word-break: break-word; }
+
+.reply { padding: 12px 18px; }
+.reply > summary b { font: 700 15px var(--display); letter-spacing: .12em; color: var(--ink); }
+.reply > summary span { text-transform: none; letter-spacing: 0; color: var(--ink-3); font-weight: 400; }
+.reply-text { margin: 12px 0 4px; padding: 14px 16px; background: var(--surface-2); border-left: 3px solid var(--line-2); font-size: 14px;
+              color: var(--ink-2); white-space: pre-wrap; max-width: 80ch; }
+
+/* Routing sheet: one operation per model step */
+.routing { padding: 20px 24px 4px; list-style: none; margin: 0; }
+.op { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 14px; }
+.op-rail { display: flex; flex-direction: column; align-items: center; }
+.op-no { width: 52px; padding: 4px 0; text-align: center; background: var(--steel); color: var(--steel-ink); font: 700 13px var(--mono); }
+.op.final .op-no { background: var(--ok); color: var(--surface); }
+.op-rail::after { content: ""; flex: 1; width: 0; border-left: 2px dashed var(--line-2); margin: 4px 0; }
+.op-body { display: flex; flex-direction: column; gap: 8px; padding-bottom: 22px; min-width: 0; }
+.op-rows { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.op-head { display: flex; align-items: center; gap: 10px; min-height: 27px; flex-wrap: wrap; }
+.op-head b { font: 700 18px var(--display); letter-spacing: .06em; text-transform: uppercase; }
+.op-head .meta { font: 12px var(--mono); color: var(--ink-3); }
+.call { border: 1px solid var(--line-2); background: var(--surface); }
+.call > summary { display: grid; grid-template-columns: 14px minmax(0, max-content) minmax(0, 1fr) minmax(0, 170px) 64px; gap: 10px;
+                  align-items: center; padding: 9px 12px; font: 14px var(--body); }
+.call > summary:hover, .call[open] > summary { background: var(--surface-2); }
+.call > summary::before { content: "›"; font-size: 13px; color: var(--ink-3); transition: transform .2s; }
+.call[open] > summary::before { transform: rotate(90deg); }
+.call .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.call .args { font: 12px var(--mono); color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.call .args .tick { margin-left: 6px; }
+.lane { position: relative; height: 10px; border: 1px solid var(--line); background: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 10%); }
+.lane i { position: absolute; top: 1px; bottom: 1px; left: 0; min-width: 3px; background: var(--hazard); box-shadow: inset 0 0 0 1px var(--hazard-edge); }
+.call .dur { font: 600 12px var(--mono); color: var(--ink-2); text-align: right; }
+.call .error { padding: 0 12px 10px 36px; font: 12px var(--mono); }
+.io { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; padding: 10px 12px 12px 36px;
+      border-top: 1px dashed var(--line-2); background: var(--surface-2); }
+.io pre { margin-top: 4px; max-height: 300px; }
+.op-note { padding: 12px 14px; background: var(--surface-2); border-left: 3px solid var(--ok); font-size: 14px; color: var(--ink-2);
+           max-width: 80ch; white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.fade { animation: fade .15s ease-out; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes stampin { 0% { transform: rotate(-5deg) scale(1.7); opacity: 0; } 60% { transform: rotate(-5deg) scale(.95); opacity: 1; } 100% { transform: rotate(-5deg) scale(1); } }
+@keyframes crawl { to { background-position: 22.6px 0; } }
+@keyframes fade { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; padding: 16px; } aside { position: static; max-height: none; }
+  .bar { padding: 10px 16px; } .vsep { display: none; } #conn { padding: 8px 16px; }
+  .traveler h1 { font-size: 32px; } .call > summary { grid-template-columns: 14px minmax(0, 1fr) 64px; } .call .args, .lane { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="hazard"></div>
+<header class="bar">
+  <div class="brand"><span class="badge">T04</span>
+    <div class="brand-name"><b>Run console</b><span>PLANT AGENT QC · TEAM04</span></div></div>
+  <span class="vsep"></span>
+  <div id="line" class="line up"><div class="lamp"><i></i><i></i><i></i></div>
+    <div class="line-text"><span id="line-state">LINE ONLINE</span><span id="line-tenant">tenant: —</span></div></div>
+  <span class="grow"></span>
+  <button id="live-pill" class="livepill" hidden><i></i><span id="live-text"></span></button>
+  <div class="shift" role="group" aria-label="Theme">
+    <button id="day" aria-pressed="true">Day shift</button><button id="night" aria-pressed="false">Night shift</button>
+  </div>
+</header>
+<p id="conn" hidden>LINE DOWN · disconnected from the console server, retrying every second</p>
+<div class="layout">
+  <aside>
+    <section class="panel">
+      <div class="ph"><span class="pn hz">01</span><span class="pt">Dispatch a job</span></div>
+      <div class="pb">
+        <div class="modes" role="group" aria-label="What to run">
+          <button id="mode-task" aria-pressed="true">Harness task</button><button id="mode-ask" aria-pressed="false">Ask the agent</button>
+        </div>
+        <label id="task-field" class="field label">Task<select id="task"></select></label>
+        <label class="field label">Instance<select id="instance"></select></label>
+        <div id="task-part">
+          <div class="criteria"><span class="label">Pass criteria</span><p id="task-checks"></p></div>
+          <div id="task-info" class="readout" style="margin-top:14px"></div>
+        </div>
+        <div id="ask-part" hidden>
+          <label class="field label">Question<textarea id="ask-text" class="ask-text" maxlength="1000"
+            placeholder="Can we finish WO-2026-00048 by 2027-03-31?"></textarea></label>
+          <div class="examples" id="examples" style="margin-top:8px"></div>
+        </div>
+        <div class="caution"><div>
+          <strong id="caution-title">CAUTION · WRITES TO LIVE TENANT</strong>
+          <p id="caution-note" hidden>Not graded: no verifier exists for a free-text question. It records one finding row on the tenant; work-order changes and escalations are switched off.</p>
+          <p>Type <code id="confirm-hint"></code> to release the interlock.</p>
+          <input id="confirm" class="confirm" autocomplete="off" spellcheck="false" aria-label="Confirmation">
+        </div></div>
+        <button id="start" class="run"><span class="prog"></span><span id="start-label">▶ START RUN</span></button>
+        <p id="start-error" class="error small"></p>
+        <p id="job" class="small"></p>
+        <button id="follow" class="ghost" hidden>Follow current run</button>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="ph"><span class="pn">02</span><span class="pt">QC log</span><span id="root-id" class="pside"></span></div>
+      <div class="pb">
+        <select id="root" class="qcsel" aria-label="Run"></select>
+        <div id="root-total"></div>
+        <div id="grid" class="grid"></div>
+        <div class="legend"><span>✓ approved</span><span>✕ revise</span><span>? unevaluated</span><span>○ no saved run</span><span>— not run here</span></div>
+      </div>
+    </section>
+  </aside>
+  <main>
+    <section id="empty" class="panel empty"><b>No job on the traveler</b>Pick a result in the QC log, or dispatch a job.</section>
+    <section id="head" class="panel" hidden>
+      <div class="ph"><span class="pn">03</span><span class="pt">Job traveler</span><span id="status" class="status"></span></div>
+      <div class="pb traveler">
+        <div><span class="label">Job</span><h1 id="detail-title"></h1></div>
+        <div id="tblock" class="tblock"></div>
+        <div class="spec">
+          <div><span class="label">Spec · what this task tests</span><p id="detail-checks"></p></div>
+          <div><span class="label">Work instruction · sent to agent</span><p id="detail-request" class="instruction"></p></div>
+        </div>
+      </div>
+    </section>
+    <div id="outcome" class="outcome" hidden>
+      <section id="verdict" class="tag"></section>
+      <section class="panel report">
+        <div class="ph"><span class="pn">04</span><span class="pt">Root-cause report</span><span id="late" class="status" hidden></span></div>
+        <div id="finding" class="pb"></div>
+      </section>
+    </div>
+    <section id="answer" class="panel" hidden></section>
+    <section id="route" class="panel" hidden>
+      <div class="ph"><span class="pn">05</span><span class="pt">Routing sheet</span><span id="route-meta" class="pside"></span></div>
+      <ol id="events" class="routing"></ol>
+    </section>
+  </main>
+</div>
+<script>
+const TOKEN = "{{TOKEN}}";
+const $ = id => document.getElementById(id);
+let tasks = [], taskById = {}, instances = [], roots = [];
+// Every change of what the detail pane shows replaces `follow` (or bumps `view` for history), and a response
+// is drawn only if its view is still the one on screen. Without this, a slow poll can paint a live run's
+// steps into a past run that was clicked meanwhile.
+let view = 0;
+let follow = null;  // {jobId, offset} while the detail pane follows a live run
+let pane = null;    // per-view render state: step cards and running totals
+let lastJob = null, selected = null, mode = "task";
+const ASK_TASK = {id: "ask_the_agent", mode: "question",
+                  checks: "Free-text question. No verifier exists for it, so the answer is shown but never graded."};
+const EXAMPLES = ["Can we finish WO-2026-00048 by 2027-03-31?", "Where is the shop floor stuck right now?",
+                  "How loaded is the shop over the next three weeks?"];
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined && text !== null) e.textContent = text;
+  return e;
+}
+async function get(url) {
+  const r = await fetch(url);  // a network failure throws a TypeError with no status
+  if (!r.ok) {
+    const err = new Error((await r.json().catch(() => ({}))).error || String(r.status));
+    err.status = r.status;
+    throw err;
+  }
+  return r.json();
+}
+const q = params => new URLSearchParams(params).toString();
+const parsed = s => { try { return JSON.parse(s); } catch { return s; } };
+function setConn(ok) {
+  $("conn").hidden = ok;
+  $("line").className = "line " + (ok ? "up" : "down");
+  $("line-state").textContent = ok ? "LINE ONLINE" : "LINE DOWN";
+}
+function setTenant(name) { $("line-tenant").textContent = `tenant: ${name || "—"}`; }
+
+// Codes stay exact in a tooltip; the label is only for reading.
+const LABELS = {
+  answered: "Answered", partial: "Partly answered", refused: "Refused", changed_underneath: "Changed underneath",
+  applied: "Applied", not_approved: "Not approved", not_writable: "Not writable", write_rejected: "Write rejected",
+  write_not_persisted: "Write not persisted", dry_run: "Dry run", apply: "Applies changes", question: "Question · read-only",
+  ask_the_agent: "Ask the agent", ask: "Ask the agent",
+};
+const own = (o, k) => Object.hasOwn(o, k) ? o[k] : undefined;
+const human = code => own(LABELS, code) || String(code).replace(/_/g, " ").replace(/\b(wo|so|eco|sco)(\d+)\b/gi,
+  (m, p, n) => p.toUpperCase() + n).replace(/^./, c => c.toUpperCase());
+const TONE = {answered: "t-ok", applied: "t-ok", partial: "t-warn", changed_underneath: "t-warn", refused: "t-info",
+              not_approved: "t-info", approve: "t-ok", revise: "t-bad", unevaluated: "t-warn"};
+function chip(text, cls, title) {
+  const c = el("span", "chip " + (cls || ""), text);
+  if (title) c.title = title;
+  return c;
+}
+function tick(code) { const t = el("span", "tick " + (own(TONE, code) || "t-plain"), human(code)); t.title = String(code); return t; }
+function idChips(box, list, limit, cls) {
+  const extra = [];
+  list.forEach((id, i) => { const c = chip(id, cls || "mono"); if (i >= limit) { c.hidden = true; extra.push(c); } box.append(c); });
+  if (extra.length) {
+    const more = el("button", "linkbtn", `+${extra.length} more`);
+    more.onclick = () => {
+      const show = extra[0].hidden;
+      for (const c of extra) c.hidden = !show;
+      more.textContent = show ? "show less" : `+${extra.length} more`;
+    };
+    box.append(more);
+  }
+  return box;
+}
+function rawBlock(label, value, cls) {
+  const d = el("details", cls || "rawd");
+  d.append(el("summary", "", label), el("pre", "", JSON.stringify(value, null, 1)));
+  return d;
+}
+function secs(s) {
+  if (s === null || s === undefined) return "—";
+  return s < 60 ? `${Math.round(s)}s` : `${Math.floor(s / 60)}m ${String(Math.round(s % 60)).padStart(2, "0")}s`;
+}
+
+// ---------------------------------------------------------------- detail pane
+
+function newPane(runNo, task, instance, kind) {
+  pane = {kind: kind || "task", steps: new Map(), lastStep: null, llm: 0, tools: 0, tokens: 0, tokensSeen: false, model: null, seconds: null,
+          live: false, instance, task, runNo, runId: null, workOrder: null, calls: []};
+  $("empty").hidden = true;
+  for (const id of ["head", "outcome", "route"]) $(id).hidden = false;
+  $("answer").hidden = true;
+  $("late").hidden = true;
+  $("detail-title").textContent = human(task.id);
+  $("detail-title").title = task.id;
+  $("detail-checks").textContent = task.checks || "No description in the task file.";
+  $("detail-request").textContent = task.prompt || "";
+  $("events").replaceChildren();
+  $("finding").replaceChildren();
+  setTenant(instance);
+  renderMeta();
+  renderRouteMeta();
+}
+function renderMeta() {
+  const t = pane.task;
+  const cells = [["Run no.", pane.runNo], ["Instance", pane.instance], ["Mode", human(t.mode || "dry_run")],
+                 ["Model", pane.model || "—"], ["Work order", pane.workOrder || "—"]];
+  $("tblock").replaceChildren(...cells.map(([k, v]) => { const d = el("div"); d.append(el("span", "label", k), el("b", "", v)); d.title = v; return d; }));
+}
+function setStatus(cls, text) {
+  const s = $("status");
+  s.className = "status " + cls;
+  s.replaceChildren(el("i"), el("span", "", text));
+}
+function renderTag(state) {
+  // state: {kind: "running"|"awaiting"|"verdict"|"lost", run, message}
+  const tag = $("verdict");
+  const title = el("div", "tag-title");
+  title.append(el("b", "", "QC INSPECTION"), el("span", "", `TAG NO. ${pane.runId || "—"}`));
+  tag.replaceChildren(el("span", "hole"), title);
+  if (state.kind === "running") {
+    setStatus("live", "In process");
+    tag.append(el("span", "stamp running", "In process"), el("p", "reason", "Steps appear on the routing sheet as the agent takes them."));
+  } else if (state.kind === "awaiting") {
+    setStatus("warn", "Awaiting QC");
+    tag.append(el("span", "stamp awaiting", "Awaiting QC"), el("p", "reason", "The agent finished; the verifier has not scored it yet."));
+  } else if (state.kind === "lost") {
+    setStatus("bad", "No result");
+    tag.append(el("span", "stamp lost", "No result"), el("p", "reason error", state.message));
+  } else {
+    const v = state.run.verdict;
+    if (pane.kind === "ask") {
+      // No verifier, so the only honest signals are whether the agent finished and whether it recorded anything.
+      const res = state.run.result;
+      if (!res) {
+        setStatus("bad", "No result");
+        tag.append(el("span", "stamp lost", "No result"), el("p", "reason error", "The question ended before the agent wrote a result."));
+      } else if (res.stop_reason !== "final_answer" || !res.finding) {
+        setStatus("warn", `Not answered · ${human(res.stop_reason || "unknown")}`);
+        tag.append(el("span", "stamp unevaluated", "Not answered"),
+                   el("p", "reason", res.finding ? `The agent stopped early (${human(res.stop_reason || "unknown")}).`
+                                                 : "The agent recorded no finding, so there is nothing to read back."));
+      } else {
+        setStatus("plain", "Answered · not graded");
+        tag.append(el("span", "stamp ungraded", "Not graded"),
+                   el("p", "reason", "A free-text question has no verifier. Read the finding and reply, but nothing here was checked."));
+      }
+      if (res && res.error) tag.append(el("pre", "error", res.error));
+    } else {
+      const word = v && own(TONE, v.verdict) ? v.verdict : "unevaluated";
+      setStatus({approve: "ok", revise: "bad", unevaluated: "warn"}[word],
+                {approve: "Released · passed QC", revise: "Held · rework", unevaluated: "Not inspected · not a pass"}[word]);
+      tag.append(el("span", "stamp " + word, {approve: "Approved", revise: "Revise", unevaluated: "Unevaluated"}[word]));
+      tag.append(el("p", "reason", v ? v.reason : "No verdict: not scored, never a pass."));
+    }
+    // A setup failure (bad credentials, tenant down) still exits 0; its cause is only in result.error.
+    if (state.run.result && state.run.result.error) tag.append(el("pre", "error", state.run.result.error));
+    const cleanupErrors = (state.run.cleanup && state.run.cleanup.errors) || [];
+    if (cleanupErrors.length) {
+      const c = el("div", "callout t-bad");
+      c.append(el("b", "", "Cleanup errors: an escalation may still be open. Check it by hand."),
+               el("pre", "", cleanupErrors.join("\n")));
+      tag.append(c);
+    }
+  }
+  const insp = el("div", "inspect");
+  for (const [k, v] of pane.kind === "ask" ? [["Inspected by", "nobody"], ["Source", "DB record"]]
+                                            : [["Inspected by", "verifier"], ["Source", "DB record"]]) {
+    const d = el("div");
+    d.append(el("span", "", k), el("b", "", v));
+    insp.append(d);
+  }
+  tag.append(insp, el("dl", "stats"));
+  const saved = state.kind === "verdict" ? state.run.persisted_before_verdict : null;
+  if (pane.kind === "ask") {
+    const recorded = state.kind === "verdict" && state.run.result && state.run.result.finding;
+    tag.append(el("p", "foot", recorded ? "Recorded in the DB · not graded" : "Nothing recorded · not graded"));
+  }
+  else tag.append(el("p", "foot", saved === false ? "✕ Result written after the verdict"
+    : saved === true ? "Saved before scoring · graded from DB, not the reply" : "Graded from DB, not the reply"));
+  renderStats();
+}
+function renderStats() {
+  const box = $("verdict").querySelector(".stats");
+  if (!box || !pane) return;
+  const live = pane.live && lastJob && lastJob.running ? (Date.now() - new Date(lastJob.started)) / 1000 : null;
+  const rows = [["Model steps", String(pane.llm)], ["Tool calls", String(pane.tools)],
+                ["Tokens", pane.tokensSeen ? pane.tokens.toLocaleString() : "—"],
+                [live !== null ? "Elapsed" : "Agent time", secs(live !== null ? live : pane.seconds)]];
+  box.replaceChildren(...rows.map(([k, v]) => { const d = el("div"); d.append(el("dt", "", k), el("dd", "", v)); return d; }));
+}
+function frow(label, ...content) {
+  const r = el("div", "frow"), val = el("div", "val");
+  val.append(...content);
+  r.append(el("span", "label", label), val);
+  return r;
+}
+function counted(list, cls) {
+  const counts = new Map();
+  for (const c of list || []) counts.set(c, (counts.get(c) || 0) + 1);
+  return [...counts].map(([c, n]) => chip(n > 1 ? `${human(c)} ×${n}` : human(c), cls, c));
+}
+function money(value, currency) {
+  if (typeof value !== "number") return String(value);
+  try { return value.toLocaleString(undefined, {style: "currency", currency}); } catch { return value.toLocaleString(); }
+}
+function sheet(headers, rows) {
+  const s = el("div", "sheet"), hd = el("div", "row hd");
+  for (const h of headers) hd.append(el("span", "", h));
+  s.append(hd);
+  for (const cells of rows) { const r = el("div", "row"); r.append(...cells); s.append(r); }
+  return s;
+}
+const SHOWN = new Set(["outcome", "work_order", "is_late", "currency", "blocking_causes", "contributing_causes",
+  "evidence_records", "potentially_blocked_work_orders", "blocked_sales_orders", "rescheduled", "customer_impact",
+  "not_visible", "escalations", "refusal_reason", "cost", "feasibility"]);
+function renderFinding(f, run, final) {
+  const box = $("finding");
+  box.replaceChildren();
+  const late = $("late");
+  late.hidden = !f || typeof f.is_late !== "boolean";
+  if (f && f.is_late === true) { late.className = "status bad"; late.textContent = "Late"; }
+  if (f && f.is_late === false) { late.className = "status ok"; late.textContent = "Not late"; }
+  if (!f) {
+    box.append(el("div", final ? "callout t-warn" : "lead",
+      final ? "No finding recorded. The verifier grades the stored finding, so this run cannot pass."
+            : "The finding appears here when the agent records it."));
+    if (run && run.interference) box.append(rawBlock("Interference · another edit injected mid-run", run.interference));
+    return;
+  }
+  if (f.work_order && f.work_order !== pane.workOrder) { pane.workOrder = f.work_order; renderMeta(); }
+  const lead = el("div", "lead");
+  lead.append(tick(f.outcome));
+  if (f.work_order) lead.append(chip(f.work_order, "mono t-plain"));
+  lead.append(el("span", "", "Structured result stored in the DB — this is what the verifier grades."));
+  box.append(lead);
+  if (f.refusal_reason) {
+    const c = el("div", "callout t-info");
+    c.append(el("b", "", f.outcome === "refused" ? "Why it refused" : "What it could not do"), el("span", "", f.refusal_reason));
+    box.append(c);
+  }
+  if (f.feasibility && typeof f.feasibility === "object") {
+    const fz = f.feasibility, hours = fz.remaining_work_content_hours;
+    const answer = el("span", "tick " + ({no: "t-bad", unknown: "t-warn"}[fz.verdict] || "t-plain"),
+                      `Finish by ${fz.asked_by || "?"}: ${fz.verdict || "not recorded"}`);
+    box.append(frow("Feasibility", answer,
+      el("span", "small", typeof hours === "number" ? `${hours} h of work remaining on open job cards` : "remaining work not recorded")));
+  }
+  if ((f.blocking_causes || []).length) box.append(frow("Blocking · stop", ...counted(f.blocking_causes, "stop")));
+  if ((f.contributing_causes || []).length) box.append(frow("Contributing · warn", ...counted(f.contributing_causes, "warnd")));
+  if ((f.potentially_blocked_work_orders || []).length) {
+    const val = idChips(el("div", "chips"), f.potentially_blocked_work_orders, 8);
+    const note = el("span", "small", `${f.potentially_blocked_work_orders.length} work orders potentially blocked, not confirmed`);
+    note.style.flexBasis = "100%";
+    box.append(frow("Downstream · potential", note, val));
+  }
+  if ((f.blocked_sales_orders || []).length) {
+    box.append(frow("Sales orders", idChips(el("div", "chips"), f.blocked_sales_orders, 6, "mono boxed")));
+  }
+  if (f.customer_impact) box.append(frow("Customer impact", el("span", "", f.customer_impact)));
+  if (f.cost && typeof f.cost === "object") {
+    box.append(frow("Cost", sheet(Object.keys(f.cost).map(human),
+      [Object.values(f.cost).map(v => el("span", "mono", money(v, f.currency)))])));
+  }
+  if ((f.rescheduled || []).length) {
+    box.append(frow("Rescheduling", sheet(["Work order", "New start", "New end", "Outcome"], f.rescheduled.map(r => {
+      const oc = el("span");
+      oc.append(tick(r.outcome));
+      return [el("span", "mono", r.number), el("span", r.new_start ? "mono" : "dash", r.new_start || "—"),
+              el("span", r.new_end ? "mono" : "dash", r.new_end || "—"), oc];
+    }))));
+  }
+  const raised = (run && run.result && run.result.escalations) || [];
+  const numbers = new Set(raised.map(r => r.number).filter(Boolean));
+  const esc = [...raised, ...(f.escalations || []).filter(e => !e.number || !numbers.has(e.number))];
+  if (esc.length) {
+    const withdrawn = new Set((run && run.cleanup && run.cleanup.withdrawn) || []);
+    box.append(frow("Escalations", sheet(["Number", "Assignee", "Reason", "After scoring"], esc.map(e => {
+      const coded = (f.escalations || []).find(x => x.number && x.number === e.number) || {};
+      const reason = e.reason_code || coded.reason_code;
+      const after = el("span");
+      if (withdrawn.has(e.number)) after.append(el("span", "tick t-ok", "Withdrawn"));
+      else if (e.raised && run && run.cleanup) after.append(el("span", "tick t-warn", "Still open"));
+      else after.append(el("span", "dash", "—"));
+      return [el("span", "mono", e.raised === false ? "Not raised" : (e.number || "No number")),
+              el("span", "", e.assignee || "—"), el("span", "", reason ? human(reason) : "—"), after];
+    }))));
+  }
+  if ((f.not_visible || []).length) box.append(frow("Not visible to seat", ...counted(f.not_visible, "warnd")));
+  for (const [k, v] of Object.entries(f)) {
+    if (!SHOWN.has(k) && v !== null && !(Array.isArray(v) && !v.length)) {
+      box.append(frow(human(k), typeof v === "object" ? rawBlock("Show", v) : el("span", "", String(v))));
+    }
+  }
+  if ((f.evidence_records || []).length) box.append(frow("Evidence", idChips(el("div", "chips"), f.evidence_records, 6)));
+  if (run && run.interference) box.append(rawBlock("Interference · another edit injected mid-run", run.interference));
+  box.append(rawBlock("Raw finding", f));
+}
+function renderAnswer(text) {
+  const box = $("answer");
+  box.hidden = !text;
+  if (!text) return;
+  const d = el("details", "reply"), s = el("summary");
+  s.append(el("b", "", "AGENT REPLY"), el("span", "", "for reading · not graded"));
+  d.open = text.length < 500;
+  d.append(s, el("p", "reply-text", text));
+  box.replaceChildren(d);
+}
+
+// ---------------------------------------------------------------- routing sheet
+
+function stepCard(step) {
+  if (step === undefined || step === null) step = pane.lastStep;
+  if (step === undefined || step === null) step = 0;
+  let card = pane.steps.get(step);
+  if (!card) {
+    const li = el("li", "op fade"), rail = el("div", "op-rail"), body = el("div", "op-body");
+    const head = el("div", "op-head"), name = el("b", "", "Investigate"), meta = el("span", "meta", `step ${step + 1}`);
+    head.append(name, meta);
+    rail.append(el("span", "op-no", `OP ${(step + 1) * 10}`));
+    const rows = el("div", "op-rows");
+    body.append(head, rows);
+    li.append(rail, body);
+    $("events").append(li);
+    card = {li, head, name, meta, rows, step, tools: [], calls: 0};
+    pane.steps.set(step, card);
+  }
+  pane.lastStep = Math.max(step, pane.lastStep ?? step);
+  return card;
+}
+function nameOp(card) {
+  const t = card.tools;
+  card.name.textContent = card.final ? "Ship reply" : t.includes("record_finding") ? "Record finding"
+    : t.includes("escalate") ? "Escalate" : t.some(n => n.startsWith("apply_")) ? "Apply changes" : "Investigate";
+  card.meta.textContent = `step ${card.step + 1}` + (card.calls ? ` · ${card.calls} tool call${card.calls > 1 ? "s" : ""}` : "");
+}
+function renderRouteMeta() {
+  const ops = pane.steps.size;
+  $("route-meta").textContent = `${ops} op${ops === 1 ? "" : "s"} · ${pane.tools} tool call${pane.tools === 1 ? "" : "s"}`
+    + (pane.seconds !== null ? ` · ${secs(pane.seconds)} agent time` : "");
+}
+function relane() {
+  // Bars compare each call with the slowest one. They are not a timeline: parallel reads overlap.
+  const max = Math.max(...pane.calls.map(c => c.seconds || 0), 0.001);
+  for (const c of pane.calls) c.bar.style.width = `${Math.max(1, (100 * (c.seconds || 0)) / max)}%`;
+}
+function callout(card, cls, title, text) {
+  const c = el("div", "callout " + cls);
+  c.append(el("b", "", title));
+  if (text) c.append(el("span", "", text));
+  card.rows.append(c);
+  return c;
+}
+function toolRow(ev) {
+  const row = el("details", "call"), head = el("summary");
+  const args = parsed(ev.arguments);
+  const preview = args && typeof args === "object" ? Object.entries(args).map(([k, v]) => `${k}: ${JSON.stringify(v)}`).join(", ")
+                                                  : String(args || "");
+  const argsBox = el("span", "args", preview || "no arguments");
+  const res = ev.result && typeof ev.result === "object" ? ev.result : null;
+  if (ev.error) argsBox.prepend(el("span", "tick t-bad", "Error"));
+  else if (res && typeof res.outcome === "string") argsBox.prepend(tick(res.outcome));
+  const lane = el("span", "lane"), bar = el("i");
+  lane.title = "Duration compared with the slowest call in this run";
+  lane.append(bar);
+  const nm = el("span", "nm", human(ev.name));
+  nm.title = ev.name;
+  head.append(nm, argsBox, lane, el("span", "dur", typeof ev.seconds === "number" ? `${ev.seconds.toFixed(2)}s` : ""));
+  row.append(head);
+  pane.calls.push({bar, seconds: typeof ev.seconds === "number" ? ev.seconds : 0});
+  if (ev.error) {
+    row.open = true;
+    const detail = res && typeof res.error === "string" && res.error !== ev.error ? `: ${res.error}` : "";
+    row.append(el("p", "error", String(ev.error) + detail));
+  }
+  const io = el("div", "io"), inp = el("div"), out = el("div");
+  inp.append(el("span", "label", `Input · ${ev.name}`), el("pre", "", JSON.stringify(args, null, 1)));
+  out.append(el("span", "label", "Output"), el("pre", "", JSON.stringify(ev.result, null, 1)));
+  io.append(inp, out);
+  row.append(io);
+  return row;
+}
+function addEvent(ev) {
+  if (ev.type === "start") {
+    pane.model = ev.model ? (ev.provider && ev.provider !== "openai" ? `${ev.provider} · ${ev.model}` : ev.model) : null;
+    pane.runId = ev.run_id || pane.runId;
+    if (ev.request) $("detail-request").textContent = `“${ev.request}”`;  // the task file holds a template
+    renderMeta();
+    const t = $("verdict").querySelector(".tag-title span");
+    if (t) t.textContent = `TAG NO. ${pane.runId || "—"}`;
+  } else if (ev.type === "llm") {
+    pane.llm++;
+    if (ev.usage && typeof ev.usage.total_tokens === "number") { pane.tokens += ev.usage.total_tokens; pane.tokensSeen = true; }
+    const card = stepCard(ev.step);
+    if (!ev.tool_calls.length) {
+      card.final = true;
+      card.li.classList.add("final");
+      card.head.append(el("span", "tick t-ok", "Final reply"));
+      if (ev.content) card.rows.append(el("p", "op-note", ev.content));
+    }
+    nameOp(card);
+  } else if (ev.type === "tool") {
+    pane.tools++;
+    const card = stepCard(ev.step);
+    card.tools.push(ev.name);
+    card.calls++;
+    card.rows.append(toolRow(ev));
+    nameOp(card);
+  } else if (ev.type === "finding_missing") {
+    const card = stepCard(ev.step);
+    card.final = false;
+    card.li.classList.remove("final");
+    card.head.querySelector(".tick.t-ok")?.remove();
+    card.head.append(el("span", "tick t-warn", "Replied before recording a finding"));
+  } else if (ev.type === "wrap_up") {
+    stepCard(ev.step).head.append(el("span", "tick t-warn", "Forced to record a finding"));
+  } else if (ev.type === "approval") {
+    callout(stepCard(), ev.approved ? "t-ok" : "t-warn", `Write ${ev.approved ? "approved" : "not approved"}`, ev.work_order || "");
+  } else if (ev.type === "interference") {
+    callout(stepCard(), "t-warn", "Someone else edited this order mid-run",
+            `${ev.number}: dates moved to ${ev.planned_start_date} – ${ev.planned_end_date}`);
+  } else if (ev.type === "exception") {
+    const c = callout(stepCard(), "t-bad", `${human(ev.tool)} raised an exception`);
+    c.append(el("pre", "", ev.traceback));
+  } else if (ev.type === "end") {
+    pane.seconds = ev.seconds;
+    const card = stepCard();
+    card.head.append(el("span", "tick t-plain", `Stopped: ${human(ev.stop_reason)}`));
+    if (ev.error) { const c = callout(card, "t-bad", "The model call failed"); c.append(el("pre", "", ev.error)); }
+    renderFinding(ev.finding, null, true);
+    if (pane.live) renderTag({kind: "awaiting"});
+  } else {
+    stepCard().rows.append(rawBlock(human(ev.type), ev));
+  }
+}
+function addEvents(events) {
+  const atBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 120;
+  for (const ev of events) addEvent(ev);
+  relane();
+  renderStats();
+  renderRouteMeta();
+  // Follow the newest step only when the viewer is already at the bottom, so reading earlier steps is never interrupted.
+  if (follow && events.length && atBottom) {
+    const last = $("events").lastElementChild;
+    if (last) last.scrollIntoView({block: "end", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+  }
+}
+function showResult(run) {
+  pane.live = false;
+  if (run.result && typeof run.result.seconds === "number") pane.seconds = run.result.seconds;
+  if (run.result && run.result.run_id) pane.runId = run.result.run_id;
+  renderTag({kind: "verdict", run});
+  renderFinding(run.result && run.result.finding, run, true);
+  renderAnswer(run.result && run.result.final_answer);
+  renderRouteMeta();
+}
+async function showRun(base, root, instance, task) {
+  follow = null;
+  const mine = ++view;
+  selected = `${base}|${root}|${instance}|${task}`;
+  markSelected();
+  try {
+    const run = await get("/api/run?" + q({base, root, instance, task}));
+    if (mine !== view) return;
+    const ask = base === "adhoc";
+    newPane(root, ask ? ASK_TASK : run.task || {id: task}, instance, ask ? "ask" : "task");
+    addEvents(run.trace);
+    showResult(run);
+  } catch (e) {
+    if (mine !== view) return;
+    newPane(root, base === "adhoc" ? ASK_TASK : {id: task}, instance, base === "adhoc" ? "ask" : "task");
+    renderTag({kind: "lost", message: `Could not load this run: ${e.message}`});
+  }
+}
+
+// ---------------------------------------------------------------- QC log
+
+async function loadRuns(pick) {
+  let full, demo, adhoc;
+  try {
+    [full, demo, adhoc] = await Promise.all(["committed", "demo", "adhoc"].map(b => get("/api/runs?" + q({base: b}))));
+  } catch (e) {
+    $("grid").replaceChildren(el("p", "error small", `Could not list runs: ${e.message}`));
+    return;
+  }
+  roots = [...full.map(r => ({...r, base: "committed"})), ...demo.map(r => ({...r, base: "demo"})),
+           ...adhoc.map(r => ({...r, base: "adhoc"}))];
+  const sel = $("root"), keep = pick || sel.value;
+  sel.replaceChildren();
+  for (const [base, label] of [["committed", "Full runs"], ["demo", "Demo runs"], ["adhoc", "Questions"]]) {
+    const group = el("optgroup");
+    group.label = label;
+    for (const r of roots.filter(r => r.base === base)) {
+      const o = el("option", "", base === "adhoc" ? `${r.name} · ${r.tasks.map(t => t.instance).join(", ") || "starting"} · not graded`
+        : r.complete ? `${r.name} · ${r.approved}/${r.scored_total} approved` : `${r.name} · incomplete`);
+      o.value = `${base}|${r.name}`;
+      group.append(o);
+    }
+    if (group.children.length) sel.append(group);
+  }
+  if (keep && [...sel.options].some(o => o.value === keep)) sel.value = keep;
+  renderGrid();
+}
+function renderGrid() {
+  const [base, name] = ($("root").value || "|").split("|");
+  const r = roots.find(x => x.base === base && x.name === name);
+  const grid = $("grid"), total = $("root-total");
+  grid.replaceChildren();
+  total.replaceChildren();
+  $("root-id").textContent = r ? `#${r.name}` : "";
+  if (!r) { grid.append(el("p", "small", "No runs yet.")); return; }
+  const got = new Map(r.tasks.map(t => [`${t.task_id}|${t.instance}`, t.verdict]));
+  const ids = base === "adhoc" ? [...new Set(r.tasks.map(t => t.task_id))]
+    : [...new Set([...r.tasks.map(t => t.task_id), ...tasks.map(t => t.id)])].sort();
+  const cols = [...new Set([...instances, ...r.tasks.map(t => t.instance)])].sort();
+  if (base === "adhoc") {
+    total.append(el("p", "small", "A free-text question: shown for reading, never graded."));
+  } else if (r.complete) {
+    const pct = r.scored_total ? Math.round((100 * r.approved) / r.scored_total) : 0;
+    const y = el("div", "yield"), left = el("div"), right = el("div");
+    const big = el("span", "big", String(pct));
+    big.append(el("small", "", "%"));
+    left.append(el("span", "label", "First-pass yield"), el("div", "", ""));
+    left.lastChild.append(big);
+    const ratio = el("span", "ratio", String(r.approved));
+    ratio.append(el("small", "", ` / ${r.scored_total}`));
+    right.append(el("span", "label", "Approved"), el("div", "", ""));
+    right.lastChild.append(ratio);
+    right.style.textAlign = "right";
+    y.append(left, right);
+    const ticks = el("div", "ticks");
+    for (const t of r.tasks) ticks.append(el("i", own(TONE, t.verdict || "unevaluated") ? (t.verdict || "unevaluated") : "unevaluated"));
+    total.append(y, ticks);
+  } else {
+    total.append(el("p", "small", "Incomplete run: still running, or stopped before the end."));
+  }
+  grid.style.setProperty("--cols", cols.length);
+  grid.append(el("span", "head", "Task"));
+  for (const c of cols) { const h = el("span", "head", c.slice(0, 3)); h.title = c; grid.append(h); }
+  for (const id of ids) {
+    const ran = r.tasks.filter(t => t.task_id === id);
+    const known = taskById[id];
+    if (!ran.length && base !== "committed") continue;  // demo and question roots hold only what was run
+    const label = el("span", "name", human(id));
+    label.title = id;
+    label.dataset.row = `${base}|${r.name}|${id}`;
+    grid.append(label);
+    for (const c of cols) {
+      const key = `${id}|${c}`, applies = known ? known.instances.includes(c) : got.has(key);
+      const b = el("button", "cell");
+      if (got.has(key)) {
+        const v = got.get(key) || "unevaluated";
+        b.className = "cell " + (own(TONE, v) ? v : "unevaluated");
+        b.textContent = base === "adhoc" ? "Q" : {approve: "✓", revise: "✕"}[v] || "?";
+        if (base === "adhoc") b.className = "cell q";
+        b.setAttribute("aria-label", `${human(id)} on ${c}: ${got.get(key) || "no verdict"}`);
+        b.dataset.key = `${base}|${r.name}|${c}|${id}`;
+        b.onclick = () => showRun(base, r.name, c, id);
+      } else {
+        b.className = "cell " + (applies ? "none" : "na");
+        b.textContent = applies ? "○" : "—";
+        b.disabled = true;
+        b.setAttribute("aria-label", `${human(id)} on ${c}: ${applies ? "no saved run" : "not run on this instance"}`);
+      }
+      grid.append(b);
+    }
+  }
+  markSelected();
+}
+function markSelected() {
+  for (const b of $("grid").querySelectorAll(".cell")) b.classList.toggle("selected", b.dataset.key === selected);
+  const [b, root, , id] = (selected || "").split("|");
+  for (const n of $("grid").querySelectorAll(".name")) n.classList.toggle("selected", n.dataset.row === `${b}|${root}|${id}`);
+}
+
+// ---------------------------------------------------------------- dispatch and live runs
+
+function updateHint() { $("confirm-hint").textContent = `${$("instance").value}/${mode === "ask" ? "ask" : $("task").value}`; }
+function setMode(next) {
+  mode = next;
+  const ask = mode === "ask";
+  $("mode-task").setAttribute("aria-pressed", String(!ask));
+  $("mode-ask").setAttribute("aria-pressed", String(ask));
+  $("task-field").hidden = ask;
+  $("task-part").hidden = ask;
+  $("ask-part").hidden = !ask;
+  $("caution-title").textContent = ask ? "CAUTION · RUNS ON THE LIVE TENANT" : "CAUTION · WRITES TO LIVE TENANT";
+  $("caution-note").hidden = !ask;
+  if (ask) {
+    const keep = $("instance").value;
+    $("instance").replaceChildren(...instances.map(i => el("option", "", i)));
+    if (instances.includes(keep)) $("instance").value = keep;
+  } else {
+    const keep = $("instance").value;
+    fillInstances();
+    if (taskById[$("task").value] && taskById[$("task").value].instances.includes(keep)) $("instance").value = keep;
+  }
+  $("confirm").value = "";
+  $("start-error").textContent = "";
+  updateHint();
+  renderJob(lastJob);
+}
+function fillInstances() {
+  const t = taskById[$("task").value];
+  $("instance").replaceChildren(...t.instances.map(i => el("option", "", i)));
+  $("task-checks").textContent = t.checks || "No pass criteria in the task file.";
+  const writes = [t.mode === "apply" ? "Applies changes" : null, t.fixture ? "Fixture rows" : null,
+                  t.escalate ? "May escalate" : null].filter(Boolean).join(" · ") || "Finding only";
+  $("task-info").replaceChildren(...[["Mode", human(t.mode || "dry_run")], ["Writes", writes]].map(([k, v]) => {
+    const d = el("div");
+    d.append(el("span", "label", k), el("b", "", v));
+    return d;
+  }));
+  updateHint();
+}
+// The last task and instance picked survive a refresh; this browser only, and a stale choice falls back quietly.
+function rememberDispatch() {
+  try { localStorage.setItem("console-dispatch", JSON.stringify({task: $("task").value, instance: $("instance").value})); } catch {}
+}
+function restoreDispatch() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem("console-dispatch")); } catch {}
+  if (saved && own(taskById, saved.task)) $("task").value = saved.task;
+  fillInstances();
+  if (saved && taskById[$("task").value].instances.includes(saved.instance)) { $("instance").value = saved.instance; updateHint(); }
+}
+function attach(job) {
+  ++view;
+  follow = {jobId: job.job_id, offset: 0};
+  selected = null;
+  markSelected();
+  const ask = job.kind === "ask";
+  newPane("live", ask ? ASK_TASK : taskById[job.task_id] || {id: job.task_id}, job.instance, ask ? "ask" : "task");
+  pane.live = true;
+  renderTag({kind: "running"});
+  renderFinding(null, null, false);
+}
+async function start() {
+  const mine = view;
+  $("start-error").textContent = "";
+  const ask = mode === "ask";
+  const body = ask ? {text: $("ask-text").value, instance: $("instance").value, confirm: $("confirm").value}
+                   : {task_id: $("task").value, instance: $("instance").value, confirm: $("confirm").value};
+  let r, data;
+  try {
+    r = await fetch(ask ? "/api/ask" : "/api/jobs", {method: "POST", body: JSON.stringify(body),
+      headers: {"Content-Type": "application/json", "X-Console-Token": TOKEN}});
+    data = await r.json();
+  } catch (e) {
+    $("start-error").textContent = `Could not reach the console server: ${e.message}`;
+    return;
+  }
+  if (!r.ok) { $("start-error").textContent = `Refused: ${data.error}`; return; }
+  $("confirm").value = "";
+  lastJob = data;
+  renderJob(data);
+  if (mine === view) attach(data);
+}
+async function followCurrent() {
+  const mine = view;
+  try {
+    const job = await get("/api/jobs/current");
+    lastJob = job;
+    if (mine === view && job && job.running) attach(job);
+  } catch (e) {
+    setConn(false);
+  }
+}
+function renderJob(job) {
+  const running = !!(job && job.running);
+  const elapsed = running ? secs((Date.now() - new Date(job.started)) / 1000) : "";
+  $("live-pill").hidden = !running;
+  if (running) $("live-text").textContent = `In process · ${human(job.task_id)} · ${elapsed}`;
+  const btn = $("start");
+  btn.disabled = running;
+  btn.classList.toggle("busy", running);
+  $("start-label").textContent = running ? `CYCLE RUNNING · ${elapsed}` : mode === "ask" ? "▶ ASK THE AGENT" : "▶ START RUN";
+  const logFile = job ? job.log.split(/[\\/]/).pop() : "";
+  $("job").textContent = !job ? "" : `${human(job.task_id)} on ${job.instance}: `
+    + (job.running ? "running" : `finished, exit ${job.exit_code}`) + ` · log ${logFile}`;
+}
+async function poll() {
+  let job;
+  try {
+    job = await get("/api/jobs/current");
+    setConn(true);
+  } catch (e) {
+    setConn(false);
+    setTimeout(poll, 1000);
+    return;
+  }
+  lastJob = job;
+  renderJob(job);
+  const f = follow;
+  $("follow").hidden = !(job && job.running && !(f && f.jobId === job.job_id));
+  if (f && job && f.jobId === job.job_id) {
+    // Status first, then the trace: once the job reads as finished, the trace read after it is complete.
+    const where = {base: job.base || "demo", root: job.run_root || "", instance: job.instance, task: job.task_id};
+    try {
+      const t = await get("/api/trace?" + q({...where, offset: f.offset}));
+      if (f === follow) {
+        addEvents(t.events);
+        f.offset = t.offset;
+        if (!job.running) {
+          renderTag({kind: "awaiting"});
+          let run = null;
+          try { run = await get("/api/run?" + q(where)); } catch (e) {
+            if (f === follow) { follow = null; pane.live = false; renderTag({kind: "lost", message: `Could not load this run: ${e.message}`}); }
+          }
+          if (run && f === follow) {
+            follow = null;
+            selected = `${where.base}|${job.run_root}|${job.instance}|${job.task_id}`;
+            pane.runNo = job.run_root;
+            renderMeta();
+            showResult(run);
+            loadRuns(`${where.base}|${job.run_root}`);
+          }
+        }
+      }
+    } catch (e) {
+      if (!e.status) setConn(false);
+      // A 404 is expected until the harness creates the task directory. Once the job has ended it means the run
+      // never got that far, and the only record of why is the console log.
+      else if (!job.running && f === follow) {
+        follow = null;
+        pane.live = false;
+        const logFile = job.log.split(/[\\/]/).pop();
+        renderTag({kind: "lost", message: `The run ended without a run directory. See runs/${where.base}/${logFile}`});
+      }
+    }
+  }
+  setTimeout(poll, 1000);
+}
+setInterval(() => { if (lastJob && lastJob.running) { renderJob(lastJob); renderStats(); } }, 1000);
+
+function setTheme(dark) {
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  $("day").setAttribute("aria-pressed", String(!dark));
+  $("night").setAttribute("aria-pressed", String(dark));
+  try { localStorage.setItem("console-theme", dark ? "dark" : "light"); } catch {}
+}
+(() => { let saved = null; try { saved = localStorage.getItem("console-theme"); } catch {} setTheme(saved === "dark"); })();
+$("day").onclick = () => setTheme(false);
+$("night").onclick = () => setTheme(true);
+
+(async () => {
+  $("task").onchange = () => { fillInstances(); rememberDispatch(); };
+  $("instance").onchange = () => { updateHint(); if (mode === "task") rememberDispatch(); if (!pane) setTenant($("instance").value); };
+  $("mode-task").onclick = () => setMode("task");
+  $("mode-ask").onclick = () => setMode("ask");
+  $("examples").replaceChildren(...EXAMPLES.map(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => { $("ask-text").value = t; }; return b; }));
+  $("start").onclick = start;
+  $("follow").onclick = followCurrent;
+  $("live-pill").onclick = followCurrent;
+  $("root").onchange = renderGrid;
+  try {
+    tasks = await get("/api/tasks");
+  } catch (e) {
+    setConn(false);
+    return;
+  }
+  taskById = Object.fromEntries(tasks.map(t => [t.id, t]));
+  instances = [...new Set(tasks.flatMap(t => t.instances))].sort();
+  $("task").replaceChildren(...tasks.map(t => { const o = el("option", "", human(t.id)); o.value = t.id; return o; }));
+  restoreDispatch();
+  setTenant($("instance").value);
+  loadRuns();
+  await followCurrent();  // a refresh during a run picks the live view back up
+  poll();
+})();
+</script>
+</body>
+</html>

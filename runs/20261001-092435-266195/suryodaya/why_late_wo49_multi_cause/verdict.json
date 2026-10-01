@@ -1,0 +1,9 @@
+{
+  "task_id": "why_late_wo49_multi_cause",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "causes match DB: ['material_request_open', 'stopped_without_recorded_reason', 'subcontract_not_sent']",
+  "sample": false,
+  "run_id": "c4812e094d5c",
+  "seconds": 116.3
+}

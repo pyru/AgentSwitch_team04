@@ -1,0 +1,28 @@
+{
+  "run_id": "25fc4bce58ae",
+  "stop_reason": "final_answer",
+  "final_answer": "**Work order not found \u2014 request refused**\n\n**Why late:** I could not determine this, because WO-2026-09999 does not exist. Both `diagnose_work_order` and `downstream_impact` returned \"not found\" for that number.\n\n**What it blocks:** Nothing can be reported \u2014 there is no such order to trace downstream.\n\n**Rescheduling:** Nothing was rescheduled; there is no order to reschedule.\n\n**Not visible to me / next step:** This is not an access problem \u2014 the record simply isn't there. For reference, the late work order list (90 orders, truncated view) runs from WO-2026-00047 through WO-2026-00107; no WO-2026-09999 appears on it. Please double-check the number \u2014 if you meant a similar order such as one of those, tell me the correct number and I will run the full diagnosis, downstream impact and reschedule proposal for it. I deliberately did not substitute a \"closest\" order, since answering about the wrong work order would be worse than telling you the number doesn't exist.",
+  "finding": {
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "currency": "INR",
+    "evidence_records": [],
+    "is_late": null,
+    "not_visible": [],
+    "outcome": "refused",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "Work order WO-2026-09999 does not exist: diagnose_work_order and downstream_impact both returned found=false, and no WO-2026-09999 appears in the late work order list. Request refused rather than substituting a similar order.",
+    "rescheduled": [],
+    "work_order": "WO-2026-09999"
+  },
+  "finding_record": {
+    "agent_memory_id": "8b9e6803-cb1a-4198-80f7-8138be7997db",
+    "run_id": "25fc4bce58ae"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 76.7,
+  "instance": "suryodaya",
+  "task_id": "refuse_unknown_work_order"
+}

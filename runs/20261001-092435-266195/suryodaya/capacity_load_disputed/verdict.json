@@ -1,0 +1,9 @@
+{
+  "task_id": "capacity_load_disputed",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "recorded both figures (1.25% board vs 117.1% work content) and flagged the 94x disagreement",
+  "sample": false,
+  "run_id": "42d1ddd0193e",
+  "seconds": 39.5
+}

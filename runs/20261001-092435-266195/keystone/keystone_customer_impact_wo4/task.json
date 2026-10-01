@@ -1,0 +1,16 @@
+{
+  "id": "keystone_customer_impact_wo4",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-17. Harness task, not a hand-written test.",
+  "instances": [
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "work_order": "WO-2026-00004"
+  },
+  "prompt": "WO-2026-00004 is late. Which customer order does it put at risk?",
+  "verifier": "harness.verifiers.team04:linked_sales_order_reported",
+  "checks": "Reports the sales order linked in the DB and invents none, now that Keystone can read sales orders.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/keystone_customer_impact_wo4.json"
+}

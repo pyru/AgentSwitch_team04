@@ -1,0 +1,9 @@
+{
+  "task_id": "bottleneck_lanes_reported",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "cited a real blocked record from 6 rejected inspections / 53 subcontracts",
+  "sample": false,
+  "run_id": "3da81d178400",
+  "seconds": 145.3
+}

@@ -13,6 +13,9 @@ database, no mock server, and no `--dry-run`. Ask Pravin before running:
 - `python -m prod_agent ... --apply` — mutates real work orders
 - `python -m prod_agent ... --escalate` — raises a **real escalation assigned to a real
   person**. The harness withdraws these after scoring; the CLI does not.
+- `python -m viewer` is safe to start, but its **Start run** button runs `python -m harness.runner` —
+  same rule, ask first. Its **Ask the agent** mode runs `python -m prod_agent` (read-only: no `--apply`,
+  no `--escalate`), which still records a finding row on the tenant
 
 Reading code, offline tests, and inspecting `runs/` output need no confirmation.
 
@@ -119,7 +122,8 @@ imports. Comments explain *why the platform behaves oddly*, not what the code do
 
 ## Run output
 
-Agent runs land in `runs/adhoc/<timestamp>-<instance>/`, harness runs in
-`runs/<timestamp>/<instance>/<task_id>/`. `runs/` is git-ignored, but a few run
-directories are **deliberately committed as grading evidence** — never delete or
-regenerate those.
+Agent runs land in `runs/adhoc/<timestamp>-<instance>/` (console questions in
+`runs/adhoc/<timestamp>/<instance>/ask/`), harness runs in
+`runs/<timestamp>/<instance>/<task_id>/`. `runs/demo/` holds console runs; the checker never reads it.
+`runs/` is git-ignored, but a few run directories are **deliberately committed as grading evidence** — never
+delete or regenerate those.

@@ -1,0 +1,13 @@
+{
+  "id": "reschedule_fixture_chain",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-16. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "apply",
+  "fixture": "late_draft_chain",
+  "prompt": "{upstream_number} is late. Find out why, tell me what it blocks downstream, and reschedule what you can. Apply the changes you are allowed to make.",
+  "verifier": "harness.verifiers.team04:reschedule_fixture_chain",
+  "checks": "Fixture drafts re-dated in DB (upstream from today, downstream after it), written by this seat, nothing else written.",
+  "_path": "harness/tasks/team04/reschedule_fixture_chain.json"
+}

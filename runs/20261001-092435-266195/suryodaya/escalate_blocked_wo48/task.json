@@ -1,0 +1,17 @@
+{
+  "id": "escalate_blocked_wo48",
+  "note": "Written with Claude (AI-assisted). Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "escalate": true,
+  "fixture": null,
+  "params": {
+    "work_order": "WO-2026-00048"
+  },
+  "prompt": "This work order WO-2026-00048 is late. Find out why, tell me what it blocks downstream, and reschedule what you can.",
+  "verifier": "harness.verifiers.team04:escalation_raised_for",
+  "checks": "The order is blocked by unsent subcontracts and is date-locked, so the agent must hand it to a person on its own judgement: exactly one escalation naming WO-2026-00048, assigned, and recorded in the finding. The harness withdraws it after scoring.",
+  "_path": "harness/tasks/team04/escalate_blocked_wo48.json"
+}

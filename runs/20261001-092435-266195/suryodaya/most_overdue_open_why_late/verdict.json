@@ -1,0 +1,9 @@
+{
+  "task_id": "most_overdue_open_why_late",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "picked WO-2026-00047 (due 2026-02-25); causes match DB",
+  "sample": false,
+  "run_id": "21cfc92923e6",
+  "seconds": 112.3
+}

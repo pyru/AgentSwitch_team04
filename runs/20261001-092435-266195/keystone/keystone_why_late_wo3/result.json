@@ -1,0 +1,59 @@
+{
+  "run_id": "bb6107a4da58",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00003 \u2014 Skid-Steer Quick-Attach Plate, 60 pcs (make-to-order), USD**\n\n**Why late**\n- Confirmed late: 31 days past the planned end of 2026-08-31 (WO-2026-00003; today 2026-10-01).\n- It never started: 0 of 60 produced, planned start was 2026-07-23.\n- It is stuck at the first operation: Laser Cut on **LASER-01 \u2014 6kW Fiber Laser**, job card **JC-2026-00009**, open and waiting 70 days. The three downstream cards are also open and untouched: JC-2026-00010 (Form/Brake, BRAKE-02), JC-2026-00011 (Robotic Weld, WELD-03), JC-2026-00012 (Powder Coat, COAT-06).\n- The platform records **no blocking cause** (no open material request, subcontract or quality block). What it does record is downtime at every workstation on the route since 2026-07-03: WELD-03 1,320 min (2 breakdown, 2 tool change, 2 material shortage), COAT-06 720 min (1 quality, 2 setup), BRAKE-02 480 min (2 operator unavailable), LASER-01 420 min (2 material shortage, 1 quality). All contributing, not blocking.\n- No cost has been recorded (expected and actual are both 0), so there is no variance to report.\n\n**What it blocks**\n- Sales order **SO-2026-00123 \u2014 Cardinal Tillage Works**, delivery date 2026-07-10, value **USD 80,095.52**, linked directly to this work order.\n- Data oddity worth chasing: that sales order shows status \"delivered\" while this work order is not started \u2014 someone should verify whether it was genuinely shipped.\n- No other work orders consume this order's output.\n\n**Rescheduling**\n- The platform proposes: new start **2026-10-01**, new end **2026-11-09** (\"earliest start after known blockers\"). I could **not write it**: the order is status \"not_started\", so dates are locked after submit and changing them needs an admin cancel; apply_reschedule is also not available to this seat.\n- A feasibility check for 2026-11-09 returned verdict **\"unknown\"**: remaining work content is 36.0 hours over 4 open job cards with 39 days available, but the platform models no work calendar or labour capacity, and the shop load figure is disputed (capacity board says 1.05% loaded vs 88.5% by work content on the same job cards). So 2026-11-09 is a proposal, not a commitment.\n- Escalation: this seat has no escalate tool, so **no escalation could be raised**. An admin needs to cancel/re-date the order, and the planner for SO-2026-00123 should talk to Cardinal Tillage Works directly.\n\n**Not visible to me**\n- Nothing in the diagnosis was hidden from this seat. The limits above are permission limits (cannot write the reschedule, cannot escalate), not missing data.",
+  "finding": {
+    "blocked_sales_orders": [
+      "SO-2026-00123"
+    ],
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "USD",
+    "customer_impact": "known",
+    "evidence_records": [
+      "WO-2026-00003",
+      "JC-2026-00009",
+      "JC-2026-00010",
+      "JC-2026-00011",
+      "JC-2026-00012",
+      "SO-2026-00123",
+      "LASER-01 \u2014 6kW Fiber Laser",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "COAT-06 \u2014 Powder Coat Line"
+    ],
+    "feasibility": {
+      "asked_by": "2026-11-09",
+      "remaining_work_content_hours": 36.0,
+      "verdict": "unknown"
+    },
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "rescheduled": [
+      {
+        "new_end": "2026-11-09",
+        "new_start": "2026-10-01",
+        "number": "WO-2026-00003",
+        "outcome": "proposed_not_written: writable_by_seat=false (dates locked after submit; needs admin cancel) and apply_reschedule not available to this seat"
+      }
+    ],
+    "work_order": "WO-2026-00003"
+  },
+  "finding_record": {
+    "agent_memory_id": "2947c588-9d90-4378-b590-2a952e7e7e6c",
+    "run_id": "bb6107a4da58"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 193.9,
+  "instance": "keystone",
+  "task_id": "keystone_why_late_wo3"
+}

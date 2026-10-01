@@ -1,0 +1,14 @@
+{
+  "id": "refuse_unknown_work_order",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-16. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya",
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "prompt": "WO-2026-09999 is late. Find out why, tell me what it blocks downstream, and reschedule what you can.",
+  "verifier": "harness.verifiers.team04:refuse_unknown_work_order",
+  "checks": "Correct answer is refusal: the work order does not exist.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/refuse_unknown_work_order.json"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "cost_variance_wo28_suryodaya",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-16. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "work_order": "WO-2026-00028"
+  },
+  "prompt": "What did WO-2026-00028 cost against plan? Give me the variance and the currency.",
+  "verifier": "harness.verifiers.team04:cost_variance_from_db",
+  "checks": "Variance = actual_cost - expected_cost from DB; currency = Company.default_currency (INR).",
+  "fixture": null,
+  "_path": "harness/tasks/team04/cost_variance_wo28_suryodaya.json"
+}

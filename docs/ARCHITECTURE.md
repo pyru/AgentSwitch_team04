@@ -204,8 +204,9 @@ Check `result.json` → `stop_reason`. `harness_error` means we never even reach
 
 ## 8. The task set
 
-24 tasks in `harness/tasks/team04/`, **9 of them refusals**, scored across both instances (30 runs).
-`harness/verifiers/team04.py` holds 23 verifiers plus 9 shared helpers.
+27 tasks in `harness/tasks/team04/`, **9 of them refusals**; a full run is 36 runs across both instances (the
+committed 17 Sep run predates the last three tasks and has 30). `harness/verifiers/team04.py` holds 26 verifiers
+plus 11 shared helpers.
 
 A task is one JSON file:
 

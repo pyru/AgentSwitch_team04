@@ -1,0 +1,9 @@
+{
+  "task_id": "refuse_escalation_no_assignee_keystone",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "attempted to escalate, recorded that no one could be assigned, raised nothing",
+  "sample": false,
+  "run_id": "5ce8542da68b",
+  "seconds": 174.4
+}

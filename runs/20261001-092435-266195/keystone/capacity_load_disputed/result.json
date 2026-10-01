@@ -1,0 +1,37 @@
+{
+  "run_id": "510fb87f71bd",
+  "stop_reason": "final_answer",
+  "final_answer": "**Shop load, next 21 days** (66 open job cards) \u2014 the platform returns two figures that disagree, so I'm giving you both:\n\n- **Capacity board's own figure: 1.05% loaded** (636 booked minutes vs 60,480 available minutes).\n- **Work content in the same job cards: 88.5% loaded** (53,532 minutes, computed as time_in_mins \u00d7 for_qty \u2014 the platform's own OEE basis).\n\nThese disagree by a wide margin because the board charges time unscaled while the OEE basis multiplies by quantity. Neither figure is \"settled\"; treat the two together, not either alone.\n\n**Workstations over declared capacity (on the work-content figure):**\n\n| Workstation | Work content | Declared capacity | Times over |\n|---|---|---|---|\n| WS-2026-00003 \u2014 WELD-03, Robotic MIG Cell | 19,260 min | 10,080 min | **1.91\u00d7** |\n| WS-2026-00002 \u2014 BRAKE-02, 175-ton Press Brake | 14,940 min | 10,080 min | **1.48\u00d7** |\n| WS-2026-00001 \u2014 LASER-01, 6kW Fiber Laser | 12,060 min | 10,080 min | **1.2\u00d7** |\n\nNote: the capacity board currently shows **0 workstations overloaded** \u2014 it does not reflect the three above; only the work-content figure shows them.",
+  "finding": {
+    "blocking_causes": [],
+    "capacity": {
+      "board_load_pct": 1.05,
+      "figures_disagree": true,
+      "work_content_load_pct": 88.5
+    },
+    "contributing_causes": [],
+    "currency": "USD",
+    "evidence_records": [
+      "WS-2026-00001",
+      "WS-2026-00002",
+      "WS-2026-00003"
+    ],
+    "is_late": null,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "rescheduled": [],
+    "work_order": "null"
+  },
+  "finding_record": {
+    "agent_memory_id": "6b06bbd1-a8f7-4488-8b7d-b748b0fdaba9",
+    "run_id": "510fb87f71bd"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 54.5,
+  "instance": "keystone",
+  "task_id": "capacity_load_disputed"
+}

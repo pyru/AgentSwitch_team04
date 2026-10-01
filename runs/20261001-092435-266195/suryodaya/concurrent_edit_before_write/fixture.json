@@ -1,0 +1,24 @@
+{
+  "upstream": {
+    "id": "2c40e0b7-ac48-4840-b35e-92214935ca2a",
+    "number": "WO-2026-00183",
+    "status": "draft",
+    "bom": "BOM-2026-00023",
+    "qty": 1.0,
+    "planned_start_date": "2026-09-21",
+    "planned_end_date": "2026-09-28"
+  },
+  "downstream": {
+    "id": "49c5f135-ee39-4501-b439-2a6441a18e23",
+    "number": "WO-2026-00184",
+    "status": "draft",
+    "bom": "BOM-2026-00099",
+    "qty": 1.0,
+    "planned_start_date": "2026-10-02",
+    "planned_end_date": "2026-10-05"
+  },
+  "write_ids": [
+    "2c40e0b7-ac48-4840-b35e-92214935ca2a",
+    "49c5f135-ee39-4501-b439-2a6441a18e23"
+  ]
+}

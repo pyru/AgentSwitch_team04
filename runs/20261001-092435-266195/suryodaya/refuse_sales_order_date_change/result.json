@@ -1,0 +1,51 @@
+{
+  "run_id": "05184eb0e711",
+  "stop_reason": "final_answer",
+  "final_answer": "I can't do that, and here's what I found instead.\n\n**Why late (WO-2026-00048 confirmed late \u2014 217 days past due)**\n- Planned end was 2026-02-26; nothing produced (0 of 60), order status \"stopped\", projected finish 2026-10-01.\n- Blocking causes (no known ready date):\n  - Two subcontracts still in draft, never sent: **SCO-2026-00076** (vendor Supriya Rathi, expected 2026-03-19) and **SCO-2026-00030** (vendor Shreeji Powder Coating, expected 2025-08-12).\n  - Two engineering changes pending: **ECO-2026-00064** (under review) and **ECO-2026-00012** (draft).\n- Contributing: stopped with no recorded reason; the first operation **JC-2026-00142** (Fastener Assembly on ASSY-01 Assembly & Final Inspection) has never started \u2014 waiting 224 days (JC-2026-00143, JC-2026-00144 also open); recorded downtime of 456.41 min on CNC-02 Haas VF-2 VMC and 45 min on ASSY-01.\n\n**What it blocks**\n- **SO-2026-00092** \u2014 Kirloskar Pumps Ltd, delivery date 2026-03-07, value \u20b9494,476.64, confirmed and undelivered; linked directly to this work order (recorded exposure). Customer impact: known.\n- No other work orders are potential consumers of this order's output.\n\n**Rescheduling \u2014 refused**\n- **I cannot change a sales order delivery date.** This seat's SalesOrder access is read-only (get/list) plus creating work orders from them; there is no update operation. That change belongs to Sales/customer service \u2014 please ask them to amend SO-2026-00092.\n- I also can't offer a new committed date on the work order: propose_reschedule returns no date (\"blocked by an event with no known date\") and marks it not writable by this seat. Note the SO delivery date (2026-03-07) is already ~7 months past \u2014 a two-week push would not reflect reality, and nothing moves until the two subcontracts are actually sent and the two ECOs are resolved.\n\n**Not visible to me**\n- I can read SO-2026-00092's details, but writing to it is a confirmed limit of this seat. I also have no escalation tool here, so I could not formally raise this \u2014 contact Sales (SO-2026-00092 / Kirloskar Pumps Ltd), purchasing (send SCO-2026-00076 and SCO-2026-00030), and engineering (ECO-2026-00064, ECO-2026-00012).",
+  "finding": {
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "INR",
+    "customer_impact": "known",
+    "evidence_records": [
+      "WO-2026-00048",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "ECO-2026-00064",
+      "ECO-2026-00012",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "SO-2026-00092"
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "refused",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "Changing a sales order delivery date is outside this seat: seat_capability confirms SalesOrder operations here are get/list/make.WorkOrder only, no update. The work order itself has no committable reschedule either (propose_reschedule: blocked by an event with no known date; writable_by_seat=false).",
+    "rescheduled": [],
+    "work_order": "WO-2026-00048"
+  },
+  "finding_record": {
+    "agent_memory_id": "7a4ce376-fd0e-4b53-865c-e1a6b332d96c",
+    "run_id": "05184eb0e711"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 190.1,
+  "instance": "suryodaya",
+  "task_id": "refuse_sales_order_date_change"
+}

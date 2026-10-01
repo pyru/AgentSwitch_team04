@@ -1,0 +1,30 @@
+{
+  "run_id": "da584e4c7378",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-09999 does not exist** \u2014 I can't answer any of the three questions for that number.\n\n- **Why late:** The lookup came back \"not found\" for WO-2026-09999 (checked via the diagnosis tool). There is no record of that work order, so there is nothing to diagnose.\n- **What it blocks:** No downstream record exists for that number either.\n- **Rescheduling:** Nothing to reschedule \u2014 no order was found.\n\nI will not guess at a similar or \"closest\" order number, since answering about a different order could mislead you. Please double-check the work order number (a mistyped digit is the usual cause) and send the correct one \u2014 then I'll run the full why-late / downstream-impact / reschedule analysis for it.",
+  "finding": {
+    "blocked_sales_orders": [],
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "currency": "USD",
+    "evidence_records": [],
+    "escalations": [],
+    "is_late": null,
+    "not_visible": [],
+    "outcome": "refused",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "Work order WO-2026-09999 not found in the system; diagnose_work_order and downstream_impact both returned found=false, so no late-order, downstream-impact or reschedule analysis could be done for that number.",
+    "rescheduled": [],
+    "work_order": "WO-2026-09999"
+  },
+  "finding_record": {
+    "agent_memory_id": "c0cfaa6c-0d20-4eb2-bd24-1229df4df5bc",
+    "run_id": "da584e4c7378"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 42.2,
+  "instance": "keystone",
+  "task_id": "refuse_unknown_work_order"
+}
