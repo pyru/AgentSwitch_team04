@@ -523,10 +523,12 @@ class ProductionAgent:
             if mistyped:
                 # A wrong shape reaches the database and takes the verifier down with it, which scores
                 # unevaluated rather than revise: worse than a wrong answer, because nothing checked it.
+                # _mistyped returns messages, not names: blaming the messages kept the bad value, so a
+                # retry that dropped the field had it restored and was refused again with no limit.
                 return self._reject_finding(args, {
                     "error": "these fields have the wrong shape", "fields": mistyped,
                     "instruction": "call record_finding again with each listed field in the shape its "
-                                   "schema declares"}, blame=mistyped)
+                                   "schema declares"}, blame=[m.split(":", 1)[0] for m in mistyped])
             nulled = _nulled_required(args)
             if nulled:
                 # The schema is sent to the model but was never checked on the way back, so a model that

@@ -973,7 +973,7 @@ def query_records(mcp: McpClient, entity: str, filters: dict | None = None,
     if total > QUERY_NARROW_ABOVE:
         # Paging this would cost total/200 sequential calls and overflow the context either way.
         return {**result, "returned": 0, "rows": [], "truncated": True, "too_many": True,
-                "instruction": f"{total} records match. Add filters (status, a date with lt:/gte:/between:, an id) "
+                "instruction": f"{total} records match. Add exact filters (a status or comma list of them, an id) "
                                "and call again, or tell the user the set is too large to read and what would narrow it."}
 
     if limit == 0:

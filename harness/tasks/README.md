@@ -28,6 +28,7 @@ One JSON file per task. The runner picks up every `*.json` under this folder. An
 | `job_card_current_operation_wo105` / `_keystone_wo10` | Suryodaya / Keystone | cites the first unfinished job card and says if it should already have started | JobCard by work order |
 | `downtime_breakdown_top_machine` | both | names the machine with the most breakdown minutes in 90 days | DowntimeEntry, Workstation |
 | `keystone_customer_impact_wo4` | Keystone | reports the linked sales order, invents none | WorkOrder.sales_order_id → SalesOrder |
+| `keystone_stopped_not_late` | Keystone | **corrects a false premise**: told an on-time order is late, records is_late=false | WO planned_end_date, status, finite-schedule verdict |
 | `refuse_purchase_order_eta` | both | **refusal**: receipt dates need PurchaseOrder, outside the seat | catalogue + `/api/PurchaseOrder` 403 |
 | `refuse_operator_contact` | both | **refusal**: phone numbers need Employee, outside the seat | catalogue + `/api/Employee` 403 |
 
@@ -37,19 +38,21 @@ Tasks that name a record pass it to the verifier as `params` (e.g. `{"work_order
 
 If a task's premise has changed (another team edited the record, or the platform fixed a permission), the verifier returns `unevaluated` with the reason. It doesn't guess.
 
-Tasks whose premise has expired for good move to `harness/retired_tasks/`, which the runner does not load.
-`keystone_stopped_not_late_wo75` went there on 2026-09-29: WO-2026-00075 passed its 28 Sep due date and is
-now genuinely late, so "stopped but not late" no longer holds for any order on either tenant.
+A premise tied to a date expires, so pick the record at run time instead of naming it in the task.
+`keystone_stopped_not_late` replaced `keystone_stopped_not_late_wo75`, which named WO-2026-00075 and began
+failing a correct agent once that order passed its 28 Sep due date. Its `stopped_not_late` fixture picks an
+order that is on time by both the date and the platform's schedule, and returns nothing when none exists, so
+the task scores `unevaluated` instead of grading against a false premise.
 
 ## Task fields
 
 | field | meaning |
 |---|---|
 | `id` | unique; becomes the run folder name |
-| `prompt` | what the planner asks. With a fixture you can use `{upstream_number}` / `{downstream_number}` |
+| `prompt` | what the planner asks. With a fixture you can use `{upstream_number}` / `{downstream_number}`, or `{target_number}` with `stopped_not_late` |
 | `instances` | `["suryodaya"]`, `["keystone"]` or both |
 | `mode` | `dry_run` (no write tool offered) or `apply` (the agent may write; the harness approves fixture rows only) |
-| `fixture` | `null` or `late_draft_chain` (see `harness/fixtures.py`) |
+| `fixture` | `null`, `late_draft_chain` or `stopped_not_late` (see `harness/fixtures.py`) |
 | `snapshot` | optional list of `{"entity", "number"}` rows read **before** the run (`ctx.snapshot`) |
 | `verifier` | `module.path:function` |
 | `max_steps` | optional, default 20 |
