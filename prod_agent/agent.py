@@ -210,10 +210,17 @@ def _mistyped(args: dict) -> list[str]:
     return wrong
 
 
+NO_CREDIT = {"insufficient_quota", "credit_balance_exhausted"}
+
+
 def _rate_limited(exc: Exception) -> bool:
     """A 429 that clears by waiting. Read off the exception rather than its class, so an injected client
-    from any OpenAI-compatible SDK qualifies. An exhausted quota is also a 429, but no wait clears it."""
-    return getattr(exc, "status_code", None) == 429 and getattr(exc, "code", None) != "insufficient_quota"
+    from any OpenAI-compatible SDK qualifies. An exhausted quota is also a 429, but no wait clears it.
+    Seen 2026-10-07: OpenAI put insufficient_quota in `type` and credit_balance_exhausted in `code`, so
+    checking `code` alone waited three minutes per task on an account with no credit left."""
+    if getattr(exc, "status_code", None) != 429:
+        return False
+    return not ({getattr(exc, "code", None), getattr(exc, "type", None)} & NO_CREDIT)
 
 
 def _fn(name, description, properties=None, required=None):

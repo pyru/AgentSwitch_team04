@@ -18,10 +18,10 @@ from prod_agent.agent import ProductionAgent
 from tests_ai.test_llm_error import FakeMessage, ScriptedLLM, isolated_environment, recording_mcp  # noqa: F401
 
 
-def _429(code="rate_limit_exceeded"):
+def _429(code="rate_limit_exceeded", type_="tokens"):
     return openai.RateLimitError("Rate limit reached for gpt-4.1 on tokens per min (TPM)",
                                  response=httpx.Response(429, request=httpx.Request("POST", "https://api")),
-                                 body={"message": "rate limited", "type": "tokens", "code": code})
+                                 body={"message": "rate limited", "type": type_, "code": code})
 
 
 @pytest.fixture(autouse=True)
@@ -61,6 +61,18 @@ def test_an_exhausted_quota_is_not_waited_on(recording_mcp, no_real_sleep):
     """insufficient_quota is also a 429, but no wait clears it."""
     mcp, _ = recording_mcp
     llm = ScriptedLLM([_429(code="insufficient_quota")])
+    result = ProductionAgent(mcp, llm=llm, model="gpt-4.1").run("why is WO-1 late?")
+
+    assert result["stop_reason"] == "llm_error"
+    assert llm.calls == 1
+    assert no_real_sleep == []
+
+
+def test_no_credit_left_is_not_waited_on_whichever_field_says_so(recording_mcp, no_real_sleep):
+    """The live error on 2026-10-07: type insufficient_quota, code credit_balance_exhausted. Checking
+    code alone waited three minutes per task on an account that could not recover."""
+    mcp, _ = recording_mcp
+    llm = ScriptedLLM([_429(code="credit_balance_exhausted", type_="insufficient_quota")])
     result = ProductionAgent(mcp, llm=llm, model="gpt-4.1").run("why is WO-1 late?")
 
     assert result["stop_reason"] == "llm_error"
