@@ -421,6 +421,30 @@ class ProductionAgent:
         merged["rescheduled"] = truth + kept
         return merged
 
+    def _restore_causes(self, args: dict) -> dict:
+        """Add back causes diagnose returned for this order that the model left out of its finding.
+
+        Seen live on WO-2026-00049, on 2026-10-01 (why_late_wo49_multi_cause) and again on 2026-10-07
+        (complex_partial_material_eta): diagnose returned stopped_without_recorded_reason first in its
+        signals, and the model retyped every other cause into the finding but not that one. The loop
+        already holds diagnose's result, so the model is not the source of which causes exist; it still
+        decides blocking versus contributing for the ones it kept, and anything it added stays.
+        """
+        diag = self._reads.get(("diagnose", args.get("work_order")))
+        if not isinstance(diag, dict) or not diag.get("found"):
+            return args
+        if any(args.get(k) is not None and not isinstance(args.get(k), list) for k in ("blocking_causes", "contributing_causes")):
+            return args  # the wrong shape is _mistyped's to refuse, not ours to split into characters
+        got = set(args.get("blocking_causes") or []) | set(args.get("contributing_causes") or [])
+        merged = dict(args)
+        for s in diag.get("signals") or []:
+            code = s.get("code")
+            if code and code not in got:
+                key = "blocking_causes" if s.get("blocking") else "contributing_causes"
+                merged[key] = list(merged.get(key) or []) + [code]
+                got.add(code)
+        return merged
+
     def _reject_finding(self, args: dict, payload: dict, blame=()) -> dict:
         """Refuse this attempt, but keep what it got right for the retry.
 
@@ -541,6 +565,7 @@ class ProductionAgent:
                 return {"error": "finding already recorded for this run"}
             args = self._restore_dropped(args)
             args = self._reconcile_rescheduled(args)
+            args = self._restore_causes(args)
             mistyped = _mistyped(args)
             if mistyped:
                 # A wrong shape reaches the database and takes the verifier down with it, which scores
