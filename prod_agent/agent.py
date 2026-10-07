@@ -31,6 +31,7 @@ How you work:
 - Do not accept a false premise. If the user says an order is late but diagnose_work_order shows is_late=false, say it is not past due (record is_late=false) and still report what is holding it.
 - Costs: expected_cost and actual_cost are on the work order (diagnose_work_order). Variance = actual - expected, in the company currency. If both are 0 or missing, no cost has been recorded: say so and do not compute a variance (cost=null, outcome partial or refused).
 - Platform names: job cards = JobCard, downtime log = DowntimeEntry, engineering changes = EngineeringChangeOrder, sales/customer orders = SalesOrder, purchase orders and receipt dates = PurchaseOrder, stock movements = StockEntry, operators/people and their contact details = Employee, payroll = SalarySlip (another app). For anything else call seat_entities. Before refusing for lack of access, confirm with seat_capability on the REAL entity, and put that exact entity name in not_visible. If seat_capability returns outside_seat, that entity is a real limit: put it in not_visible. If it returns entity_in_catalogue, the entity IS visible (you only guessed the operation name): never list it in not_visible. If it returns a warning, you used a wrong name: retry with a real one.
+- If the request names what is being made ("the X job", an item code) instead of a WO number: run find_orders_for_item first, then diagnose the order it points to. Never pick an order for an item from query_records rows: a page mixes completed orders in with the live one, and a completed order is never the job meant.
 - For "where is this item used", "what consumes this part", or the effect of a shortage of one item: run where_is_item_used. It reports consumed_in_boms (BOMs that use it) separately from produced_by_boms (the BOM that makes it) — those are opposite relationships and naming the wrong one answers a different question. Never answer this from query_records.
 - A record's child rows come back inside it: a BOM carries its materials and operations, a JobCard its materials_consumed. You cannot FILTER on them (materials.item_id is rejected), so a question about what a record contains — which BOMs use an item, which cards consumed a part — is answered by fetching the records and reading their child arrays, not by filtering. If query_records says truncated, read next_step: when the whole set fits under the cap, ask again for all of it before answering.
 - Any claim about a WHOLE set — "they all failed with X", "most are Y", "the common cause is Z" — must come from query_group, never from rows query_records returned. A page is not the set: seen live, 200 sampled rows all carried one error and the true split across 1209 was 773/328/107/1. If query_records comes back with truncated true, you may quote individual records from it but you may not say what they have in common.
@@ -311,6 +312,12 @@ class ProductionAgent:
             _fn("seat_capability", "Check whether this seat can use a platform tool, e.g. 'SalesOrder.update', 'DowntimeEntry.list', 'SalarySlip.list'.",
                 {"tool": {"type": "string"}}, ["tool"]),
             _fn("seat_policy_conformance", "The agent policy the platform DECLARES for this seat (allowed domains, denied entities, what needs human approval) and where this seat's observed reach diverges from it."),
+            _fn("find_orders_for_item", "The OPEN work orders that make an item, late ones first. Use this whenever "
+                                        "the request names what is being made (\"the bracket job\", \"the FG-PLT-0900 "
+                                        "order\") instead of a WO number, then diagnose the order it points to. Closed "
+                                        "orders are counted, not listed, because a completed order is never the job meant.",
+                {"item": {"type": "string", "description": "item id, code (FG-PLT-0900), number or exact name"}},
+                ["item"]),
             _fn("where_is_item_used", "Which BOMs consume an item, and which BOM produces it. Use this for "
                                       "\"where is this part used\", \"what uses this component\", \"what does a shortage "
                                       "of X affect\". A BOM's materials cannot be filtered on, so this is the only "
@@ -356,7 +363,7 @@ class ProductionAgent:
     REPEAT_GUARDED = {"company_context", "list_late_work_orders", "diagnose_work_order", "downstream_impact",
                       "downtime_summary", "seat_entities", "seat_capability", "capacity_outlook",
                       "order_feasible_by", "shop_floor_exceptions", "seat_policy_conformance",
-                      "query_records", "query_group", "where_is_item_used"}
+                      "query_records", "query_group", "where_is_item_used", "find_orders_for_item"}
 
     def _repeat_note(self, name: str, args: dict, step: int) -> dict | None:
         """Stop the model looping on an identical read (seen live: 9 identical seat_capability calls)."""
@@ -479,6 +486,8 @@ class ProductionAgent:
             return domain.seat_policy_conformance(self.mcp)
         if name == "where_is_item_used":
             return domain.where_is_item_used(self.mcp, args["item"])
+        if name == "find_orders_for_item":
+            return domain.find_orders_for_item(self.mcp, args["item"])
         if name == "query_group":
             return domain.query_group(self.mcp, args["entity"], args["field"], args.get("filters"))
         if name == "query_records":
@@ -648,7 +657,7 @@ class ProductionAgent:
     # record_finding) stay serial — each gates on state the others must not race.
     PARALLEL_SAFE = {"company_context", "list_late_work_orders", "diagnose_work_order", "downstream_impact",
                      "propose_reschedule", "downtime_summary", "seat_entities", "seat_capability",
-                     "query_records", "query_group", "where_is_item_used"}
+                     "query_records", "query_group", "where_is_item_used", "find_orders_for_item"}
     MAX_PARALLEL = 8
 
     def _invoke(self, call, note: dict | None) -> tuple[dict, str | None, float, str | None]:

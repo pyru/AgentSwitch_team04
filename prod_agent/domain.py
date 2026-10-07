@@ -863,6 +863,52 @@ def where_is_item_used(mcp: McpClient, item: str) -> dict:
     return out
 
 
+def find_orders_for_item(mcp: McpClient, item: str) -> dict:
+    """The open work orders that make an item, late ones first, for a request that names what is being
+    made rather than an order number.
+
+    Seen live 2026-10-07 on complex_order_by_item_name: asked about "the Skid-Steer Quick-Attach Plate
+    job", the model read one page of WorkOrders (20 of 77), took the first row for that item —
+    WO-2026-00070, completed in May — and reported the job on time. The only open order for it,
+    WO-2026-00003, was five weeks overdue. Ten of the eleven orders for that item were completed, so a
+    page is far more likely to show a finished order than the live one. `.list` filters on item_id and
+    on a status list at the server, so this is one narrow read and the closed orders never reach the model.
+    """
+    found = resolve_item(mcp, item)
+    if not found:
+        return {"found": False, "item": item, "detail": "no item with that id, code, number or exact name"}
+    today = config.today()
+    sched = {o["work_order_id"]: o for o in finite_schedule(mcp).get("orders", [])}
+    every = mcp.list_all("WorkOrder", item_id=found["id"])
+    open_orders = []
+    for wo in every:
+        if wo.get("item_id") != found["id"] or wo.get("status") not in OPEN_WO:
+            continue
+        due = _date(wo.get("planned_end_date"))
+        verdict = (sched.get(wo["id"]) or {}).get("verdict")
+        s = _wo_summary(wo)
+        s["is_late"] = bool((due and due < today) or verdict == "late")
+        s["days_past_due"] = (today - due).days if due and due < today else 0
+        open_orders.append(s)
+    # Late first, most overdue first; then the rest by due date.
+    open_orders.sort(key=lambda s: (not s["is_late"], -s["days_past_due"], s.get("planned_end_date") or "9999"))
+    out = {"found": True, "item": _item_summary(found), "open_orders": open_orders,
+           "closed_orders_not_listed": len(every) - len(open_orders)}
+    late = [s["number"] for s in open_orders if s["is_late"]]
+    if not open_orders:
+        out["instruction"] = ("no open work order makes this item; say so, and do not diagnose a completed "
+                              "or cancelled order as if it were the job in question")
+    elif len(open_orders) == 1:
+        out["instruction"] = f"{open_orders[0]['number']} is the only open order for this item: it is the job meant"
+    elif len(late) == 1:
+        out["instruction"] = (f"{len(open_orders)} open orders make this item and only {late[0]} is late: for a "
+                              f"question about a late job, that is the one meant. Say the others exist.")
+    else:
+        out["instruction"] = (f"{len(open_orders)} open orders make this item ({len(late)} late). Diagnose the "
+                              "most overdue, and name the others so the user can say if they meant another.")
+    return out
+
+
 def _item_summary(item: dict) -> dict:
     return {k: item.get(k) for k in ("id", "number", "code", "name", "item_group", "stock_uom") if k in item}
 
