@@ -210,6 +210,12 @@ def _mistyped(args: dict) -> list[str]:
     return wrong
 
 
+def _rate_limited(exc: Exception) -> bool:
+    """A 429 that clears by waiting. Read off the exception rather than its class, so an injected client
+    from any OpenAI-compatible SDK qualifies. An exhausted quota is also a 429, but no wait clears it."""
+    return getattr(exc, "status_code", None) == 429 and getattr(exc, "code", None) != "insufficient_quota"
+
+
 def _fn(name, description, properties=None, required=None):
     return {"type": "function", "function": {"name": name, "description": description, "parameters": {
         "type": "object", "properties": properties or {}, "required": required or []}}}
@@ -672,6 +678,24 @@ class ProductionAgent:
         return results
 
     # ------------------------------------------------------------------ loop
+    # The SDK's own backoff (max_retries=8) gives up after ~40 seconds, but a tokens-per-minute window only
+    # clears after a full minute. Seen 2026-10-01: two harness runs on one key kept it full past the SDK's
+    # retries, and two tasks ended with no finding. Waiting out the window costs a minute; giving up costs
+    # the task. Bounded, so a key that stays saturated still fails the run rather than hanging it.
+    RATE_LIMIT_WAITS = 3
+    RATE_LIMIT_WAIT_SECONDS = 60
+
+    def _complete(self, step: int, **request):
+        for attempt in range(self.RATE_LIMIT_WAITS + 1):
+            try:
+                return self.llm.chat.completions.create(**request)
+            except Exception as e:
+                if attempt == self.RATE_LIMIT_WAITS or not _rate_limited(e):
+                    raise
+                self.trace({"type": "llm_wait", "step": step, "attempt": attempt + 1,
+                            "seconds": self.RATE_LIMIT_WAIT_SECONDS, "reason": str(e)[:200]})
+                time.sleep(self.RATE_LIMIT_WAIT_SECONDS)
+
     def run(self, request: str) -> dict:
         started = time.time()
         messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": request}]
@@ -689,8 +713,7 @@ class ProductionAgent:
                 self.trace({"type": "wrap_up", "step": step, "tool_choice": choice})
             tools = self.tool_specs()
             try:
-                resp = self.llm.chat.completions.create(model=self.model, messages=messages,
-                                                        tools=tools, **sampling)
+                resp = self._complete(step, model=self.model, messages=messages, tools=tools, **sampling)
                 msg = resp.choices[0].message
                 usage = getattr(resp, "usage", None)
                 llm_event = {"type": "llm", "step": step, "content": msg.content,
