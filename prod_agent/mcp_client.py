@@ -2,6 +2,7 @@
 
 A JSON-RPC error still arrives as HTTP 200, so every call inspects the envelope.
 """
+import http.client
 import json
 import threading
 import time
@@ -84,6 +85,13 @@ def _http(url, body=None, token=None, method=None, timeout=120, retries=CONNECT_
             # so a retry cannot repeat a write the server processed. A timeout while waiting for the
             # response is a plain TimeoutError and is deliberately not retried.
             if attempt == retries:
+                raise
+            time.sleep(CONNECT_BACKOFF_SECONDS * (attempt + 1))
+        except (http.client.IncompleteRead, ConnectionResetError):
+            # The connection dropped mid-response. Seen 2026-10-01 (a graded test) and 2026-10-07 (a
+            # verifier's 338 KB AgentMemory read cut at 134 KB, scoring a correct refusal unevaluated).
+            # The server finished the request before the body was lost, so only a read may be repeated.
+            if not read_only or attempt == retries:
                 raise
             time.sleep(CONNECT_BACKOFF_SECONDS * (attempt + 1))
 
