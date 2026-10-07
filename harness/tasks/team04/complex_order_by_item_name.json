@@ -1,0 +1,12 @@
+{
+  "id": "complex_order_by_item_name",
+  "note": "Written with Claude (AI-assisted), 2026-10-07, for the hidden-benchmark preparation. Target chosen at run time by its fixture.",
+  "instances": [
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "prompt": "The {target_item} job is running late. Why, and what does it hold up?",
+  "verifier": "harness.verifiers.team04:order_found_by_item",
+  "checks": "Vague reference: the order is named by what it makes. Must resolve it to the only open order for that item, then diagnose it from the DB.",
+  "fixture": "late_by_item"
+}

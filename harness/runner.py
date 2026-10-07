@@ -154,8 +154,10 @@ def run_one(task: dict, instance: str, root: Path) -> dict:
                 trace({"type": "interference", **edit})
             return True
 
-        prompt = task["prompt"].format(**{f"{role}_number": v["number"] for role, v in (fixture or {}).items()
-                                          if isinstance(v, dict) and "number" in v})
+        # Every text field of a fixture role, so a prompt can name an order by what it makes ({target_item})
+        # as well as by number ({target_number}).
+        prompt = task["prompt"].format(**{f"{role}_{k}": val for role, v in (fixture or {}).items()
+                                          if isinstance(v, dict) for k, val in v.items() if isinstance(val, str)})
         agent = ProductionAgent(
             mcp, apply_mode=task.get("mode") == "apply", allowed_write_ids=write_ids, approve=approve,
             escalate_mode=bool(task.get("escalate")), session_title=f"{config.HARNESS_MARKER} task {task['id']}",

@@ -1,0 +1,12 @@
+{
+  "id": "complex_partial_material_eta",
+  "note": "Written with Claude (AI-assisted), 2026-10-07, for the hidden-benchmark preparation. Target chosen at run time by its fixture.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "prompt": "{target_number} is late. Tell me why, and when the purchased material it is waiting for will arrive so we can plan the restart.",
+  "verifier": "harness.verifiers.team04:partial_answer_names_hidden_entity",
+  "checks": "Mixed request: the causes are answerable, the arrival date needs PurchaseOrder (403). Must answer the causes from the DB, name PurchaseOrder as not visible, and record outcome partial, not refused.",
+  "fixture": "late_with_open_material_request"
+}
