@@ -282,3 +282,43 @@ The failure is a silent `total: 0`, which reads as "no such records". Our harnes
 fixture rows and created a new pair per run instead of reusing one — 60 marker drafts on Suryodaya where 2
 should be, fixed our side in `9929235`. The report states that as the cost of the silent zero, not as a
 platform action.
+
+## 8 October — the newly-late automation
+
+Since 3 Oct the finite schedule raises an `AgentJob` for the Production persona on every regeneration
+(`trigger_kind: schedule_newly_late`, "Review N newly late production order(s)"). Both defects below are in
+that one hand-off. Filed once on Suryodaya each, both instances verified inside the report, no twins.
+
+| E1 | Suryodaya (both verified) | 80b82cb1-6640-4718-b370-d0d56da22f0e | Every `schedule_newly_late` job fails with `agent_authority_unresolved` before its first step — 19 of 19 since 3 Oct | - | High | Filed 8 Oct |
+| E2 | Suryodaya (both verified) | 0e41e63d-1f9f-437b-8bce-08d4e9d692b0 | "Newly late" re-sends the whole late list on every regeneration (same 60 orders x 13 jobs), and the dedupe key carries a per-run counter | - | Medium | Filed 8 Oct |
+
+**E1 detail.** Suryodaya JOB-2026-09579..09592 (13) and Keystone JOB-2026-00313..00319 (6): all `failed`,
+`user_id: "system"`, 0 tokens, 4–14 ms, 0 `AgentJobStep` rows. The same through MCP `AgentJob.get` and REST,
+and the numbers are contiguous, so nothing was pruned. Ruled out: floor paused (`AgentFloorConfig.paused` 0),
+persona off (`is_active` 1), and the second seat (152 "Production review", assigned 01:42 UTC on 3 Oct, after
+the first failure on each instance). The two human-started Production jobs that day are parked in
+`waiting_approval`, so only unattended jobs fail. 773 scheduled `AgentTask` jobs in the Suryodaya table
+(16–22 Sep) ended with the same error. The seat cannot see any of this: the cockpit's `automation_failures`
+lane is `permission_denied` for `manufacturing_user`. The report asks that a fix not resolve authority to the
+persona's `user_id`, which is **our** account on both instances: a job running as team04 would have its
+writes counted as ours by the harness verifiers' "work orders written by this seat during the run" check.
+
+**E2 detail.** Suryodaya's 13 jobs name the identical 60 WorkOrders (+0/−0 each time), all overdue before the
+first job. Keystone repeats an unchanged list on 3 of 5 later runs. On 7 Oct it fired hourly 16:44–22:44 UTC
+while our harness was editing draft orders, which are never in the late set. Mechanism, from the rows: one
+`ScheduleSnapshot` per instance regenerated in place, `notification_generation` 13 / 6 equals the job count,
+and `dedupe_key` ends in that counter (`…:13:Production`), so the 10-minute dedupe window never matches.
+`schedule_newly_late` is also not among `AgentJob.trigger_kind`'s declared options.
+
+**Not filed from this sweep — awaiting a team decision.**
+- Timestamps not consistently UTC (Low): `SalesOrder.updated_at` carries `+00:00` on 310/313 (Suryodaya) and
+  167/171 (Keystone) rows, from a 30 Sep bulk touch, beside naive `created_at`; `AgentJob` mixes both inside one
+  row. Separately, 277 Suryodaya seed rows carry `updated_at` exactly +5:30:00 after `created_at` with
+  `updated_by` null (IST wall-clock in a UTC column); Keystone has none.
+- Out-of-lane tools listed for the seat (Medium): the catalogue is now 411 tools and includes
+  `endpoint.approvals.process_decision`, `endpoint.email.rfq.create_quote`, `endpoint.accounting.supplier_scorecard`,
+  `endpoint.calendar.birthdays`, `endpoint.inventory.shipping_board`, plus storefront and public-booking
+  endpoints. Same class as B10. Listing only — none were called.
+- `TeamHarness.list/get/update/create` listed beside `get_mine/set_mine` — the B7/B8 shape on the table final
+  scoring reads. **Untested**: a read-only ownership check was blocked by the session's auto-mode classifier.
+- `IncompleteRead` on 1 and 7 Oct: two drops, indistinguishable from our own network. Not worth filing.
