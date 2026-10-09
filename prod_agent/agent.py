@@ -224,9 +224,52 @@ def _rate_limited(exc: Exception) -> bool:
     return not ({getattr(exc, "code", None), getattr(exc, "type", None)} & NO_CREDIT)
 
 
+# Ways to make a model call one tool, strongest first. The loop forces record_finding (and escalate) by name so a
+# finding always lands; the harness runner's model is only promised to support tool calls, not forcing one.
+CHOICE_MODES = ("named", "required", "auto")
+
+
+def _choice_rejected(exc: Exception) -> bool:
+    """A provider refusing the form of tool_choice, as opposed to anything else that can fail. OpenAI-compatible
+    servers answer an unsupported tool_choice with 400 or 422 and name the parameter in the message."""
+    return getattr(exc, "status_code", None) in (400, 422) and "tool" in str(exc).lower()
+
+
+def default_llm(provider: str):
+    from openai import OpenAI
+    # The SDK backs off on 429/5xx; the default 2 retries is too few for a 30k tokens-per-minute key.
+    # No base_url for openai: the SDK reads OPENAI_BASE_URL itself, which is how the harness runner's model is reached.
+    if provider == "openai":
+        return OpenAI(api_key=config.env("OPENAI_API_KEY"), max_retries=8)
+    api_key = config.env("OPENROUTER_API_KEY")
+    if not api_key:
+        raise RuntimeError("Set OPENROUTER_API_KEY in .env")
+    return OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1", max_retries=8)
+
+
 def _fn(name, description, properties=None, required=None):
     return {"type": "function", "function": {"name": name, "description": description, "parameters": {
         "type": "object", "properties": properties or {}, "required": required or []}}}
+
+
+def probe_tool_choice(llm, model: str) -> dict:
+    """Which form of forced tool call this model accepts, found with one tiny request per form before any task
+    spends time on it. Returns the mode, whether the forced call actually came back, and what was rejected."""
+    request = {"model": model, "messages": [{"role": "user", "content": "Call the ping tool."}],
+               "tools": [_fn("ping", "Answer a ping.")]}
+    forms = {"named": {"type": "function", "function": {"name": "ping"}}, "required": "required", "auto": "auto"}
+    rejected = []
+    for mode in CHOICE_MODES:
+        try:
+            resp = llm.chat.completions.create(**request, tool_choice=forms[mode])
+        except Exception as e:
+            if not _choice_rejected(e):
+                raise
+            rejected.append(f"{mode}: {str(e)[:160]}")
+            continue
+        called = bool(resp.choices and resp.choices[0].message.tool_calls)
+        return {"mode": mode, "tool_called": called, "rejected": rejected}
+    raise RuntimeError("the model rejected every form of tool_choice: " + " | ".join(rejected))
 
 
 WO_REF = {"work_order": {"type": "string", "description": "Work order number (WO-YYYY-NNNNN) or id"}}
@@ -237,9 +280,12 @@ class ProductionAgent:
                  apply_mode: bool = False, approve: Callable[[dict], bool] | None = None,
                  allowed_write_ids: set[str] | None = None, trace: Callable[[dict], None] | None = None,
                  max_steps: int = 20, llm=None, escalate_mode: bool = False, session_title: str | None = None,
-                 max_escalations: int = 1):
+                 max_escalations: int = 1, deadline: float | None = None, forced_tool_choice: str = "named",
+                 clock: Callable[[], float] = time.monotonic):
         self.mcp = mcp
-        self.provider = (config.env("LLM_PROVIDER", "openai") or "openai").strip().lower()
+        # The harness runner supplies one OpenAI-compatible model through OPENAI_* and nothing else.
+        self.provider = "openai" if config.on_platform() else \
+            (config.env("LLM_PROVIDER", "openai") or "openai").strip().lower()
         if self.provider == "openai":
             self.model = model or config.env("OPENAI_MODEL", "gpt-4.1")
         elif self.provider == "openrouter":
@@ -254,6 +300,11 @@ class ProductionAgent:
         self.allowed_write_ids = allowed_write_ids
         self.trace = trace or (lambda event: None)
         self.max_steps = max_steps
+        if forced_tool_choice not in CHOICE_MODES:
+            raise ValueError(f"forced_tool_choice must be one of {CHOICE_MODES}, not {forced_tool_choice!r}")
+        self.forced_tool_choice = forced_tool_choice
+        self.deadline = deadline  # on `clock`; None means no time limit, only the step budget
+        self._clock = clock
         self._proposals: dict[str, dict] = {}
         self._applied: dict[str, dict] = {}   # wo_id -> the write the platform confirmed
         self._conflicted: dict[str, dict] = {}  # wo_id -> a write the platform refused as stale
@@ -276,17 +327,7 @@ class ProductionAgent:
         # Reads REPEAT_GUARDED already promises are "still current" for the rest of the run, kept so
         # propose_reschedule does not re-run a diagnosis and a BOM walk the model has already paid for.
         self._reads: dict[tuple[str, str], dict] = {}
-        if llm is None:
-            from openai import OpenAI
-            # The SDK backs off on 429/5xx; the default 2 retries is too few for a 30k tokens-per-minute key.
-            if self.provider == "openai":
-                llm = OpenAI(api_key=config.env("OPENAI_API_KEY"), max_retries=8)
-            else:
-                api_key = config.env("OPENROUTER_API_KEY")
-                if not api_key:
-                    raise RuntimeError("Set OPENROUTER_API_KEY in .env")
-                llm = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1", max_retries=8)
-        self.llm = llm
+        self.llm = llm if llm is not None else default_llm(self.provider)
 
     # ------------------------------------------------------------------ tools
     def tool_specs(self) -> list[dict]:
@@ -379,19 +420,28 @@ class ProductionAgent:
                 "instruction": "if the answer needs a record this seat cannot see, say so; "
                                "otherwise use what you have and call record_finding"}
 
+    # Under a deadline, the finding is forced this long before it, which leaves room for the forced call, a refusal
+    # from one of record_finding's guards, and the retry.
+    WRAP_UP_SECONDS = 45
+
+    def _time_left(self) -> float | None:
+        return None if self.deadline is None else self.deadline - self._clock()
+
     def _wrap_up_choice(self, step: int):
-        """Force the finding into the database before the step budget runs out."""
+        """Force the finding into the database before the step budget or the time limit runs out."""
         remaining = self.max_steps - step
+        left = self._time_left()
+        short_of_time = left is not None and left < self.WRAP_UP_SECONDS
         if self.finding is not None:
-            return "none" if remaining == 1 else None
+            return "none" if remaining == 1 or short_of_time else None
         escalation_due = self.escalate_mode and self.needs_person and not self.escalations
         # Forcing it only near the budget misses the common case: a run that finishes early never gets
         # there. Seen live 2026-09-29 on concurrent_edit_before_write — the conflict was detected, the
         # finding refused once for the missing escalation, and the model recorded anyway at step 9 of
         # 20, so the handover was never raised. Once the refusal has been ignored, force the call.
-        if escalation_due and (remaining == 3 or self._escalation_warned):
+        if escalation_due and (remaining == 3 or self._escalation_warned or short_of_time):
             return {"type": "function", "function": {"name": "escalate"}}
-        if remaining <= 2:
+        if remaining <= 2 or short_of_time:
             return {"type": "function", "function": {"name": "record_finding"}}
         return None
 
@@ -726,25 +776,56 @@ class ProductionAgent:
     RATE_LIMIT_WAITS = 3
     RATE_LIMIT_WAIT_SECONDS = 60
 
+    def _shape_choice(self, request: dict) -> dict:
+        """Express a forced tool call in the form this model accepts (see probe_tool_choice)."""
+        choice = request.get("tool_choice")
+        if self.forced_tool_choice == "named" or choice is None:
+            return request
+        if not isinstance(choice, dict):  # "none": a model that refuses forcing one tool may refuse forbidding all
+            return {**request, "tool_choice": "auto"} if self.forced_tool_choice == "auto" else request
+        # With only the forced tool on offer, "required" means that tool, and "auto" makes it the obvious one.
+        only = [t for t in request.get("tools") or [] if t["function"]["name"] == choice["function"]["name"]]
+        return {**request, "tools": only or request.get("tools"), "tool_choice": self.forced_tool_choice}
+
     def _complete(self, step: int, **request):
-        for attempt in range(self.RATE_LIMIT_WAITS + 1):
+        waits = 0
+        while True:
             try:
-                return self.llm.chat.completions.create(**request)
+                return self.llm.chat.completions.create(**self._shape_choice(request))
             except Exception as e:
-                if attempt == self.RATE_LIMIT_WAITS or not _rate_limited(e):
+                if "tool_choice" in request and _choice_rejected(e) and self.forced_tool_choice != "auto":
+                    weaker = CHOICE_MODES[CHOICE_MODES.index(self.forced_tool_choice) + 1]
+                    self.trace({"type": "tool_choice_fallback", "step": step, "from": self.forced_tool_choice,
+                                "to": weaker, "reason": str(e)[:200]})
+                    self.forced_tool_choice = weaker  # for the rest of the run: the model will not change its mind
+                    continue
+                left = self._time_left()
+                # A wait that would run into the deadline only trades a late failure for an early one.
+                if waits == self.RATE_LIMIT_WAITS or not _rate_limited(e) or \
+                        (left is not None and left < self.RATE_LIMIT_WAIT_SECONDS + self.WRAP_UP_SECONDS):
                     raise
-                self.trace({"type": "llm_wait", "step": step, "attempt": attempt + 1,
+                waits += 1
+                self.trace({"type": "llm_wait", "step": step, "attempt": waits,
                             "seconds": self.RATE_LIMIT_WAIT_SECONDS, "reason": str(e)[:200]})
                 time.sleep(self.RATE_LIMIT_WAIT_SECONDS)
 
     def run(self, request: str) -> dict:
         started = time.time()
         messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": request}]
+        left = self._time_left()
         self.trace({"type": "start", "run_id": self.run_id, "instance": self.mcp.session.instance,
-                    "provider": self.provider, "model": self.model, "apply_mode": self.apply_mode, "request": request})
+                    "provider": self.provider, "model": self.model, "apply_mode": self.apply_mode, "request": request,
+                    "forced_tool_choice": self.forced_tool_choice,
+                    "seconds_allowed": None if left is None else round(left, 1)})
         final, stop_reason = None, "max_steps"
         llm_error = None
         for step in range(self.max_steps):
+            left = self._time_left()
+            if left is not None and left <= 0:
+                # Past the deadline the harness needs the run back; whatever was recorded is what gets graded.
+                stop_reason = "deadline"
+                self.trace({"type": "deadline", "step": step})
+                break
             # Strip a provider namespace so OpenRouter's OpenAI model ids retain deterministic sampling.
             sampling_model = self.model.rpartition("/")[2]
             sampling = {"temperature": 0} if sampling_model.startswith(("gpt-4", "gpt-3")) else {}

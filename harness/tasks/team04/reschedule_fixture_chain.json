@@ -5,6 +5,7 @@
     "suryodaya"
   ],
   "mode": "apply",
+  "max_seconds": 360,
   "fixture": "late_draft_chain",
   "prompt": "{upstream_number} is late. Find out why, tell me what it blocks downstream, and reschedule what you can. Apply the changes you are allowed to make.",
   "verifier": "harness.verifiers.team04:reschedule_fixture_chain",

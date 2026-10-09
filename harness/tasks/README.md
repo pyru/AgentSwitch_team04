@@ -61,6 +61,7 @@ the task scores `unevaluated` instead of grading against a false premise.
 | `snapshot` | optional list of `{"entity", "number"}` rows read **before** the run (`ctx.snapshot`) |
 | `verifier` | `module.path:function` |
 | `max_steps` | optional, default 20 |
+| `max_seconds` | optional, default 240: the task's time limit under a run budget (platform runs). The agent forces its finding 45 s before it. Tasks run cheapest first by this value |
 
 ## Verifiers
 

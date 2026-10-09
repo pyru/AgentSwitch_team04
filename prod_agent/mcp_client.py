@@ -97,20 +97,34 @@ def _http(url, body=None, token=None, method=None, timeout=120, retries=CONNECT_
 
 
 class Session:
-    """Login for one instance. Tokens are cached under .tokens/ namespaced by team and instance."""
+    """Login for one instance. Tokens are cached under .tokens/ namespaced by team and instance.
+
+    Under the harness runner the runner's base URL and seat token are used as given: no password, no login, no
+    token file, and only the one instance that run serves — its URL is a fresh copy of that instance alone.
+    """
 
     def __init__(self, instance: str):
         if instance not in config.INSTANCES:
             raise ValueError(f"unknown instance {instance!r}")
         self.instance = instance
-        self.base = config.INSTANCES[instance]
         self._lock = threading.Lock()
+        self.platform = config.platform()
+        if self.platform:
+            if instance != self.platform["instance"]:
+                raise ValueError(f"this run serves {self.platform['instance']} only, not {instance}")
+            self.base, self.token, self._token_file = self.platform["base"], self.platform["token"], None
+            return
+        self.base = config.INSTANCES[instance]
         self._token_file = TOKEN_DIR / f"team04-{instance}.token"
         self.token = self._token_file.read_text().strip() if self._token_file.exists() else None
         if not self.token:
             self.login()
 
     def login(self):
+        if self.platform:
+            # The runner's token is all a platform run has: there is no password to fall back on, and logging in
+            # again with the same token would only repeat the 401.
+            raise RuntimeError(f"{self.base} rejected the harness runner's token (401)")
         email, password = config.credentials(self.instance)
         status, payload = _http(f"{self.base}/api/auth/login", {"email": email, "password": password})
         if status != 200 or not payload or "token" not in payload:

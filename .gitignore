@@ -5,6 +5,8 @@
 
 # Run output
 runs/
+results.json
+results.json.tmp
 
 # Unfiled security findings: keep out of the public repo until reported
 notes/bug_candidates.md

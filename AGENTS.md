@@ -16,6 +16,10 @@ database, no mock server, and no `--dry-run`. Ask Pravin before running:
 
 Reading code, offline tests, and inspecting `runs/` output need no confirmation.
 
+Submitting on AgentSwitch ("Our harness" → Submit for a run) runs `agentswitch-harness.toml`
+against a throwaway copy of the instance, so it does not touch the shared book, but it spends
+the team's **one run every 3 days**: never submit without being asked.
+
 ## Commands
 
 ```bash
@@ -27,6 +31,7 @@ AGENT_OFFLINE=1 python -m pytest tests              # the 27 that need no networ
 AGENT_TODAY=2026-09-16 python -m pytest tests_ai -v # pin the date or results drift
 python scripts/verify_submission.py                 # full pre-submission checklist
 python scripts/verify_submission.py --offline       # skip network checks
+python scripts/check_results.py                     # results.json in the platform runner's format
 ```
 
 `verify_submission.py` shells out to `pytest tests -q` and exits non-zero on any failed
@@ -50,14 +55,24 @@ default and reads `OPENAI_API_KEY`/`OPENAI_MODEL` as before. `openrouter` routes
 `https://openrouter.ai/api/v1` and requires both `OPENROUTER_API_KEY` and
 `OPENROUTER_MODEL` — there is no cross-provider fallback, and no default slug, because
 `gpt-4.1` is not a valid OpenRouter id (they are `vendor/model`). A model reached this way
-must support tool calling *and* a forced `tool_choice`; without the latter the loop cannot
-make it record a finding before the step budget ends. Each run's `start` trace event
-records the resolved provider.
+must support tool calling and should accept a forced `tool_choice`: if it rejects one, the
+loop falls back to `required` and then `auto` for the rest of the run, which makes recording a
+finding likely rather than guaranteed. Each run's `start` trace event records the resolved
+provider.
 
 **`.env` overrides the process environment**, not the other way round — an exported shell
-variable is silently beaten by a non-empty `.env` line (`prod_agent/config.py:20`).
+variable is silently beaten by a non-empty `.env` line (`prod_agent/config.py:55`).
 
-`AGENT_OFFLINE` is the one exception, and it is **shell-only**: putting it in `.env` does nothing.
+`AGENTSWITCH_TOKEN`, `AGENTSWITCH_BASE_URL` and `AGENTSWITCH_INSTANCE` belong to the platform's
+harness runner and are shell-only, read from `os.environ` like `AGENT_OFFLINE` below. With
+`AGENTSWITCH_TOKEN` set the code is in **platform mode**: `.env` is not read at all (the
+runner's `OPENAI_*` win), `Session` uses the given token and base URL for that one instance
+(no login, no `.tokens/`), `LLM_PROVIDER` is ignored, and `harness.runner` runs a preflight,
+keeps a 27-minute budget (`HARNESS_BUDGET_MINUTES` overrides) and rewrites `results.json`
+after every task. Unset them before running tests; `tests_ai/conftest.py` clears them for
+the AI-written tests.
+
+`AGENT_OFFLINE` is the other exception, and it is **shell-only**: putting it in `.env` does nothing.
 The root `conftest.py` reads it straight from `os.environ` during collection, which happens before
 anything calls `load_dotenv`, precisely so a stray `.env` line cannot silently switch the gate on
 or off. Set to exactly `1`, it skips every test that depends on a live-tenant fixture — `surya`,

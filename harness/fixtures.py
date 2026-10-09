@@ -233,6 +233,10 @@ def injected_late_order(mcp: McpClient) -> dict:
     return {"target": _target(mcp.call("WorkOrder.get", {"id": wo["id"]}))}
 
 
+# Fixtures that create or edit work orders. Verifiers judge "no writes" by everything this seat did since a task
+# started, so a task using one of these must never run beside another task.
+WRITING_FIXTURES = {"late_draft_chain", "injected_late_order"}
+
 FIXTURES = {"late_draft_chain": late_draft_chain, "stopped_not_late": stopped_not_late,
             "late_with_open_material_request": late_with_open_material_request,
             "late_with_unrelated_order": late_with_unrelated_order, "late_by_item": late_by_item,

@@ -3,6 +3,7 @@
   "note": "Written with Claude (AI-assisted). Harness task, not a hand-written test.",
   "instances": ["suryodaya"],
   "mode": "apply",
+  "max_seconds": 420,
   "escalate": true,
   "fixture": "late_draft_chain",
   "interference": "edit_dates_before_apply",

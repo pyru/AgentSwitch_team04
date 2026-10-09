@@ -109,6 +109,33 @@ python -m harness.runner --include-samples
 
 Output goes to `runs/<timestamp>/<instance>/<task>/`: `task.json`, `fixture.json`, `trace.jsonl` (written event by event), and `result.json`, all fsync'd **before** the verifier writes `verdict.json`. Verdicts are `approve`, `revise` or `unevaluated`, and unevaluated never counts as a pass. See [harness/tasks/README.md](harness/tasks/README.md) for the task and verifier format.
 
+Every run also keeps `results.json` (git-ignored) current in the format AgentSwitch's harness runner reads, so `python scripts/check_results.py` can check it.
+
+## Run on AgentSwitch ("Our harness" → Submit for a run)
+
+Since Release 8.1 the platform runs this harness on its own server with its own model. [agentswitch-harness.toml](agentswitch-harness.toml) tells it how: `pip install -r requirements.txt`, then `python -m harness.runner` once per instance in `instances`, each against a fresh copy of that instance whose writes are thrown away, with no internet, for at most `timeout_minutes` (30). It reads `results.json` and shows pass/fail per task and a score. **One run per team every 3 days**, on the exact commit of the branch saved in the panel.
+
+The runner gives us `AGENTSWITCH_BASE_URL`, `AGENTSWITCH_TOKEN`, `AGENTSWITCH_INSTANCE` and `OPENAI_BASE_URL`/`OPENAI_API_KEY`/`OPENAI_MODEL`. When `AGENTSWITCH_TOKEN` is set, the harness runs in platform mode:
+
+- **Credentials.** The runner's token and base URL are used as given: no password, no login, no `.tokens/` file, and `.env` is not read at all, so its model settings cannot override the runner's. The model client is the plain `openai` package, which picks up `OPENAI_BASE_URL` itself.
+- **One instance.** Only `AGENTSWITCH_INSTANCE`'s tasks run; a `Session` for the other instance is refused.
+- **Preflight.** Before any task: MCP `tools/list` and REST `/api/auth/me` with the token (the agent uses MCP, verifiers read REST), and one tiny call per form of forced tool call (`named`, then `required`, then `auto`) to find which the model accepts. A failure is written to `results.json` as a failed `preflight` entry with every task marked not run.
+- **Results.** Every planned task is in `results.json` from the start as not run, and is replaced by its verdict as it lands: `passed` is true for `approve` only. The file is rewritten whole after every task, so a run stopped at any moment still leaves a readable file.
+- **Time.** A 27-minute budget (`HARNESS_BUDGET_MINUTES` overrides). No task starts with under 90 seconds left, and the rest stay "not run (time budget)", which counts as failed. Each task gets 240 seconds, or its `max_seconds`; the agent forces its finding 45 seconds before its limit and stops at it. Tasks run cheapest first. At 28.5 minutes a watchdog exits with `results.json` as it stands.
+
+Local runs are unchanged: no budget, no preflight, both instances, password login from `.env`.
+
+`--workers N` runs the read-only tasks N at a time before the rest. A task that may write a work order or raise an escalation, or whose fixture writes, always runs alone, because verifiers count everything this seat did since a task started. The committed toml runs one task at a time.
+
+Rehearse a platform run locally before spending a submission. This calls the live tenant and writes an AgentMemory row per task, so the AGENTS.md rule on harness runs applies:
+
+```bash
+AGENTSWITCH_BASE_URL=https://agentswitch.theschoolofai.in AGENTSWITCH_INSTANCE=suryodaya \
+AGENTSWITCH_TOKEN=$(cat .tokens/team04-suryodaya.token) OPENAI_API_KEY=... OPENAI_MODEL=gpt-4.1 \
+python -m harness.runner --task refuse_unknown_work_order
+python scripts/check_results.py
+```
+
 ## Layout
 
 | path | what |
@@ -116,7 +143,8 @@ Output goes to `runs/<timestamp>/<instance>/<task>/`: `task.json`, `fixture.json
 | `prod_agent/mcp_client.py` | JSON-RPC MCP client (errors arrive as HTTP 200) and an independent REST client for verifiers |
 | `prod_agent/domain.py` | deterministic logic: `diagnose`, `downstream_impact`, `propose_reschedule`, `apply_proposal`, `record_finding` |
 | `prod_agent/agent.py` | the loop, tool specs and system prompt |
-| `harness/` | runner, verifier context, fixtures, task set |
+| `harness/` | runner, verifier context, fixtures, task set, `results.json` writer |
+| `agentswitch-harness.toml` | how AgentSwitch's harness runner installs, runs and reads this repo |
 | `tests/` | hand-written tests only |
 | `GAP_REPORT.md` | week-one gap report (benchmark: Carbon) |
 | `docs/ARCHITECTURE.md` | how the agent and harness fit together, and where to change things |

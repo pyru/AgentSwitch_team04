@@ -5,6 +5,7 @@
     "suryodaya"
   ],
   "mode": "dry_run",
+  "max_seconds": 300,
   "params": {
     "work_order": "WO-2026-00049"
   },

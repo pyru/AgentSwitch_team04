@@ -145,11 +145,39 @@ def main():
     key_marker, password_marker = "sk-" + "proj-", "!aA" + "1"
     for p in ROOT.rglob("*"):
         if p.is_file() and not any(part in (".git", "runs", ".tokens", "__pycache__") for part in p.parts) \
-                and p.name != ".env" and p.suffix in (".py", ".md", ".json", ".txt", ".example"):
+                and p.name != ".env" and p.suffix in (".py", ".md", ".json", ".txt", ".example", ".toml"):
             body = p.read_text(encoding="utf-8", errors="ignore")
             if key_marker in body or password_marker in body:
                 leaked.append(str(p.relative_to(ROOT)))
     check("no API key or password in committable files", not leaked, ", ".join(leaked))
+
+    print("\n== G. AgentSwitch harness runner (Our harness -> Submit for a run)")
+    import tomllib
+
+    from harness.results import RESULTS_NAME, problems
+    from prod_agent.config import INSTANCES
+    try:
+        spec = tomllib.loads((ROOT / "agentswitch-harness.toml").read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:  # TOMLDecodeError is a ValueError
+        check("agentswitch-harness.toml readable", False, str(exc))
+    else:
+        missing = [k for k in ("install", "run", "results", "instances", "timeout_minutes") if k not in spec]
+        check("harness toml has every key the runner reads", not missing, ", ".join(missing))
+        instances = spec.get("instances")
+        check("harness toml lists only our instances", isinstance(instances, list) and bool(instances)
+              and set(instances) <= set(INSTANCES), str(instances))
+        timeout = spec.get("timeout_minutes")
+        check("harness toml timeout is 1-30 minutes", type(timeout) is int and 1 <= timeout <= 30, str(timeout))
+        check("harness toml reads the file our runner writes", spec.get("results") == RESULTS_NAME, str(spec.get("results")))
+        check("harness toml runs our harness", "harness.runner" in str(spec.get("run")), str(spec.get("run")))
+    check("results.json is git-ignored", RESULTS_NAME in gitignore)
+    results_file = ROOT / RESULTS_NAME
+    if results_file.exists():
+        try:
+            found = problems(json.loads(results_file.read_text(encoding="utf-8")))
+        except ValueError as exc:
+            found = [f"not JSON: {exc}"]
+        check(f"latest {RESULTS_NAME} in the runner's format", not found, "; ".join(found[:3]))
 
     if offline:
         if offline_skipped:
