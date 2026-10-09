@@ -103,7 +103,8 @@ def _server_now_utc(base: str) -> dt.datetime:
             headers = resp.headers
     except urllib.error.HTTPError as e:  # a 401 still carries the server's Date header
         headers = e.headers
-    return email.utils.parsedate_to_datetime(headers["Date"]).astimezone(dt.UTC).replace(tzinfo=None)
+    # timezone.utc, not datetime.UTC (3.11+): the platform's harness runner may run Python 3.10.
+    return email.utils.parsedate_to_datetime(headers["Date"]).astimezone(dt.timezone.utc).replace(tzinfo=None)
 
 
 def capture_context(rest: RestClient, task: dict) -> dict:
@@ -111,7 +112,7 @@ def capture_context(rest: RestClient, task: dict) -> dict:
     try:
         started = _server_now_utc(rest.session.base)
     except (urllib.error.URLError, KeyError, TypeError, ValueError):
-        started = dt.datetime.now(dt.UTC).replace(tzinfo=None)
+        started = dt.datetime.now(dt.timezone.utc).replace(tzinfo=None)
     started -= dt.timedelta(seconds=2)
     return {
         "me": rest.raw("/api/auth/me")["id"],

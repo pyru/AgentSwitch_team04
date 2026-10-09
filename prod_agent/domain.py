@@ -778,7 +778,9 @@ def seat_policy_conformance(mcp: McpClient) -> dict:
 
 def record_finding(mcp: McpClient, run_id: str, finding: dict) -> dict:
     """Persist the agent's conclusion so verifiers read the database, not the reply text."""
-    payload = {"run_id": run_id, "recorded_at": dt.datetime.now(dt.UTC).isoformat(), **finding}
+    # timezone.utc, not datetime.UTC: that arrived in Python 3.11, the platform's harness runner does not say which
+    # Python it runs, and on 3.10 this line failed every finding.
+    payload = {"run_id": run_id, "recorded_at": dt.datetime.now(dt.timezone.utc).isoformat(), **finding}
     row = mcp.call("AgentMemory.create", {
         "content": config.FINDING_PREFIX + json.dumps(payload, sort_keys=True),
         "category": "fact", "source": "system", "importance": 0.5, "is_active": True,

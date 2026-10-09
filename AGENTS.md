@@ -46,7 +46,10 @@ Makefile.
 
 ## Environment
 
-Python 3.11. Plain `pip`, no lockfile. Required in `.env`: `TEAM04_PASSWORD_SURYODAYA`,
+Python 3.11, but the runtime code (`prod_agent/`, `harness/`) must also run on **3.10**: the
+platform's harness runner does not say which Python it uses, and `datetime.UTC` (3.11+) once
+broke every finding there. `tests_ai/test_python_floor.py` guards it; tests and
+`scripts/verify_submission.py` may use 3.11 (`tomllib`). Plain `pip`, no lockfile. Required in `.env`: `TEAM04_PASSWORD_SURYODAYA`,
 `TEAM04_PASSWORD_KEYSTONE`, `OPENAI_API_KEY`. Optional: `OPENAI_MODEL` (default
 `gpt-4.1`), `AGENT_TODAY`.
 
