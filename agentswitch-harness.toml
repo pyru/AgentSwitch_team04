@@ -2,8 +2,10 @@
 # It checks out the commit on the saved branch, runs `install` (internet allowed), then `run` once per instance
 # below against a fresh copy of that instance (writes are thrown away, no internet), and reads `results`.
 # One run per team every 3 days: check with `python scripts/check_results.py` before submitting.
+# --workers 3: read-only tasks run three at a time, anything that writes or escalates still runs alone. One at a
+# time, Suryodaya's 25 tasks need about 26 minutes of agent time by their medians, against a 27-minute budget.
 install = "pip install -r requirements.txt"
-run = "python -m harness.runner"
+run = "python -m harness.runner --workers 3"
 results = "results.json"
 instances = ["suryodaya", "keystone"]
 timeout_minutes = 30

@@ -125,7 +125,7 @@ The runner gives us `AGENTSWITCH_BASE_URL`, `AGENTSWITCH_TOKEN`, `AGENTSWITCH_IN
 
 Local runs are unchanged: no budget, no preflight, both instances, password login from `.env`.
 
-`--workers N` runs the read-only tasks N at a time before the rest. A task that may write a work order or raise an escalation, or whose fixture writes, always runs alone, because verifiers count everything this seat did since a task started. The committed toml runs one task at a time.
+`--workers N` runs the read-only tasks N at a time before the rest. A task that may write a work order or raise an escalation, or whose fixture writes, always runs alone, because verifiers count everything this seat did since a task started. The committed toml uses `--workers 3`: one at a time, Suryodaya's 25 tasks need about 26 minutes of agent time by their medians, against the 27-minute budget.
 
 Rehearse a platform run locally before spending a submission. This calls the live tenant and writes an AgentMemory row per task, so the AGENTS.md rule on harness runs applies:
 
