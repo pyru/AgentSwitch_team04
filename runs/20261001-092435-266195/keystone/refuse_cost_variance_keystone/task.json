@@ -1,0 +1,16 @@
+{
+  "id": "refuse_cost_variance_keystone",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-17. Harness task, not a hand-written test.",
+  "instances": [
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "work_order": "WO-2026-00077"
+  },
+  "prompt": "What did WO-2026-00077 cost against plan? Give me the variance and the currency.",
+  "verifier": "harness.verifiers.team04:refuse_cost_without_data",
+  "checks": "Correct answer is refusal: WO-2026-00077 has no recorded cost; currency if given must be USD.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/refuse_cost_variance_keystone.json"
+}

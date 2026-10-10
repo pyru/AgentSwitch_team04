@@ -1,0 +1,75 @@
+{
+  "me": "1094a446-2b4f-41a0-a380-cd09a4528db8",
+  "started_at_utc": "2026-10-01T04:38:22",
+  "snapshot": {
+    "WO-2026-00048": {
+      "id": "dfabeada-1d04-41a0-9753-c10c67bb3887",
+      "number": "WO-2026-00048",
+      "item_id": "54e22a25-2b98-4420-8f9d-f741be514724",
+      "bom_id": "4f38ea06-c237-4a77-9547-9a71854d4d9d",
+      "sales_order_id": "9f518559-e6b8-413e-a255-061c3a2856ec",
+      "company_id": "5cbe5a55-af74-4363-a436-f5350593114c",
+      "design_file_id": null,
+      "production_plan_id": null,
+      "project_id": null,
+      "production_strategy": "make_to_order",
+      "qty": 60.0,
+      "produced_qty": 0.0,
+      "scrap_qty": 0.0,
+      "planned_start_date": "2026-02-19",
+      "planned_end_date": "2026-02-26",
+      "actual_start_date": "2026-09-12",
+      "actual_end_date": null,
+      "target_warehouse_id": "62c0178c-efb8-481a-aff8-8fc77b1bbd39",
+      "source_warehouse_id": "9fa2c9d1-2eaf-4846-b4e0-b31c61ad0a94",
+      "scrap_warehouse_id": null,
+      "priority": "high",
+      "expected_cost": 0.0,
+      "actual_cost": 0.0,
+      "total_operation_time": 0.0,
+      "actual_operation_time": 0.0,
+      "quality_inspection_required": 1,
+      "wip_account": "Work In Progress",
+      "notes": "Pump Mounting Bracket Assembly \u2014 batch of 60.",
+      "status": "stopped",
+      "approval_status": "not_required",
+      "docstatus": 1,
+      "created_at": "2026-09-12T17:17:52.499597",
+      "updated_at": "2026-09-12T22:47:52.501208",
+      "created_by": "df139225-a9ec-4651-a9ad-7b1b639033da",
+      "updated_by": null,
+      "bom_revision": null,
+      "routing_id": null,
+      "routing_revision": null,
+      "supplies_work_order_id": null,
+      "supplies_qty": null,
+      "quality_issue_id": null,
+      "quality_issue_line_key": null,
+      "sales_order_line_ref": null,
+      "_item_id_display": "Pump Mounting Bracket Assembly",
+      "_bom_id_display": "Pump Mounting Bracket Assembly",
+      "_company_id_display": "Suryodaya Precision Works Pvt. Ltd.",
+      "_target_warehouse_id_display": "FG Store",
+      "_source_warehouse_id_display": "WIP - Line 1",
+      "_display": "WO-2026-00048",
+      "_transitions": [
+        {
+          "action": "Resume",
+          "label": null,
+          "to": "in_progress",
+          "from": "stopped"
+        }
+      ],
+      "_permissions": {
+        "write": true,
+        "delete": false
+      },
+      "_can_create": true,
+      "_readonly_fields": [
+        "bom_revision",
+        "routing_id",
+        "routing_revision"
+      ]
+    }
+  }
+}

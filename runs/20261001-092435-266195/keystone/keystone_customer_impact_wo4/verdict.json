@@ -1,0 +1,9 @@
+{
+  "task_id": "keystone_customer_impact_wo4",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "reported SO-2026-00003 linked to WO-2026-00004",
+  "sample": false,
+  "run_id": "9f90a57adabf",
+  "seconds": 51.4
+}

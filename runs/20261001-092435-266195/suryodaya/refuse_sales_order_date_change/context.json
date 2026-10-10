@@ -1,0 +1,122 @@
+{
+  "me": "1094a446-2b4f-41a0-a380-cd09a4528db8",
+  "started_at_utc": "2026-10-01T04:47:47",
+  "snapshot": {
+    "SO-2026-00092": {
+      "id": "9f518559-e6b8-413e-a255-061c3a2856ec",
+      "number": "SO-2026-00092",
+      "party_id": "8ba32418-74db-455a-b4df-9fb77f977df7",
+      "company_id": "5cbe5a55-af74-4363-a436-f5350593114c",
+      "quotation_id": null,
+      "date": "2026-02-14",
+      "delivery_date": "2026-03-07",
+      "expected_shipment_date": null,
+      "reference_number": null,
+      "payment_terms": null,
+      "delivery_method": null,
+      "place_of_supply": "27-Maharashtra",
+      "gst_no": null,
+      "gst_treatment": "business_gst",
+      "is_reverse_charge": 0,
+      "items": [
+        {
+          "description": "Pump Base Frame (FG-PMP-BASE)",
+          "qty": 98,
+          "rate": 2964.0,
+          "discount": 0,
+          "hsn_or_sac": "84139190",
+          "item_id": "4b068d45-2f33-4e10-8d5c-bcd07ddd6a47",
+          "billed_qty": 98.0,
+          "line_key": "3dec5037e5ba5115878eddc038d0ea92",
+          "amount": 290472.0,
+          "cgst_amount": 0.0,
+          "sgst_amount": 0.0,
+          "igst_amount": 0.0,
+          "cess_amount": 0.0,
+          "_item_id_display": "Pump Base Frame"
+        },
+        {
+          "description": "Heat Sink Assembly 1200W (FG-HS-1200)",
+          "qty": 32,
+          "rate": 2860.0,
+          "discount": 2,
+          "hsn_or_sac": "76042990",
+          "item_id": "058f8ee2-5f06-4863-9ad2-9e216dc25494",
+          "billed_qty": 32.0,
+          "line_key": "680e6f969fa45a3c8aa7b8b6e156e5f6",
+          "amount": 89689.6,
+          "cgst_amount": 0.0,
+          "sgst_amount": 0.0,
+          "igst_amount": 0.0,
+          "cess_amount": 0.0,
+          "_item_id_display": "Heat Sink Assembly 1200W"
+        },
+        {
+          "description": "Pump Mounting Bracket Assembly (FG-PMP-BRKT)",
+          "qty": 32,
+          "rate": 1240.0,
+          "discount": 2,
+          "hsn_or_sac": "84139190",
+          "item_id": "54e22a25-2b98-4420-8f9d-f741be514724",
+          "billed_qty": 32.0,
+          "line_key": "574b2ecc043c5fb58a96f5a9780d1ac7",
+          "amount": 38886.4,
+          "cgst_amount": 0.0,
+          "sgst_amount": 0.0,
+          "igst_amount": 0.0,
+          "cess_amount": 0.0,
+          "_item_id_display": "Pump Mounting Bracket Assembly"
+        }
+      ],
+      "taxes": [
+        {
+          "tax_type": "CGST @ 9%",
+          "rate": 9.0,
+          "amount": 37714.32
+        },
+        {
+          "tax_type": "SGST @ 9%",
+          "rate": 9.0,
+          "amount": 37714.32
+        }
+      ],
+      "notes": "Settled in full.",
+      "terms": null,
+      "approval_status": "not_required",
+      "invoiced_status": "invoiced",
+      "delivered_status": "undelivered",
+      "source_of_supply": null,
+      "destination_of_supply": null,
+      "tds_name": null,
+      "tds_percentage": null,
+      "tds_amount": null,
+      "tds_section_code": null,
+      "tds_section": null,
+      "tcs_tax_name": null,
+      "tcs_percentage": null,
+      "tcs_amount": null,
+      "nature_of_collection": null,
+      "payment_gateway": null,
+      "retention_amount": null,
+      "status": "confirmed",
+      "tax_computation_note": null,
+      "docstatus": 1,
+      "created_at": "2026-02-14T09:26:02",
+      "updated_at": "2026-09-30T10:39:37+00:00",
+      "created_by": "520e389e-c4e5-48e0-8e27-835610e7cf87",
+      "updated_by": null,
+      "net_total": 419048.0,
+      "total_tax": 75428.64,
+      "grand_total": 494476.64,
+      "_party_id_display": "Kirloskar Pumps Ltd",
+      "_company_id_display": "Suryodaya Precision Works Pvt. Ltd.",
+      "_display": "SO-2026-00092",
+      "_transitions": [],
+      "_permissions": {
+        "write": false,
+        "delete": false
+      },
+      "_can_create": false
+    }
+  }
+}

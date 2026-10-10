@@ -1,7 +1,12 @@
-"""Ad-hoc CLI: python -m prod_agent --instance suryodaya "This work order WO-2026-00048 is late..." [--apply]"""
+"""Ad-hoc CLI: python -m prod_agent --instance suryodaya "This work order WO-2026-00048 is late..." [--apply]
+
+    --run-dir PATH writes the trace and result there instead of runs/adhoc/<timestamp>-<instance>/ (the run
+    console uses it to give each question the harness's root/instance/task layout).
+"""
 import argparse
 import datetime as dt
 import json
+from pathlib import Path
 
 from . import config
 from .agent import ProductionAgent
@@ -14,9 +19,10 @@ def main():
     ap.add_argument("--instance", default="suryodaya", choices=sorted(config.INSTANCES))
     ap.add_argument("--apply", action="store_true", help="allow writes, each approved at the prompt")
     ap.add_argument("--escalate", action="store_true", help="allow the agent to raise one escalation to a person")
+    ap.add_argument("--run-dir", type=Path)
     args = ap.parse_args()
 
-    run_dir = config.ROOT / "runs" / "adhoc" / f"{dt.datetime.now():%Y%m%d-%H%M%S-%f}-{args.instance}"
+    run_dir = args.run_dir or config.ROOT / "runs" / "adhoc" / f"{dt.datetime.now():%Y%m%d-%H%M%S-%f}-{args.instance}"
     run_dir.mkdir(parents=True, exist_ok=False)
     trace_file = (run_dir / "trace.jsonl").open("x", encoding="utf-8")
 
@@ -29,7 +35,7 @@ def main():
         return input("Write this change? [y/N] ").strip().lower() == "y"
 
     agent = ProductionAgent(McpClient(Session(args.instance)), apply_mode=args.apply, escalate_mode=args.escalate,
-                            approve=approve, trace=trace)
+                            approve=approve, trace=trace, require_finding=True)
     out = agent.run(args.request)
     (run_dir / "result.json").write_text(json.dumps(out, indent=2, default=str), encoding="utf-8")
     print(out["final_answer"] or f"(no final answer: {out['stop_reason']})")

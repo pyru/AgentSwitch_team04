@@ -1,0 +1,16 @@
+{
+  "id": "why_late_wo49_multi_cause",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-16. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "work_order": "WO-2026-00049"
+  },
+  "prompt": "WO-2026-00049 is late. Find out why, tell me what it blocks downstream, and reschedule what you can.",
+  "verifier": "harness.verifiers.team04:causes_match_db",
+  "checks": "Stopped + draft subcontract + open material requests (DB) are all reported, none invented.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/why_late_wo49_multi_cause.json"
+}

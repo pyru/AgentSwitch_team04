@@ -1,0 +1,55 @@
+{
+  "run_id": "c4812e094d5c",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00049 \u2014 Pump Base Frame (10 pcs, make-to-order, 0 produced).** Planned 22\u201328 Feb 2026; today is 1 Oct 2026 \u2014 it is 215 days past due. Costs: expected \u20b90 / actual \u20b90 recorded, so no cost variance exists yet.\n\n**Why late** \u2014 order is *stopped*, stuck at its first job card **JC-2026-00145 \"Robotic MIG Weld Frame\"** on WELD-01 Robotic MIG Cell, never started (waiting 221 days).\n- Blocking (no known ready date):\n  - **SCO-2026-00024** \u2014 subcontract to Shreeji Powder Coating still in *draft*, never sent (was due 2026-01-17).\n  - **ECO-2026-00073** \u2014 engineering change pending, \"EN8 round bar shortage on the scriber line\" (critical).\n  - **ECO-2026-00013** \u2014 engineering change pending, \"Order \u2014 Balaji Springs & Sons\" (high).\n- Contributing: material requests **MR-2026-00065** (submitted, overdue, no ready date) and **MR-2026-00054** (draft, overdue since 2025-06-26); stopped without a recorded reason; recorded downtime on the route \u2014 WELD-01 521 min since Jul 2026 (power failure/other/maintenance), ASSY-01 Assembly & Final Inspection 407 min material-shortage downtime plus 45 min tool change; CNC-03 55 min planned maintenance.\n\n**What it blocks** \u2014 Sales order **SO-2026-00100**, Kirloskar Pumps Ltd, due 2026-03-20, \u20b9533,746.10, confirmed and undelivered (this order is linked directly to the WO). No other open work orders consume this item's output via BOMs, so no downstream work orders may be affected.\n\n**Rescheduling** \u2014 Nothing could be written. propose_reschedule returned only a proposal for WO-2026-00049 with no new dates: `date_committable=false`, `writable_by_seat=false` \u2014 \"no committable date: engineering_change_pending, subcontract_not_sent.\" A date can only be committed after a person resolves ECO-2026-00073 and ECO-2026-00013 and sends SCO-2026-00024 to the vendor. I could not escalate: the escalate tool is not available to this seat, so no one was assigned \u2014 please route this to a planner to chase those three records.\n\n**Not visible to me** \u2014 Nothing relevant; the diagnosis reported no hidden data for this order.",
+  "finding": {
+    "blocked_sales_orders": [
+      "SO-2026-00100"
+    ],
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "material_request_open",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "cost": null,
+    "currency": "INR",
+    "customer_impact": "known",
+    "evidence_records": [
+      "WO-2026-00049",
+      "JC-2026-00145",
+      "SCO-2026-00024",
+      "MR-2026-00065",
+      "MR-2026-00054",
+      "ECO-2026-00073",
+      "ECO-2026-00013",
+      "SO-2026-00100",
+      "WELD-01 Robotic MIG Cell",
+      "ASSY-01 Assembly & Final Inspection",
+      "CNC-03 DMG Mori NLX 2500"
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": null,
+    "rescheduled": [],
+    "work_order": "WO-2026-00049"
+  },
+  "finding_record": {
+    "agent_memory_id": "172a74d3-54ea-445f-9f1b-0da1ddc8344c",
+    "run_id": "c4812e094d5c"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 116.3,
+  "instance": "suryodaya",
+  "task_id": "why_late_wo49_multi_cause"
+}

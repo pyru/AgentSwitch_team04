@@ -1,0 +1,9 @@
+{
+  "task_id": "reschedule_fixture_chain",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "WO-2026-00185 2026-10-01..2026-10-08; WO-2026-00186 starts 2026-10-09; no other writes",
+  "sample": false,
+  "run_id": "13892983f91b",
+  "seconds": 314.6
+}

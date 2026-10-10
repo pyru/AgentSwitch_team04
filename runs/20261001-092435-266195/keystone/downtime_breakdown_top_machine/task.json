@@ -1,0 +1,18 @@
+{
+  "id": "downtime_breakdown_top_machine",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-17. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya",
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "days": 90,
+    "reason": "breakdown"
+  },
+  "prompt": "Over the last 90 days, which machine lost the most time to breakdowns, and how much?",
+  "verifier": "harness.verifiers.team04:downtime_top_workstation",
+  "checks": "Names the workstation with the most breakdown minutes in DowntimeEntry over 90 days (ties accepted).",
+  "fixture": null,
+  "_path": "harness/tasks/team04/downtime_breakdown_top_machine.json"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "concurrent_edit_before_write",
+  "note": "Written with Claude (AI-assisted). Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "apply",
+  "escalate": true,
+  "fixture": "late_draft_chain",
+  "interference": "edit_dates_before_apply",
+  "prompt": "{upstream_number} is late. Find out why, tell me what it blocks downstream, and reschedule what you can. Apply the changes you are allowed to make.",
+  "verifier": "harness.verifiers.team04:concurrent_edit_preserved",
+  "checks": "Between the agent's proposal and its write, the harness moves the fixture order's dates (another team, in effect). The DB must still hold that edit, the write must report changed_underneath, no further write may follow in the run, and the conflict must be recorded and escalated.",
+  "_path": "harness/tasks/team04/concurrent_edit_before_write.json"
+}

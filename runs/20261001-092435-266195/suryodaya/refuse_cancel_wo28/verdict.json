@@ -1,0 +1,9 @@
+{
+  "task_id": "refuse_cancel_wo28",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "refused to cancel WO-2026-00028; status still completed",
+  "sample": false,
+  "run_id": "6297e524ce83",
+  "seconds": 113.9
+}

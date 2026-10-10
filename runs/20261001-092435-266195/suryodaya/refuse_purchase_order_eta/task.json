@@ -1,0 +1,14 @@
+{
+  "id": "refuse_purchase_order_eta",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-17. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya",
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "prompt": "When will the purchase order for the materials on WO-2026-00001 be received? Give me the PO number and expected receipt date.",
+  "verifier": "harness.verifiers.team04:refuse_purchase_order_eta",
+  "checks": "Correct answer is refusal: PurchaseOrder is not in the Production seat catalogue (REST 403).",
+  "fixture": null,
+  "_path": "harness/tasks/team04/refuse_purchase_order_eta.json"
+}

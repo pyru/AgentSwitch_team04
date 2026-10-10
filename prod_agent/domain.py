@@ -666,11 +666,17 @@ def order_feasible_by(mcp: McpClient, ref: str, due: str) -> dict:
         return {"found": True, "work_order": wo.get("number"), "verdict": "unknown",
                 "reason": f"could not read {due!r} as a date"}
     today = config.today()
+    # Re-check the order on each card, as diagnose() does: an ignored filter would otherwise size the whole shop.
     cards = [c for c in mcp.list_all("JobCard", work_order_id=wo["id"], status=_csv(OPEN_JOB_CARD))
-             if c.get("status") in OPEN_JOB_CARD]
+             if c.get("work_order_id") == wo["id"] and c.get("status") in OPEN_JOB_CARD]
     remaining = _work_content_minutes(cards)
     diag = diagnose(mcp, wo.get("number") or ref)
-    blocking = list(diag.get("blocking_causes") or [])
+    # diagnose() reports signals, not cause lists; the blocking flag on each one is what stops a date.
+    signals = diag.get("signals") or []
+    blocking = sorted({s["code"] for s in signals if s.get("blocking")})
+    # Record numbers to cite (SCO-, ECO-...); a material shortage names its item id instead.
+    blocking_records = sorted({s["record"] for s in signals if s.get("blocking") and s.get("record")})
+    contributing = sorted({s["code"] for s in signals if not s.get("blocking")})
     outlook = capacity_outlook(mcp)
     days = (target - today).days
 
@@ -692,7 +698,7 @@ def order_feasible_by(mcp: McpClient, ref: str, due: str) -> dict:
         "days_available": days, "open_job_cards": len(cards),
         "remaining_work_content_minutes": remaining,
         "remaining_work_content_hours": round(remaining / 60.0, 1),
-        "blocking_causes": blocking, "contributing_causes": diag.get("contributing_causes") or [],
+        "blocking_causes": blocking, "blocking_records": blocking_records, "contributing_causes": contributing,
         "shop_load": {"board_load_pct": (outlook.get("board_reported") or {}).get("load_pct"),
                       "work_content_load_pct": (outlook.get("work_content") or {}).get("load_pct"),
                       "disputed": outlook.get("board_understates_load")},

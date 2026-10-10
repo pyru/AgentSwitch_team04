@@ -1,0 +1,52 @@
+{
+  "run_id": "77cf5245d1c9",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00105 \u2013 Motor Controller Housing Blank** (20 pcs, make-to-stock, no sales order linked). Planned 2026-08-15 \u2192 2026-08-21; today is 2026-10-01, so it is **41 days past due** with **0 of 20 produced**.\n\n**Where exactly it is stuck**\n- At the very first operation: job card **JC-2026-00321 \"Laser Cut Blank\"** on **LASER-01 (Trumpf TruLaser 3030)**. Planned start 2026-08-15, never started \u2014 waiting **47 days**.\n- The two later operations (JC-2026-00322 CNC Mill Housing Pocket on CNC-01, JC-2026-00323 Drill & Tap M8 on CNC-02) are also open at zero quantity \u2014 they cannot begin until the blank is laser-cut.\n\n**Why (blocking)**\n- **Three pending engineering changes** are flagged as blocking, with no resolution dates recorded: **ECO-2026-00088** (draft, \"switch to new\"), **ECO-2026-00023** (submitted, \"continue old\"), and **ECO-2026-00001** (submitted, high priority, \"scrap and restart\" \u2014 battery tray bend radius change, Bharat EV drg. rev C). These need a person in engineering to action them; I have no escalate tool on this seat, so I could not raise an escalation \u2014 please contact engineering directly.\n\n**Contributing**\n- Operation not started past its planned start (WO and JC-2026-00321).\n- Recorded downtime on the route: LASER-01 had 300.62 min planned maintenance (recorded May 2025, over a year old); CNC-02 Haas VF-2 has 473.99 min over 2 entries since 2026-07-03 (power failure + planned maintenance).\n\n**What it blocks**\n- No sales order is linked (\"none linked: no sales order on this order or its dependants\"), so no direct customer exposure.\n- BOM matching shows four downstream orders that **may be affected** (potential consumers of the housing blank, not confirmed blocks): WO-2026-00077 (120 pcs, high), WO-2026-00092 (60 pcs, urgent), WO-2026-00062 (50 pcs, in progress), WO-2026-00107 (10 pcs, draft) \u2014 all Motor Controller Housing Assembly.\n\n**Rescheduling** \u2014 not requested; nothing changed. Say the word and I can run a reschedule proposal.\n\n**Not visible to me** \u2014 nothing material; all relevant records were visible. No cost has been recorded on this WO (expected and actual both 0), so no variance can be computed.",
+  "finding": {
+    "blocked_sales_orders": [],
+    "blocking_causes": [
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "INR",
+    "customer_impact": "none linked: no sales order on this order or its dependants",
+    "evidence_records": [
+      "WO-2026-00105",
+      "JC-2026-00321",
+      "JC-2026-00322",
+      "JC-2026-00323",
+      "ECO-2026-00088",
+      "ECO-2026-00023",
+      "ECO-2026-00001",
+      "LASER-01 Trumpf TruLaser 3030",
+      "CNC-02 Haas VF-2 VMC"
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [
+      "WO-2026-00107",
+      "WO-2026-00092",
+      "WO-2026-00077",
+      "WO-2026-00062"
+    ],
+    "refusal_reason": null,
+    "rescheduled": [],
+    "work_order": "WO-2026-00105"
+  },
+  "finding_record": {
+    "agent_memory_id": "a244a733-9ba8-4441-a5f8-7beac76565af",
+    "run_id": "77cf5245d1c9"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 94.2,
+  "instance": "suryodaya",
+  "task_id": "job_card_current_operation_wo105"
+}

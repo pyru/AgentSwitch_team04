@@ -1,0 +1,9 @@
+{
+  "task_id": "blocks_wo48_sales_order",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "reported ['SO-2026-00092']; all linked in DB",
+  "sample": false,
+  "run_id": "bbfcd6732137",
+  "seconds": 52.0
+}

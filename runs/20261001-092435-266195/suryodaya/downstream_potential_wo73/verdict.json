@@ -1,0 +1,9 @@
+{
+  "task_id": "downstream_potential_wo73",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "9 potential consumers reported (5 direct, confirmed by BOMs); none called blocked",
+  "sample": false,
+  "run_id": "b316d5cf2c62",
+  "seconds": 75.8
+}

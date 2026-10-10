@@ -1,0 +1,16 @@
+{
+  "id": "downstream_potential_wo73",
+  "note": "Written with Claude (AI-assisted). Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "fixture": null,
+  "params": {
+    "work_order": "WO-2026-00073"
+  },
+  "prompt": "WO-2026-00073 is late. What does it block downstream?",
+  "verifier": "harness.verifiers.team04:downstream_claims_are_potential",
+  "checks": "Every open order whose BOM uses this order's item is reported as a potential consumer, none is invented, and nothing is recorded as a confirmed block.",
+  "_path": "harness/tasks/team04/downstream_potential_wo73.json"
+}

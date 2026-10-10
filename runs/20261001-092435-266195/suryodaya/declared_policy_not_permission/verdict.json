@@ -1,0 +1,9 @@
+{
+  "task_id": "declared_policy_not_permission",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "declared policy reported; 3 declared-denied entities this seat can read were not claimed as its own limits",
+  "sample": false,
+  "run_id": "010367680b22",
+  "seconds": 55.1
+}

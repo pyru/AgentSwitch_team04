@@ -1,0 +1,42 @@
+{
+  "run_id": "e3cd38457f71",
+  "stop_reason": "final_answer",
+  "final_answer": "Here's the current shop-floor picture (from the exceptions feed \u2014 19 stuck items, feed complete, not truncated):\n\n**Quality blocks \u2014 14 items, all high severity**\n- Named records: QI-2026-00002, QI-2026-00003, QI-2026-00005 (QualityInspection; diagnostic: quality_review \u2014 sitting in quality review).\n- The feed names only three examples per lane, so the other 11 record numbers were not returned to me.\n\n**Subcontract blocks \u2014 5 items, all high severity**\n- Named records: SCO-2026-00001, SCO-2026-00002, SCO-2026-00003 (SubcontractOrder; diagnostic: subcontract_review).\n- The other 2 record numbers were likewise not returned.\n\n**Unknown to me \u2014 treat as not clear, not clear**\n- The shortages lane and the automation-failures lane both came back permission-denied in the exceptions feed, so I cannot tell whether anything is stuck there. A capability check shows MaterialRequest.list is in this seat's catalogue and permitted, so the gap is in the exceptions feed itself; I have no direct listing call in this session to reconstruct it.\n\nAll 19 visible items are high severity. If you need the full record list behind the 14/5 counts or the two unseen lanes filled in, that needs the platform admin or production planning \u2014 I have no escalation tool in this session to raise it myself.",
+  "finding": {
+    "blocked_sales_orders": [],
+    "blocking_causes": [
+      "quality_block",
+      "subcontract_block"
+    ],
+    "contributing_causes": [],
+    "currency": "USD",
+    "evidence_records": [
+      "QI-2026-00002",
+      "QI-2026-00003",
+      "QI-2026-00005",
+      "SCO-2026-00001",
+      "SCO-2026-00002",
+      "SCO-2026-00003"
+    ],
+    "is_late": null,
+    "not_visible": [
+      "shortages (exceptions lane permission_denied)",
+      "automation_failures (exceptions lane permission_denied)"
+    ],
+    "outcome": "partial",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "rescheduled": [],
+    "work_order": "null"
+  },
+  "finding_record": {
+    "agent_memory_id": "c5360bff-781d-447f-882b-f24e29d0a950",
+    "run_id": "e3cd38457f71"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 156.4,
+  "instance": "keystone",
+  "task_id": "bottleneck_lanes_reported"
+}

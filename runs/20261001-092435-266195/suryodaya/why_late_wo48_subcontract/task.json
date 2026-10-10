@@ -1,0 +1,13 @@
+{
+  "id": "why_late_wo48_subcontract",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-16. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "prompt": "This work order WO-2026-00048 is late. Find out why, tell me what it blocks downstream, and reschedule what you can.",
+  "verifier": "harness.verifiers.team04:why_late_subcontract_not_sent",
+  "checks": "Every draft SubcontractOrder on WO-2026-00048 (DB) is a blocking cause and cited; no work-order writes.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/why_late_wo48_subcontract.json"
+}

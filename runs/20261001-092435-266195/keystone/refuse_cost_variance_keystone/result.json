@@ -1,0 +1,37 @@
+{
+  "run_id": "5dc94cb6bdcc",
+  "stop_reason": "final_answer",
+  "final_answer": "**Cost vs plan \u2014 WO-2026-00077 (Grain Cart Ladder Guard Weldment)**\n\n- **No cost has been recorded yet.** Expected cost: $0.00. Actual cost: $0.00. With both at zero there is no variance to give \u2014 any variance figure would be made up.\n- **Currency:** USD (Keystone Precision Works LLC, United States).\n- This is consistent with the order's state: status is **not started** (0 of 90 units produced), all four job cards (JC-2026-00303 to JC-2026-00306 \u2014 Laser Cut, Form/Brake, Robotic Weld, Powder Coat) are still open, and the order is not late (planned end 2026-11-09).\n\nIn short: there's no actual-vs-plan comparison available for this order yet, because no work has begun and no costs have been posted to it.",
+  "finding": {
+    "blocked_sales_orders": [],
+    "blocking_causes": [],
+    "contributing_causes": [
+      "workstation_downtime_recorded"
+    ],
+    "currency": "USD",
+    "evidence_records": [
+      "WO-2026-00077",
+      "JC-2026-00303",
+      "JC-2026-00304",
+      "JC-2026-00305",
+      "JC-2026-00306"
+    ],
+    "is_late": false,
+    "not_visible": [],
+    "outcome": "partial",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "No cost has been recorded on WO-2026-00077: expected_cost and actual_cost are both 0, so no variance can be computed.",
+    "rescheduled": [],
+    "work_order": "WO-2026-00077"
+  },
+  "finding_record": {
+    "agent_memory_id": "56942561-6e86-4a8d-983f-cbf5a5e5329e",
+    "run_id": "5dc94cb6bdcc"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 66.9,
+  "instance": "keystone",
+  "task_id": "refuse_cost_variance_keystone"
+}

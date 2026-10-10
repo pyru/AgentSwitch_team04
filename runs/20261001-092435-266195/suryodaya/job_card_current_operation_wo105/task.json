@@ -1,0 +1,16 @@
+{
+  "id": "job_card_current_operation_wo105",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-17. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "work_order": "WO-2026-00105"
+  },
+  "prompt": "WO-2026-00105 is late. Where exactly is it stuck, and why?",
+  "verifier": "harness.verifiers.team04:current_operation_cited",
+  "checks": "Cites the first unfinished job card (lowest sequence) and reports operation_not_started if it should already have started.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/job_card_current_operation_wo105.json"
+}

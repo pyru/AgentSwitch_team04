@@ -1,0 +1,71 @@
+{
+  "run_id": "b316d5cf2c62",
+  "stop_reason": "final_answer",
+  "final_answer": "**Why late** (WO-2026-00073, Battery Tray Side Rail (formed), qty 60, make-to-stock)\n\n- Confirmed late: planned end 2026-05-15, 139 days past due, projected finish 2026-10-01.\n- Nothing has been produced; the order sits at job card **JC-2026-00223** \"Laser Cut Side Rail\" on **LASER-01 Trumpf TruLaser 3030** \u2014 open, never started, waiting 146 days. Second op **JC-2026-00224** (Press Brake Form Rail, PB-01 Amada HFE 1303) is also open.\n- **Blocking**: two pending engineering changes with action \"continue_old\" \u2014 **ECO-2026-00037** (under review, critical) and **ECO-2026-00016** (submitted, medium). No known ready date until these resolve.\n- Contributing: planned start missed (2026-05-08), and PB-01 has recorded downtime since 2026-07-03 (464.45 min over 3 entries: 2 setup_change, 1 tool_change).\n\n**What it blocks downstream** (reverse BOM walk \u2014 these are potential consumers, not confirmed blocks; stock or another order may cover the demand)\n\nDepth 1 \u2014 Battery Tray Weldment (sub-assy) orders that consume this rail:\n- WO-2026-00071 (in progress, urgent, qty 40)\n- WO-2026-00056 (in progress, qty 250)\n- WO-2026-00086 (not started, high, qty 60)\n- WO-2026-00101 (not started, qty 200)\n- WO-2026-00116 (draft, qty 50)\n\nDepth 2 \u2014 via WO-2026-00116, EV Battery Tray Assembly 2400 orders: WO-2026-00076, WO-2026-00091 (urgent), WO-2026-00106 (high), WO-2026-00061.\n\nSales-order exposure (all Bharat EV Motors Ltd, reached through potential consumers, so potential exposure):\n- **SO-2026-00151** \u2014 delivery 2026-06-10, \u20b92,693,620.93, undelivered\n- **SO-2026-00171** \u2014 delivery 2026-07-12, \u20b92,219,635.79, undelivered\n- **SO-2026-00021** \u2014 delivery 2026-08-18, \u20b9456,695.40, undelivered\n- SO-2026-00050 \u2014 delivery 2026-09-16, \u20b91,174,359.60, but recorded as **delivered**, so likely not at risk\n\nThat's roughly \u20b95.37 million of potential undelivered exposure across the three live orders, all with Bharat EV Motors Ltd.\n\n**Rescheduling**\n\nI have not changed any dates. If you want, I can run propose_reschedule to get proposed dates for this order and its dependants \u2014 note the two pending ECOs would still need to resolve before it can start.\n\n**Not visible to me**\n\nNothing was withheld; all data above came from this seat's tools. No escalation tool is available in this seat, so the pending ECOs (ECO-2026-00037, ECO-2026-00016) need to be chased with whoever owns engineering changes.",
+  "finding": {
+    "blocked_sales_orders": [
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "blocking_causes": [
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "INR",
+    "customer_impact": "known",
+    "evidence_records": [
+      "WO-2026-00073",
+      "JC-2026-00223",
+      "JC-2026-00224",
+      "ECO-2026-00037",
+      "ECO-2026-00016",
+      "PB-01 Amada HFE 1303",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00086",
+      "WO-2026-00101",
+      "WO-2026-00116",
+      "WO-2026-00076",
+      "WO-2026-00091",
+      "WO-2026-00106",
+      "WO-2026-00061",
+      "SO-2026-00151",
+      "SO-2026-00171",
+      "SO-2026-00021",
+      "SO-2026-00050"
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00086",
+      "WO-2026-00101",
+      "WO-2026-00116",
+      "WO-2026-00076",
+      "WO-2026-00091",
+      "WO-2026-00106",
+      "WO-2026-00061"
+    ],
+    "refusal_reason": null,
+    "rescheduled": [],
+    "work_order": "WO-2026-00073"
+  },
+  "finding_record": {
+    "agent_memory_id": "33212627-d72b-499f-a783-37fc2d5047cf",
+    "run_id": "b316d5cf2c62"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 75.8,
+  "instance": "suryodaya",
+  "task_id": "downstream_potential_wo73"
+}

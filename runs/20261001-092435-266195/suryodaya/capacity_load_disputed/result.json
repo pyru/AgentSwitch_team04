@@ -1,0 +1,37 @@
+{
+  "run_id": "42d1ddd0193e",
+  "stop_reason": "final_answer",
+  "final_answer": "**Shop load, next 21 days (Suryodaya Precision Works, INR) \u2014 two figures that disagree, so here are both:**\n\n- **Capacity board's own figure: 1.25% load** (1,381 booked minutes vs 110,834 available minutes; 149 open job cards).\n- **Work content in the same job cards: 117.1% load** (129,772 minutes, computed as JobCard.time_in_mins \u00d7 for_qty \u2014 the platform's own OEE basis).\n\nThese disagree by ~94x because the capacity board charges raw time_in_muns unscaled, while the OEE basis multiplies by for_qty. The platform itself flags this as disputed \u2014 I can't present either as settled, and the 117.1% figure is the one consistent with the platform's own definition of work content.\n\n**Workstations over declared capacity (on the work-content figure):**\n\n| Workstation | Name | Work content | Declared capacity | Over |\n|---|---|---|---|---|\n| WS-2026-00009 | ASSY-01 Assembly & Final Inspection | 72,182 min | 30,240 min | 2.39\u00d7 |\n| WS-2026-00008 | WELD-01 Robotic MIG Cell | 17,920 min | 10,080 min | 1.78\u00d7 |\n| WS-2026-00005 | CNC-02 Haas VF-2 VMC | 15,980 min | 10,080 min | 1.59\u00d7 |\n\n**Important caveat:** the platform's capacity board currently shows **0 workstations overloaded** \u2014 it does not surface these three. So on the board everything looks clear, but on the platform's own OEE basis, assembly is the worst bottleneck at nearly 2.4\u00d7 its declared capacity, with the MIG weld cell and CNC-02 also over.\n\nNothing was invisible to this seat here \u2014 if you want, I can diagnose what's feeding the ASSY-01 overload (which job cards are consuming it).",
+  "finding": {
+    "blocking_causes": [],
+    "capacity": {
+      "board_load_pct": 1.25,
+      "figures_disagree": true,
+      "work_content_load_pct": 117.1
+    },
+    "contributing_causes": [],
+    "currency": "INR",
+    "evidence_records": [
+      "WS-2026-00009",
+      "WS-2026-00008",
+      "WS-2026-00005"
+    ],
+    "is_late": null,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "rescheduled": [],
+    "work_order": "null"
+  },
+  "finding_record": {
+    "agent_memory_id": "5a8c8d84-b71d-4282-b60b-902ed48abecc",
+    "run_id": "42d1ddd0193e"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 39.5,
+  "instance": "suryodaya",
+  "task_id": "capacity_load_disputed"
+}

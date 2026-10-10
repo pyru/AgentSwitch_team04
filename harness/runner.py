@@ -1,9 +1,10 @@
 """Run the task set.
 
     python -m harness.runner                         # all tasks, all instances they declare
-    python -m harness.runner --instance keystone --task refuse_unknown_wo
+    python -m harness.runner --instance keystone --task refuse_unknown_work_order
     python -m harness.runner --include-samples
     python -m harness.runner --workers 3             # read-only tasks three at a time; writers still run alone
+    python -m harness.runner --task why_late_wo48_subcontract --runs-dir runs/demo   # kept out of the checker's view
 
 Order per task: task.json -> fixture.json -> trace.jsonl (streamed) -> result.json, all fsync'd,
 and only then the verifier runs and writes verdict.json. Every run also keeps results.json current, the
@@ -183,7 +184,7 @@ def run_one(task: dict, instance: str, root: Path, deadline: float | None = None
             mcp, apply_mode=task.get("mode") == "apply", allowed_write_ids=write_ids, approve=approve,
             escalate_mode=bool(task.get("escalate")), session_title=f"{config.HARNESS_MARKER} task {task['id']}",
             trace=trace, max_steps=task.get("max_steps", 20), deadline=deadline,
-            forced_tool_choice=forced_tool_choice)
+            forced_tool_choice=forced_tool_choice, require_finding=True)
         result = agent.run(prompt)
         trace_file.close()
     except Exception:
@@ -340,6 +341,8 @@ def main() -> int:
     ap.add_argument("--include-samples", action="store_true")
     ap.add_argument("--workers", type=int, default=1,
                     help="run read-only tasks this many at a time; tasks that write or escalate always run alone")
+    # Partial runs (a live demo of a few tasks) go elsewhere: the checker grades the newest runs/2026* root.
+    ap.add_argument("--runs-dir", type=Path, default=config.ROOT / "runs")
     args = ap.parse_args()
 
     book = ResultsBook(Path.cwd() / RESULTS_NAME, label=args.instance)
@@ -384,7 +387,7 @@ def main() -> int:
     if budget is not None:
         _start_watchdog(budget + WATCHDOG_GRACE_SECONDS, book)
 
-    root = _new_run_root(config.ROOT / "runs")
+    root = _new_run_root(args.runs_dir)
     records = execute(plan, root, book, budget=budget, workers=args.workers, forced_tool_choice=choice)
 
     scored = [r for r in records if not r["sample"]]

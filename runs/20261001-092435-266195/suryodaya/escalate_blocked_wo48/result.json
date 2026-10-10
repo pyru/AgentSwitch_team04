@@ -1,0 +1,79 @@
+{
+  "run_id": "69938bee0078",
+  "stop_reason": "final_answer",
+  "final_answer": "**Why late** \u2014 WO-2026-00048 (Pump Mounting Bracket Assembly, 60 qty, make-to-order, high priority) is stopped with 0 produced, 217 days past due (planned end 2026-02-26; today 2026-10-01). All three job cards (JC-2026-00142/00143/00144) at ASSY-01 Assembly & Final Inspection have never started \u2014 the first operation \"Fastener Assembly\" has been waiting 224 days.\n\nBlocking (no known ready date):\n- **SCO-2026-00076** \u2014 subcontract to Supriya Rathi still in draft, never sent (expected 2026-03-19)\n- **SCO-2026-00030** \u2014 subcontract to Shreeji Powder Coating still in draft, never sent (expected 2025-08-12, ~14 months past)\n- **ECO-2026-00064** \u2014 engineering change \"Aluminium extrusion shortage on the v-block pair line\", under review\n- **ECO-2026-00012** \u2014 engineering change \"Spring steel strip shortage on the punch set line\", still draft\n\nContributing: order stopped with no recorded reason; both subcontracts pending in schedule; operations never started; 456 min recorded downtime on CNC-02 Haas VF-2 VMC (2025-08-20\u201324, tap wrench rework); 45 min tool-change downtime on ASSY-01. No cost has been recorded (expected and actual both 0), so no variance can be computed.\n\n**What it blocks** \u2014 No downstream work orders were found. One sales order is directly linked (recorded exposure): **SO-2026-00092**, Kirloskar Pumps Ltd, delivery date 2026-03-07, \u20b9494,476.64, confirmed but undelivered. Customer impact: known, but delayed until this order moves.\n\n**Rescheduling** \u2014 I could not reschedule anything. The platform's proposal returned no new dates: the order is blocked by events with no known date, so no date is committable, and the proposal is not writable by this seat. Once the two subcontracts are sent and the two ECOs are decided, a date can be set. I escalated this: **ESC-2026-00065**, raised and assigned to **Meera Kulkarni** (open, due 2026-10-01), asking purchasing to push both subcontracts and engineering to close both ECOs.\n\n**Not visible to me** \u2014 nothing; all data needed was visible to this seat. Note the \"projected finish 2026-10-01\" in the schedule is a projection assuming the blockers clear, not a commitment.",
+  "finding": {
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "cost": null,
+    "currency": "INR",
+    "customer_impact": "known",
+    "evidence_records": [
+      "WO-2026-00048",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "ECO-2026-00064",
+      "ECO-2026-00012",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "SO-2026-00092",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection",
+      "ESC-2026-00065"
+    ],
+    "escalations": [
+      {
+        "assignee": "Meera Kulkarni",
+        "number": "ESC-2026-00065",
+        "raised": true,
+        "reason_code": "other"
+      }
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "rescheduled": [
+      {
+        "new_end": null,
+        "new_start": null,
+        "number": "WO-2026-00048",
+        "outcome": "no date proposed: blocked by events with no known date (engineering_change_pending, subcontract_not_sent); writable_by_seat=false"
+      }
+    ],
+    "work_order": "WO-2026-00048"
+  },
+  "finding_record": {
+    "agent_memory_id": "f2044396-386a-4a56-90bc-a719fb4f4229",
+    "run_id": "69938bee0078"
+  },
+  "escalations": [
+    {
+      "raised": true,
+      "escalation_id": "7d7262fb-5804-4ea1-b4cb-05801bd687cb",
+      "number": "ESC-2026-00065",
+      "status": "open",
+      "assignee": "Meera Kulkarni",
+      "due_at": "2026-10-01T08:15:18.713447+00:00"
+    }
+  ],
+  "agent_session_id": "a6c1dfeb-0562-4b51-aa97-d03f4c279353",
+  "conflicts": [],
+  "seconds": 157.8,
+  "instance": "suryodaya",
+  "task_id": "escalate_blocked_wo48"
+}

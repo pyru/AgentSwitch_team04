@@ -1,0 +1,40 @@
+{
+  "run_id": "3da81d178400",
+  "stop_reason": "final_answer",
+  "final_answer": "Here's where the shop floor is stuck right now (Suryodaya Precision Works, from the live exceptions feed \u2014 33 records, complete, not truncated):\n\n**Quality blocks \u2014 28 records, all high severity**\nQuality inspections held at quality review. Named records from the feed: QI-2026-00008, QI-2026-00021, QI-2026-00034 (the feed shows three examples for this lane; 25 further inspections are in the same state).\n\n**Subcontract blocks \u2014 5 records, all high severity**\nSubcontract orders held at subcontract review. Named records: SCO-2026-00001, SCO-2026-00002, SCO-2026-00003, plus 2 more in the same lane.\n\n**Unknown lanes (the feed could not fill them)**\n- **Shortages \u2014 permission_denied.** I cannot tell you whether any material shortages are holding work right now. Unknown, not clear \u2014 I won't guess.\n- **Automation failures \u2014 permission_denied.** Same: contents unknown.\n\nSo the visible blockage is entirely quality review and subcontract review; whether shortages or automation failures add to it is undeterminable from this seat. If you want, name any of these records and I can pull its downstream impact on work orders and sales orders.",
+  "finding": {
+    "blocking_causes": [
+      "quality_block",
+      "subcontract_block"
+    ],
+    "contributing_causes": [],
+    "currency": "INR",
+    "evidence_records": [
+      "QI-2026-00008",
+      "QI-2026-00021",
+      "QI-2026-00034",
+      "SCO-2026-00001",
+      "SCO-2026-00002",
+      "SCO-2026-00003"
+    ],
+    "is_late": null,
+    "not_visible": [
+      "shortages (shop_floor_exceptions lane_states: permission_denied)",
+      "automation_failures (shop_floor_exceptions lane_states: permission_denied)"
+    ],
+    "outcome": "partial",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "work_order": "null"
+  },
+  "finding_record": {
+    "agent_memory_id": "fb4599a4-c4cd-4bab-b6b0-492f2637e7d1",
+    "run_id": "3da81d178400"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 145.3,
+  "instance": "suryodaya",
+  "task_id": "bottleneck_lanes_reported"
+}
