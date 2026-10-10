@@ -1,11 +1,17 @@
 """One run at a time, started through the same CLI a person would type: a harness task, or a free-text question."""
 import datetime as dt
+import os
 import subprocess
 import sys
 import threading
 from pathlib import Path
 
 from prod_agent import config
+
+try:
+    import fcntl
+except ImportError:  # Windows has no flock; there only the in-process check below guards a single console
+    fcntl = None
 
 ASK_MAX_CHARS = 1000
 
@@ -15,10 +21,12 @@ class JobError(Exception):
 
 
 class JobRunner:
-    def __init__(self, tasks: list[dict], demo_base: Path, popen=subprocess.Popen, adhoc_base: Path | None = None):
+    def __init__(self, tasks: list[dict], demo_base: Path, popen=subprocess.Popen, adhoc_base: Path | None = None,
+                 lock_path: Path | None = None):
         self.tasks = {t["id"]: t for t in tasks}
         self.demo_base = demo_base
         self.adhoc_base = adhoc_base or demo_base.parent / "adhoc"
+        self.lock_path = lock_path or demo_base.parent / ".console-run.lock"
         self._popen = popen
         self._lock = threading.Lock()
         self._next_id = 0
@@ -66,19 +74,40 @@ class JobRunner:
             # Two runs share the fixture work orders on the tenant and would trip changed_underneath on each other.
             if self.current is not None and self.current["proc"].poll() is None:
                 raise JobError("a run is already in progress")
-            base.mkdir(parents=True, exist_ok=True)
-            before = {p.name for p in base.iterdir()}
-            started = dt.datetime.now()
-            self._next_id += 1
-            log_path = base / f"console-{started:%Y%m%d-%H%M%S}-{self._next_id}.log"
-            with log_path.open("w", encoding="utf-8") as log:
-                # A new session keeps Ctrl-C on the console from killing the run before it withdraws its escalations.
-                proc = self._popen(cmd, cwd=config.ROOT, stdin=subprocess.DEVNULL, stdout=log,
-                                   stderr=subprocess.STDOUT, start_new_session=True)
+            held = self._hold_run_lock()
+            try:
+                base.mkdir(parents=True, exist_ok=True)
+                before = {p.name for p in base.iterdir()}
+                started = dt.datetime.now()
+                self._next_id += 1
+                log_path = base / f"console-{started:%Y%m%d-%H%M%S}-{self._next_id}.log"
+                with log_path.open("w", encoding="utf-8") as log:
+                    # A new session keeps Ctrl-C on the console from killing the run before it withdraws its
+                    # escalations. The child inherits the lock and holds it until it exits, even past this console.
+                    proc = self._popen(cmd, cwd=config.ROOT, stdin=subprocess.DEVNULL, stdout=log,
+                                       stderr=subprocess.STDOUT, start_new_session=True,
+                                       pass_fds=() if held is None else (held,))
+            finally:
+                if held is not None:
+                    os.close(held)
             self.current = {"job_id": self._next_id, **meta, "proc": proc, "base_dir": base, "before": before,
                             "run_root": run_root, "log": str(log_path),
                             "started": started.isoformat(timespec="seconds")}
         return self.status()
+
+    def _hold_run_lock(self) -> int | None:
+        """The run's slot across consoles. The in-memory check above forgets a run when the console restarts, while
+        the run itself, in its own session, carries on."""
+        if fcntl is None:
+            return None
+        self.lock_path.parent.mkdir(parents=True, exist_ok=True)
+        fd = os.open(self.lock_path, os.O_RDWR | os.O_CREAT, 0o600)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            os.close(fd)
+            raise JobError("a run is already in progress (started from another or an earlier console)") from None
+        return fd
 
     def status(self) -> dict | None:
         if self.current is None:

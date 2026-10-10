@@ -94,6 +94,16 @@ def test_a_long_value_is_truncated_as_a_label():
     assert out["groups"][label] == 4
 
 
+def test_long_values_sharing_a_prefix_are_counted_and_shown_apart():
+    """Truncating before counting merged two error messages that differ only after the label limit."""
+    head = "Gemini rejected the request (HTTP 400): " + "x" * domain.QUERY_GROUP_LABEL_CHARS
+    rows = [{"error": head + " quota"}] * 3 + [{"error": head + " schema"}] * 2
+    out = domain.query_group(GroupMcp(rows), "AgentJob", "error")
+    assert out["distinct_values"] == 2
+    assert sorted(out["groups"].values()) == [2, 3]
+    assert all(len(label) < 2 * domain.QUERY_GROUP_LABEL_CHARS for label in out["groups"])
+
+
 def test_a_high_cardinality_field_reports_a_top_slice_and_sums_the_tail():
     rows = [{"error": f"e{i}"} for i in range(100)]
     out = domain.query_group(GroupMcp(rows), "AgentJob", "error")

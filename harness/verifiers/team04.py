@@ -910,6 +910,9 @@ def order_found_by_item(ctx: VerifyContext):
     wo, gone = _fixture_target(ctx)
     if gone:
         return U, gone
+    end = (wo.get("planned_end_date") or "")[:10]
+    if not end or end >= config.today().isoformat():
+        return U, f"premise gone: {wo['number']} is due {end or 'never'}, no longer overdue"
     same_item = [w for w in ctx.rest.list("WorkOrder") if w.get("status") in OPEN_WO and w.get("item_id") == wo.get("item_id")]
     if len(same_item) != 1:
         return U, f"premise gone: {len(same_item)} open orders now make that item"

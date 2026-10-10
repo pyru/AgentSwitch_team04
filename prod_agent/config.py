@@ -42,6 +42,8 @@ def load_dotenv(path: Path = ROOT / ".env") -> None:
     """Non-empty values in the project .env win over the process environment.
 
     Except under the harness runner, which provides its own model settings: ours must not override them.
+    The shell-only switches are skipped: copied into os.environ, an AGENTSWITCH_TOKEN line would make every later
+    on_platform() true and move a local run onto that token.
     """
     if on_platform() or not path.exists():
         return
@@ -50,9 +52,11 @@ def load_dotenv(path: Path = ROOT / ".env") -> None:
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, _, value = line.partition("=")
-        value = value.strip().strip('"').strip("'")
+        key, value = key.strip(), value.strip().strip('"').strip("'")
+        if key == "AGENT_OFFLINE" or key.startswith("AGENTSWITCH_"):
+            continue
         if value:
-            os.environ[key.strip()] = value
+            os.environ[key] = value
 
 
 def env(name: str, default: str | None = None) -> str | None:

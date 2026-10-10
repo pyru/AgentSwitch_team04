@@ -119,3 +119,20 @@ def test_the_model_client_takes_the_runners_endpoint_and_key(platform_env, monke
 
     assert str(llm.base_url).startswith("https://model.example.invalid/v1")
     assert llm.api_key == "platform-key"
+
+
+def test_a_dotenv_line_cannot_switch_a_local_run_onto_a_runner_token(monkeypatch, tmp_path):
+    """AGENTSWITCH_* and AGENT_OFFLINE are shell-only: copied from .env, the token would make every later
+    on_platform() true."""
+    env_file = tmp_path / ".env"
+    env_file.write_text("AGENTSWITCH_TOKEN=stray\nAGENTSWITCH_BASE_URL=https://x.invalid\n"
+                        "AGENTSWITCH_INSTANCE=suryodaya\nAGENT_OFFLINE=1\nOPENAI_MODEL=ours\n", encoding="utf-8")
+    for name in ("AGENTSWITCH_TOKEN", "AGENTSWITCH_BASE_URL", "AGENTSWITCH_INSTANCE", "AGENT_OFFLINE"):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv("OPENAI_MODEL", "exported")
+
+    config.load_dotenv(env_file)
+
+    assert not config.on_platform() and config.platform() is None
+    assert "AGENT_OFFLINE" not in os.environ
+    assert os.environ["OPENAI_MODEL"] == "ours", "ordinary keys still come from .env"

@@ -334,6 +334,14 @@ def _start_watchdog(seconds: float, book: ResultsBook) -> threading.Timer:
     return timer
 
 
+def watchdog_for(platform: dict | None, budget: float | None, book: ResultsBook) -> threading.Timer | None:
+    """Armed only on the runner's throwaway copy. os._exit skips cleanup_escalations, so on a shared tenant it
+    would leave a real person assigned to a test escalation; a local budget keeps its per-task deadlines only."""
+    if budget is None or not platform:
+        return None
+    return _start_watchdog(budget + WATCHDOG_GRACE_SECONDS, book)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--instance", choices=sorted(config.INSTANCES) + ["all"], default="all")
@@ -384,8 +392,7 @@ def main() -> int:
         print(f"preflight: {book.note}", flush=True)
 
     budget = budget_seconds(bool(platform))
-    if budget is not None:
-        _start_watchdog(budget + WATCHDOG_GRACE_SECONDS, book)
+    watchdog_for(platform, budget, book)
 
     root = _new_run_root(args.runs_dir)
     records = execute(plan, root, book, budget=budget, workers=args.workers, forced_tool_choice=choice)

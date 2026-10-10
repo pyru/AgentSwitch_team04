@@ -5,6 +5,7 @@ The graded, hand-written tests live in tests/.
 """
 import json
 import os
+import subprocess
 import sys
 import threading
 import urllib.error
@@ -15,6 +16,7 @@ from types import SimpleNamespace
 import pytest
 
 from prod_agent import config
+from viewer import jobs as jobs_module
 from viewer import runs
 from viewer.jobs import JobError, JobRunner
 from viewer.server import make_server
@@ -182,6 +184,38 @@ def test_only_one_run_at_a_time(tmp_path):
     assert len(procs) == 2
     assert jobs.status()["run_root"] == "20260930-120001-000001"
     assert jobs.status()["job_id"] == 2
+
+
+def harmless_popen(children):
+    """Real child processes that only sleep, so the lock file is held the way a real run holds it."""
+    def popen(cmd, **kwargs):
+        child = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(30)"], **kwargs)
+        children.append(child)
+        return child
+    return popen
+
+
+@pytest.mark.skipif(jobs_module.fcntl is None, reason="no flock on this platform")
+def test_a_restarted_or_second_console_cannot_overlap_a_run_still_going(tmp_path):
+    """The run outlives the console that started it (its own session), so the in-memory check alone forgets it."""
+    children = []
+    try:
+        first = JobRunner(TASKS, tmp_path / "demo", popen=harmless_popen(children))
+        first.start("refuse_x", "suryodaya", "suryodaya/refuse_x")
+
+        restarted = JobRunner(TASKS, tmp_path / "demo", popen=harmless_popen(children))
+        with pytest.raises(JobError, match="in progress"):
+            restarted.start("why_late", "suryodaya", "suryodaya/why_late")
+        assert len(children) == 1
+
+        children[0].kill()
+        children[0].wait()
+        restarted.start("why_late", "suryodaya", "suryodaya/why_late")
+        assert len(children) == 2
+    finally:
+        for child in children:
+            child.kill()
+            child.wait()
 
 
 def test_no_status_before_any_run(tmp_path):

@@ -968,13 +968,15 @@ def query_group(mcp: McpClient, entity: str, field: str, filters: dict | None = 
         if value is None or value == "":
             missing += 1
             continue
-        label = str(value)
-        if len(label) > QUERY_GROUP_LABEL_CHARS:
-            label = label[:QUERY_GROUP_LABEL_CHARS] + "…"
-        counts[label] = counts.get(label, 0) + 1
+        counts[str(value)] = counts.get(str(value), 0) + 1
 
     ranked = sorted(counts.items(), key=lambda kv: -kv[1])
-    groups = dict(ranked[:QUERY_GROUP_MAX_VALUES])
+    groups, seen = {}, {}
+    for value, n in ranked[:QUERY_GROUP_MAX_VALUES]:
+        label = value if len(value) <= QUERY_GROUP_LABEL_CHARS else value[:QUERY_GROUP_LABEL_CHARS] + "…"
+        # Long error messages often share their first 80 characters; counted apart, they are shown apart too.
+        seen[label] = seen.get(label, 0) + 1
+        groups[label if seen[label] == 1 else f"{label} (variant {seen[label]})"] = n
     tail = sum(n for _, n in ranked[QUERY_GROUP_MAX_VALUES:])
     out = {"entity": entity, "filters": filters, "group_by": field,
            "scanned": len(rows), "total": rows.total, "groups": groups,
