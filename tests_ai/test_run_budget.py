@@ -215,3 +215,15 @@ def test_the_start_event_records_the_time_allowed(recording_mcp):
 
     assert events[0]["seconds_allowed"] == 240
     assert events[0]["forced_tool_choice"] == "named"
+
+
+def test_the_watchdog_is_armed_only_on_the_runners_throwaway_copy(tmp_path):
+    """Its os._exit skips withdrawing escalations, so on a shared tenant it would leave a real person assigned."""
+    book = ResultsBook(tmp_path / "results.json", label="suryodaya")
+    assert runner.watchdog_for(None, 120, book) is None
+    assert runner.watchdog_for({"instance": "suryodaya"}, None, book) is None
+    timer = runner.watchdog_for({"instance": "suryodaya"}, 120, book)
+    try:
+        assert timer is not None and timer.is_alive()
+    finally:
+        timer.cancel()

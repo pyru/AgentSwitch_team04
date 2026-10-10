@@ -1,0 +1,48 @@
+{
+  "run_id": "bbfcd6732137",
+  "stop_reason": "final_answer",
+  "final_answer": "**Why WO-2026-00048 is late** (Pump Mounting Bracket Assembly, 60 pcs, 0 produced; planned end 2026-02-26 \u2014 217 days past due, status stopped):\n- Two subcontract orders are still in draft and were never sent: SCO-2026-00076 (vendor Supriya Rathi) and SCO-2026-00030 (Shreeji Powder Coating) \u2014 blocking.\n- Two engineering changes are pending: ECO-2026-00064 (under review) and ECO-2026-00012 (draft) \u2014 blocking.\n- Contributing: the first operation never started (JC-2026-00142, Fastener Assembly, waiting 224 days at ASSY-01), the stop has no recorded reason, and recorded downtime on CNC-02 (456 min, \"other\") and ASSY-01 (45 min, tool change).\n\n**What it blocks downstream**\n- Customer order affected (directly linked): SO-2026-00092 \u2014 Kirloskar Pumps Ltd, delivery date 2026-03-07, value \u20b9494,476.64, confirmed, undelivered.\n- No downstream work orders found via BOM matching, so nothing else may be affected.\n\n**Rescheduling** \u2014 I have not proposed new dates; the subcontracts must be sent and the ECOs cleared before a credible date exists. Say the word and I'll pull a proposal.\n\n**Not visible to me** \u2014 nothing was hidden for this question; cost is recorded as \u20b90/\u20b90 on the work order, so no cost variance exists to report.",
+  "finding": {
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "INR",
+    "customer_impact": "known",
+    "evidence_records": [
+      "WO-2026-00048",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "ECO-2026-00064",
+      "ECO-2026-00012",
+      "JC-2026-00142",
+      "SO-2026-00092"
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "rescheduled": [],
+    "work_order": "WO-2026-00048"
+  },
+  "finding_record": {
+    "agent_memory_id": "c63d8a09-243f-45d7-8ac2-b950fe940d00",
+    "run_id": "bbfcd6732137"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 52.0,
+  "instance": "suryodaya",
+  "task_id": "blocks_wo48_sales_order"
+}

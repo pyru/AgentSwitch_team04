@@ -1,0 +1,56 @@
+{
+  "run_id": "0f7f14236634",
+  "stop_reason": "final_answer",
+  "final_answer": "**Most overdue open work order: WO-2026-00004 \u2014 Grain Cart Ladder Guard Weldment** (47 days past due; planned end 2026-08-15, today 2026-10-01; qty 80, produced 0; not started; make-to-order, medium priority).\n\n**Why late**\n- Nothing has started. The first operation, Laser Cut on job card **JC-2026-00013** at workstation **LASER-01 \u2014 6kW Fiber Laser**, has been waiting **111 days** past its planned start of 2026-06-12 (signal: `operation_not_started`, `not_started_past_planned_start`).\n- All four job cards are open with zero completion: JC-2026-00013 (Laser Cut, LASER-01), JC-2026-00014 (Form/Brake, BRAKE-02), JC-2026-00015 (Robotic Weld, WELD-03), JC-2026-00016 (Powder Coat, COAT-06).\n- Recorded downtime on this route since 2026-07-03 (all contributing, none blocking):\n  - **WELD-03**: 1,320 min over 6 entries (2 breakdown, 2 tool change, 2 material shortage)\n  - **COAT-06**: 720 min over 3 entries (1 quality issue, 2 setup change)\n  - **BRAKE-02**: 480 min over 2 entries (2 operator unavailable)\n  - **LASER-01**: 420 min over 3 entries (2 material shortage, 1 quality issue)\n- No blocking cause with a known ready date was found \u2014 the order is simply queued-but-never-started behind that downtime pressure.\n\n**What it blocks**\n- No downstream work orders consume this item (the BOM reverse walk found no open consumers), so no other work orders may be affected.\n- Direct exposure: sales order **SO-2026-00003** \u2014 customer **Tri-State Farm Equipment**, confirmed, **$158,929.52 USD**, undelivered, with a delivery date of **2026-06-09** (already past). Customer impact is recorded as known, i.e. this customer is affected.\n\n**Rescheduling**\n- The platform proposes: new start **2026-10-01**, new end **2026-12-04** (\"earliest start after known blockers; finish from finite schedule\"), with no dependants to move.\n- **I could not write it.** The proposal is not writable by this seat: the order's status is \"not_started\", and dates are locked after submit \u2014 changing them needs an admin cancel. This seat also has no escalation tool available, so I could not raise it automatically; a planner/admin needs to unlock or cancel-and-reissue the order's dates.\n\n**Not visible to me**\n- Nothing was flagged as outside this seat's visibility on this order \u2014 all evidence above came from work-order, job-card and downtime data I can see.",
+  "finding": {
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "cost": null,
+    "currency": "USD",
+    "customer_impact": "known",
+    "evidence_records": [
+      "WO-2026-00004",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "LASER-01",
+      "BRAKE-02",
+      "WELD-03",
+      "COAT-06",
+      "SO-2026-00003"
+    ],
+    "escalations": [],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "rescheduled": [
+      {
+        "new_end": "2026-12-04",
+        "new_start": "2026-10-01",
+        "number": "WO-2026-00004",
+        "outcome": "proposed_not_writable"
+      }
+    ],
+    "work_order": "WO-2026-00004"
+  },
+  "finding_record": {
+    "agent_memory_id": "3c97a9cb-9aa6-4e92-8b92-aeaf60a67140",
+    "run_id": "0f7f14236634"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 158.0,
+  "instance": "keystone",
+  "task_id": "most_overdue_open_why_late"
+}

@@ -136,6 +136,51 @@ python -m harness.runner --task refuse_unknown_work_order
 python scripts/check_results.py
 ```
 
+## Live run console
+
+```bash
+python -m viewer            # http://127.0.0.1:8765
+```
+
+A local page for the screen-shared live demo. Pick a harness task and an instance, type the confirmation it
+asks for, and watch the agent's steps arrive, then the verdict and the evidence behind it (the finding in the
+database, the write ordering, interference and cleanup). It also browses past runs.
+
+**Ask the agent** takes a free-text question instead ("Can we finish WO-2026-00048 by 2027-03-31?", "Where is
+the shop floor stuck right now?"). It runs `python -m prod_agent --instance <name> --run-dir … -- "<question>"`
+with no `--apply` and no `--escalate`, so it can read and record a finding but never change an order or page a
+person. No verifier exists for a free-text question, so its tag reads **Not graded**; for a graded feasibility
+answer run the `feasible_by_wo48` task. Questions land in `runs/adhoc/` and show under **Questions** in the QC log.
+
+- It starts the same command you would type: `python -m harness.runner --task <id> --instance <name>
+  --runs-dir runs/demo`. Every click is a live run against a shared tenant.
+- Demo runs land in `runs/demo/`, never `runs/2026*`, so a partial run cannot become the run
+  `scripts/verify_submission.py` grades.
+- One run at a time, only tasks from `harness/tasks/team04/`, no `--apply`/`--escalate` outside what a task
+  declares.
+- There is no stop button: a killed run skips the escalation withdrawal. Ctrl-C stops the page, not the run.
+- Localhost only. It is not built to be shared or hosted.
+
+**Before the demo**
+
+- One console process only, and no `python -m harness.runner` from a terminal while it runs: the one-run guard
+  lives in the console's memory and shared fixture rows would collide.
+- Never restart the console while a run is in progress. The run keeps going, but the new console forgets it;
+  wait for the log in `runs/demo/` to end.
+- If you refresh the page just as a run finishes, the live view is not re-attached; the run is under **Demo runs** in Past runs.
+- Check provider, model and date without showing `.env` on screen (`.env` beats exported variables):
+  `grep -E '^(LLM_PROVIDER|OPENAI_MODEL|OPENROUTER_MODEL|AGENT_TODAY)=' .env`. The trace's `start` event shows
+  the provider and model actually used.
+- After an escalation task, read the `cleanup` block. A failed withdrawal does not change the verdict, so the
+  page flags it; withdraw that escalation by hand.
+
+**Demo order** (agent time from the 17 Sep run): `refuse_unknown_work_order` on keystone (~15 s) →
+`why_late_wo48_subcontract` (~70 s) → `concurrent_edit_before_write` (~100 s; writes fixture rows, escalation
+withdrawn after scoring) → `feasible_by_wo48` ("can we finish WO-48 by 2027-03-31?", graded) → one question in
+**Ask the agent** from a grader. Show `escalate_blocked_wo48` (~190 s) from past runs instead of live. These times
+are from `gpt-4.1`; slower models take longer (the OpenRouter rehearsals took about 80 s for the refusal). If a
+tenant is down, walk through `runs/20260917-110938` in the same page.
+
 ## Layout
 
 | path | what |
@@ -145,6 +190,7 @@ python scripts/check_results.py
 | `prod_agent/agent.py` | the loop, tool specs and system prompt |
 | `harness/` | runner, verifier context, fixtures, task set, `results.json` writer |
 | `agentswitch-harness.toml` | how AgentSwitch's harness runner installs, runs and reads this repo |
+| `viewer/` | local live-run console (python -m viewer) |
 | `tests/` | hand-written tests only |
 | `GAP_REPORT.md` | week-one gap report (benchmark: Carbon) |
 | `docs/ARCHITECTURE.md` | how the agent and harness fit together, and where to change things |

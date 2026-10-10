@@ -1,0 +1,13 @@
+{
+  "id": "blocks_wo48_sales_order",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-16. Harness task, not a hand-written test.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "prompt": "What does the delay on WO-2026-00048 block downstream? I need the affected customer orders.",
+  "verifier": "harness.verifiers.team04:blocks_linked_sales_order",
+  "checks": "Sales order linked in DB (SO-2026-00092 on 2026-09-16) is reported; no unlinked sales order invented.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/blocks_wo48_sales_order.json"
+}

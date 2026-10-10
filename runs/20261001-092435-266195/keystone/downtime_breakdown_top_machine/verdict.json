@@ -1,0 +1,9 @@
+{
+  "task_id": "downtime_breakdown_top_machine",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "named ['CNC-04 \u2014 VMC 40-taper', 'WS-2026-00004'] with 960.0 min of breakdown downtime since 2026-07-03",
+  "sample": false,
+  "run_id": "685734e6326d",
+  "seconds": 21.6
+}

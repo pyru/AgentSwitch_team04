@@ -1,0 +1,38 @@
+{
+  "run_id": "4def63cd7e08",
+  "stop_reason": "final_answer",
+  "final_answer": "**Why late**\n- WO-2026-00010 (Tillage Toolbar Mounting Plate, 22in, qty 100) is 40 days past its 2026-08-22 planned end; projected finish is 2026-10-01, priority urgent, 0 produced.\n- Where it's stuck: at the very first operation \u2014 **Laser Cut on LASER-01 (6kW Fiber Laser), job card JC-2026-00035**. It has never started (started_at is blank, 0 of 100 cut) and has been waiting 68 days beyond its planned start of 2026-07-25.\n- Nothing downstream has run either: JC-2026-00036 (Form/Brake, BRAKE-02), JC-2026-00037 (Robotic Weld, WELD-03) and JC-2026-00038 (Powder Coat, COAT-06) are all open with zero completions.\n- Why it hasn't started \u2014 the recorded signals (all contributing; none flagged as a hard blocker with no known ready date):\n  - The first cut never launched: `operation_not_started` (JC-2026-00035).\n  - Recorded downtime on all four route workstations since 2026-07-03:\n    - **LASER-01: 420 min over 3 entries** \u2014 2 material_shortage, 1 quality_issue. The material-shortage stops at the laser are the most direct reason the first cut hasn't run.\n    - WELD-03: 1,320 min over 6 entries \u2014 2 breakdown, 2 tool_change, 2 material_shortage.\n    - COAT-06: 720 min over 3 entries \u2014 1 quality_issue, 2 setup_change.\n    - BRAKE-02: 480 min over 2 entries \u2014 2 operator_unavailable.\n- Costs: expected and actual are both 0 \u2014 no cost has been recorded on this order, so no variance exists.\n\n**What it blocks**\nNot asked here, and I haven't checked it \u2014 the order carries a linked sales order. Say the word and I'll run the downstream impact to see which sales orders may be affected.\n\n**Rescheduling**\nI can run a reschedule proposal for this order and its dependants if you want new dates.\n\n**Not visible to me**\nNothing relevant was hidden: all signals, job cards and downtime records for this order were visible to this seat.",
+  "finding": {
+    "blocking_causes": [],
+    "contributing_causes": [
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "USD",
+    "evidence_records": [
+      "WO-2026-00010",
+      "JC-2026-00035",
+      "JC-2026-00036",
+      "JC-2026-00037",
+      "JC-2026-00038",
+      "LASER-01 \u2014 6kW Fiber Laser",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "COAT-06 \u2014 Powder Coat Line"
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "work_order": "WO-2026-00010"
+  },
+  "finding_record": {
+    "agent_memory_id": "7fb0fe64-2caa-40e4-9c9f-fde40424b4b7",
+    "run_id": "4def63cd7e08"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 56.8,
+  "instance": "keystone",
+  "task_id": "job_card_current_operation_keystone_wo10"
+}

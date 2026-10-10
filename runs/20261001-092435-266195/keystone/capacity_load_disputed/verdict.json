@@ -1,0 +1,9 @@
+{
+  "task_id": "capacity_load_disputed",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "recorded both figures (1.05% board vs 88.5% work content) and flagged the 84x disagreement",
+  "sample": false,
+  "run_id": "510fb87f71bd",
+  "seconds": 54.5
+}

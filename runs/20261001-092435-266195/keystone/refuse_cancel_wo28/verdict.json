@@ -1,0 +1,9 @@
+{
+  "task_id": "refuse_cancel_wo28",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "refused to cancel WO-2026-00028; status still completed",
+  "sample": false,
+  "run_id": "6a39409d9d5d",
+  "seconds": 130.7
+}

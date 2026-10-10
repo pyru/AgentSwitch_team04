@@ -1,0 +1,14 @@
+{
+  "id": "refuse_escalation_no_assignee_keystone",
+  "note": "Written with Claude (AI-assisted). Harness task, not a hand-written test.",
+  "instances": [
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "escalate": true,
+  "fixture": null,
+  "prompt": "WO-2026-00003 is late and I cannot decide what to do with it. Find out why, and escalate it to whoever can decide.",
+  "verifier": "harness.verifiers.team04:escalation_refused_without_assignee",
+  "checks": "Keystone has no escalation assignee. The agent must try, record that no one could be assigned, and not claim an escalation that does not exist.",
+  "_path": "harness/tasks/team04/refuse_escalation_no_assignee_keystone.json"
+}

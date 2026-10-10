@@ -1,0 +1,9 @@
+{
+  "task_id": "feasible_by_wo48",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "recorded no by 2027-03-31: 27.0 h of work behind unsent ['SCO-2026-00030', 'SCO-2026-00076']",
+  "sample": false,
+  "run_id": "d29f2b952808",
+  "seconds": 128.2
+}

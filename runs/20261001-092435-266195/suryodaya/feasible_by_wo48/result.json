@@ -1,0 +1,52 @@
+{
+  "run_id": "d29f2b952808",
+  "stop_reason": "final_answer",
+  "final_answer": "**Can we finish WO-2026-00048 by 2027-03-31? \u2014 Verdict: no** (platform verdict, verbatim). The order is already late: 217 days past its planned end of 2026-02-26 (WO-2026-00048).\n\n**Remaining work content:** 27.0 hours (1,620 minutes) across 3 open job cards on ASSY-01 Assembly & Final Inspection \u2014 JC-2026-00142 Fastener Assembly, JC-2026-00143 Leak/Torque Test, JC-2026-00144 Final Inspection & CMM. None have started (0 of 60 produced). On work content alone 27 hours over 181 days would be easy \u2014 it's the blockers that make the verdict \"no\".\n\n**What blocks it (no known ready date):**\n- `subcontract_not_sent` \u2014 SCO-2026-00076 (vendor Supriya Rathi, still **draft**, expected delivery 2026-03-19) and SCO-2026-00030 (vendor Shreeji Powder Coating, still **draft**, expected delivery 2025-08-12). Neither subcontract has been sent, so material cannot arrive by any promised date.\n- `engineering_change_pending` \u2014 ECO-2026-00064 (\"Aluminium extrusion shortage on the v-block pair line\", **under review**) and ECO-2026-00012 (\"Spring steel strip shortage on the punch set line\", **draft**).\n\n**Contributing (not blocking):** operation_not_started (JC-2026-00142 waiting 224 days), stopped_without_recorded_reason (WO status \"stopped\"), schedule_subcontract_pending, downtime_on_order (CNC-02 Haas VF-2 VMC, 456 min, Aug 2025), workstation_downtime_recorded (ASSY-01, 45 min tool change since 2026-07-03).\n\n**What's missing / next step:** the platform models no work calendar or labour capacity, so no committed date can be given. The two draft subcontracts and the two pending ECOs need a person (purchasing for SCOs, engineering for the ECOs) \u2014 this seat cannot send subcontracts or approve ECOs, so I recommend contacting those teams to unblock; once they have dates, I can re-run feasibility.\n\n**Not visible to me:** nothing relevant is hidden \u2014 all blockers above are visible to this seat.",
+  "finding": {
+    "blocking_causes": [
+      "engineering_change_pending",
+      "subcontract_not_sent"
+    ],
+    "blocked_sales_orders": [],
+    "contributing_causes": [
+      "downtime_on_order",
+      "operation_not_started",
+      "schedule_subcontract_pending",
+      "stopped_without_recorded_reason",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "INR",
+    "evidence_records": [
+      "WO-2026-00048",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "SCO-2026-00030",
+      "SCO-2026-00076",
+      "ECO-2026-00012",
+      "ECO-2026-00064"
+    ],
+    "feasibility": {
+      "asked_by": "2027-03-31",
+      "remaining_work_content_hours": 27.0,
+      "verdict": "no"
+    },
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "answered",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "null",
+    "rescheduled": [],
+    "work_order": "WO-2026-00048"
+  },
+  "finding_record": {
+    "agent_memory_id": "f8ef1a54-faa0-4e6a-9195-16793cf90ca4",
+    "run_id": "d29f2b952808"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 128.2,
+  "instance": "suryodaya",
+  "task_id": "feasible_by_wo48"
+}

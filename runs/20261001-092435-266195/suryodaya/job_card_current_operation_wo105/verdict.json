@@ -1,0 +1,9 @@
+{
+  "task_id": "job_card_current_operation_wo105",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "cited JC-2026-00321 (Laser Cut Blank, open) as the current operation",
+  "sample": false,
+  "run_id": "77cf5245d1c9",
+  "seconds": 94.2
+}

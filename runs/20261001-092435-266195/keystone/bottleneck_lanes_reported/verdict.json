@@ -1,0 +1,9 @@
+{
+  "task_id": "bottleneck_lanes_reported",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "cited a real blocked record from 3 rejected inspections / 0 subcontracts",
+  "sample": false,
+  "run_id": "e3cd38457f71",
+  "seconds": 156.4
+}

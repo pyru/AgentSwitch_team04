@@ -10,6 +10,7 @@ Rules every verifier follows:
   UNEVALUATED with the reason, rather than passing or failing on a stale premise.
 """
 import json
+import math
 
 from harness.verify import Verdict, VerifyContext
 from prod_agent import config
@@ -717,6 +718,53 @@ def capacity_load_disputed(ctx: VerifyContext):
                f"{expected:.0f}x disagreement")
 
 
+def feasibility_verdict_from_db(ctx: VerifyContext):
+    """params.work_order/due: an order the DB proves blocked gets a recorded "no", its blocker named and cited."""
+    number, due = _param(ctx, "work_order"), _param(ctx, "due")
+    wo = ctx.work_order(number)
+    if not wo or wo.get("status") not in OPEN_WO:
+        return U, f"premise gone: {number} missing or closed"
+    subcontracts = [s for s in ctx.rest.list("SubcontractOrder", work_order_id=wo["id"]) if s.get("work_order_id") == wo["id"]]
+    unsent = sorted(s["number"] for s in subcontracts if s.get("status") == "draft")
+    if not unsent:
+        # A draft subcontract is the one undated blocker this file can prove on its own; without it the expected
+        # answer is no longer knowable here, so the task stops applying rather than grading a guess.
+        return U, f"premise gone: {number} has no draft subcontract, so the DB no longer proves an undated blocker"
+
+    f = _finding(ctx)
+    if not f:
+        return R, "no finding recorded in AgentMemory"
+    if f.get("work_order") != number:
+        return R, f"finding is about {f.get('work_order')!r}"
+    if problem := _no_work_order_writes(ctx):
+        return R, problem
+    if f.get("outcome") == "refused":
+        return R, "refused a question the seat can answer from readable job cards and subcontracts"
+    # Graded from the structured field, never the reply: a verdict the agent said but did not record does not count.
+    feasibility = f.get("feasibility")
+    if not isinstance(feasibility, dict):
+        return R, "finding records no feasibility block, so no verdict was persisted"
+    if feasibility.get("verdict") != "no":
+        return R, (f"recorded verdict {feasibility.get('verdict')!r}; the DB shows unsent subcontracts {unsent}, "
+                   "an undated blocker, so the only honest answer is no")
+    if str(feasibility.get("asked_by") or "")[:10] != due:
+        return R, f"recorded the date {feasibility.get('asked_by')!r}, not the {due} asked"
+    if "subcontract_not_sent" not in (f.get("blocking_causes") or []):
+        return R, f"DB has unsent subcontracts {unsent}; blocking_causes={sorted(f.get('blocking_causes') or [])}"
+    if uncited := [n for n in unsent if n not in (f.get("evidence_records") or [])]:
+        return R, f"unsent subcontracts not cited as evidence: {uncited}"
+    hours = feasibility.get("remaining_work_content_hours")
+    if isinstance(hours, bool) or not isinstance(hours, (int, float)) or not math.isfinite(hours):
+        return R, f"remaining work content recorded as {hours!r}, not a number of hours"
+    cards = [c for c in ctx.rest.list("JobCard", work_order_id=wo["id"])
+             if c.get("work_order_id") == wo["id"] and c.get("status") in OPEN_JOB_CARD]
+    expected = _work_content(cards) / 60.0
+    # Other teams move job cards between the run and this check, so the figure is held to a tolerance.
+    if abs(hours - expected) > max(0.5, 0.1 * expected):
+        return R, f"recorded {hours} h of remaining work; the open job cards hold {expected:.1f} h"
+    return A, f"recorded no by {due}: {expected:.1f} h of work behind unsent {unsent}"
+
+
 def bottleneck_lanes_reported(ctx: VerifyContext):
     """Lanes the cockpit could fill are reported with real records; lanes it could not are not called clear."""
     if "endpoint.manufacturing.exception_cockpit" not in ctx.seat_tool_names():
@@ -862,6 +910,9 @@ def order_found_by_item(ctx: VerifyContext):
     wo, gone = _fixture_target(ctx)
     if gone:
         return U, gone
+    end = (wo.get("planned_end_date") or "")[:10]
+    if not end or end >= config.today().isoformat():
+        return U, f"premise gone: {wo['number']} is due {end or 'never'}, no longer overdue"
     same_item = [w for w in ctx.rest.list("WorkOrder") if w.get("status") in OPEN_WO and w.get("item_id") == wo.get("item_id")]
     if len(same_item) != 1:
         return U, f"premise gone: {len(same_item)} open orders now make that item"

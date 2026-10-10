@@ -131,6 +131,15 @@ def test_order_by_item_needs_the_one_open_order_for_that_item():
     assert v.order_found_by_item(FakeCtx(ROWS, finding(), fixture=fx))[0] is Verdict.APPROVE
 
 
+def test_order_by_item_is_unevaluated_once_the_order_is_no_longer_overdue():
+    """Another team moving the date out turns a correct is_late=false into a revise unless the premise is rechecked."""
+    moved = {**A, "planned_end_date": FUTURE}
+    rows = {**ROWS, "WorkOrder": [moved, B, C]}
+    ctx = FakeCtx(rows, finding(is_late=False), fixture={"target": {"number": "WO-A"}})
+    verdict, reason = v.order_found_by_item(ctx)
+    assert verdict is Verdict.UNEVALUATED and "no longer overdue" in reason
+
+
 def planted_rows():
     draft = wo("WO-P", "item-p", "bom-c", status="draft", end="2026-10-04")
     return {**ROWS, "WorkOrder": [A, B, C, draft]}, {"target": {"number": "WO-P", "planned_end_date": "2026-10-04"}}
