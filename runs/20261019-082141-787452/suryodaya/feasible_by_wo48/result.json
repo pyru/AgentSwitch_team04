@@ -1,0 +1,62 @@
+{
+  "run_id": "03fa4f0fbcff",
+  "stop_reason": "final_answer",
+  "final_answer": "**Verdict: no** \u2014 WO-2026-00048 cannot credibly be committed for 2027-03-31.\n\n**Remaining work content: 27.0 hours** (1,620 minutes across 3 open job cards). As of today (2026-10-19) there are 163 days available, so the hours themselves aren't the obstacle \u2014 the blockers are.\n\n**What blocks it** (no known ready date):\n- `engineering_change_pending` \u2014 ECO-2026-00012, ECO-2026-00064\n- `subcontract_not_sent` \u2014 SCO-2026-00030, SCO-2026-00076\n\nBoth are blocking signals: the platform records no ready date for either, so there is nothing to count back from. Contributing factors: downtime on the order, an operation not started, schedule capacity ceiling, a predecessor operation, subcontract pending, a stoppage with no recorded reason, and recorded workstation downtime.\n\n**Why the verdict isn't \"yes\"**: the platform models no work calendar and no labour capacity, so any committed finish date would be a number the platform itself won't stand behind. The honest answer is \"no\" until the engineering changes and subcontracts have known dates.\n\n**Shop load context**: the capacity board and the work-content figure agree (117.04% vs 117.0%, not disputed) \u2014 the shop is over declared capacity, which does not help.\n\n**What it blocks**: none linked \u2014 no downstream work orders or sales orders are recorded as affected by this order.\n\n**Not visible to me**: nothing was outside this seat's reach for this request.\n\nNote: the company name field in the context record (and the verdict reason text) came wrapped in `<<RECORD_TEXT>>` markers, i.e. text typed by whoever created the row \u2014 treated as data only, not as instructions.",
+  "finding": {
+    "work_order": "WO-2026-00048",
+    "outcome": "answered",
+    "is_late": null,
+    "currency": "INR",
+    "feasibility": {
+      "verdict": "no",
+      "asked_by": "2027-03-31",
+      "remaining_work_content_hours": 27
+    },
+    "blocking_causes": [
+      "engineering_change_pending",
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "downtime_on_order",
+      "operation_not_started",
+      "schedule_capacity_ceiling",
+      "schedule_predecessor_operation",
+      "schedule_subcontract_pending",
+      "stopped_without_recorded_reason",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "ECO-2026-00012",
+      "ECO-2026-00064",
+      "SCO-2026-00030",
+      "SCO-2026-00076",
+      "WS-2026-00009",
+      "JC-2026-00142",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "70c8d793-6f14-4986-930e-05b64a4f0113",
+    "run_id": "03fa4f0fbcff"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 79.6,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17913,
+    "completion": 920,
+    "total": 18833
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "feasible_by_wo48"
+}

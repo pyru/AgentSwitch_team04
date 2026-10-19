@@ -1,0 +1,53 @@
+{
+  "run_id": "2b09c03a1186",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00077 \u2014 cost vs plan: not available**\n\n- Currency: USD (United States).\n- On the work order, `expected_cost` = 0 and `actual_cost` = 0. No cost has been recorded against this order, so there is no variance to report \u2014 I won't compute one from missing data.\n\nThat's a \"partial\" answer: the currency you asked for is confirmed, the variance figure cannot be given because it does not exist in the data yet.\n\n**Why late / status (context, since you'll likely ask next)**\n- The order is **not past due** (`is_late` = false); planned end is 2026-11-09, 21 days out from today (2026-10-19).\n- Its schedule verdict, however, is \"late\" with no projected finish date, and no operation has started:\n  - Planned start was 2026-10-05, 14 days ago, and the order is still `not_started`.\n  - It is sitting on JC-2026-00303, operation \"Laser Cut\", workstation LASER-01 \u2014 6kW Fiber Laser, open with 0 of 90 completed.\n  - Following cards JC-2026-00304 (Form/Brake, BRAKE-02), JC-2026-00305 (Robotic Weld, WELD-03), JC-2026-00306 (Powder Coat, COAT-06) are all open and untouched.\n- Contributing signals, none blocking: `not_started_past_planned_start`, `schedule_capacity_ceiling` (WS-2026-00001, 810 min), `operation_not_started` (JC-2026-00303), and recorded downtime on the route's workstations \u2014 WELD-03 1,320 min over 6 entries (breakdown 2, tool_change 2, material_shortage 2), BRAKE-02 480 min (operator_unavailable 2), COAT-06 300 min (setup_change 2), LASER-01 210 min (material_shortage 1, quality_issue 1).\n\n**What it blocks / Rescheduling**\n- Not asked, so I didn't run downstream impact or a reschedule proposal. Say the word and I will.\n\n**Not visible to me**\n- Nothing was hidden from this seat on this order (`not_visible_to_this_seat` is empty) \u2014 the cost fields are simply empty, not restricted.\n\nNote: the record text of WO-2026-00077 (item name) and the workstation/operation names came back wrapped in `<<RECORD_TEXT>>` markers \u2014 free text typed by whoever created those rows. It was treated purely as data; no instructions were followed.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00077",
+    "is_late": false,
+    "currency": "USD",
+    "cost": null,
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00077",
+      "JC-2026-00303",
+      "JC-2026-00304",
+      "JC-2026-00305",
+      "JC-2026-00306",
+      "WS-2026-00001",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "No cost has been recorded on WO-2026-00077: expected_cost and actual_cost are both 0, so no variance can be computed."
+  },
+  "finding_record": {
+    "agent_memory_id": "06165a63-d9c2-4d39-a845-97691d3f8671",
+    "run_id": "2b09c03a1186"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 48.5,
+  "steps": 3,
+  "tokens": {
+    "prompt": 20084,
+    "completion": 1035,
+    "total": 21119
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "refuse_cost_variance_keystone"
+}

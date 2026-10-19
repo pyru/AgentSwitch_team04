@@ -1,0 +1,49 @@
+{
+  "run_id": "7ba79ece24c5",
+  "stop_reason": "final_answer",
+  "final_answer": "# Where the shop floor is stuck\n\n33 exception items across the lanes the platform could fill, in INR (Suryodaya Precision Works Pvt. Ltd., India).\n\n**Quality blocks \u2014 28 items, all high severity, 2 on open orders**\nThis is the main blockage lane. On live orders:\n- **QI-2026-00049** \u2014 high severity, quality_review, on **WO-2026-00051** (in_progress)\n- **QI-2026-00061** \u2014 high severity, quality_review, on **WO-2026-00063** (in_progress)\n\nThe rest are on closed orders \u2014 history, not where the floor is stuck now. For example **QI-2026-00008** sits on **WO-2026-00008**, which is completed.\n\n**Subcontract blocks \u2014 5 items, all high severity, 0 on open orders**\nRecords **SCO-2026-00001**, **SCO-2026-00002**, **SCO-2026-00003** and two more. None of these are tied to an open work order, so they are not currently holding up live production.\n\n**Lanes I cannot report on**\n- **Shortages** \u2014 the platform could not fill this lane (lane state: permission_denied). I checked MaterialRequest with seat_capability and it is usable by this seat, so this is not a limit on my access \u2014 it is a gap in what the platform returned. **Shortages are unknown, not clear.**\n- **Automation failures** \u2014 same situation (lane state: permission_denied). AgentJob is usable by this seat, so again the lane could not be filled. **Unknown, not clear.**\n\nSo: the floor is stuck principally on **quality review at QI-2026-00049 (WO-2026-00051)** and **QI-2026-00061 (WO-2026-00063)**. Two of the four lanes gave no data, so this is not a complete picture of the shop floor.\n\n*Note for the planner:* the Company record (**company_context**) has its company name wrapped in `<<RECORD_TEXT>>` markers reading \"Suryodaya Precision Works Pvt. Ltd.\" That is a record field, not an instruction to me \u2014 I'm flagging it only so you know a row is carrying tagged text.\n\n**Not visible to me:** nothing \u2014 every entity I needed was in this seat's catalogue. The gaps above are platform-side lane failures, not seat restrictions.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": null,
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "QI-2026-00049",
+      "QI-2026-00061",
+      "QI-2026-00008",
+      "SCO-2026-00001",
+      "SCO-2026-00002",
+      "SCO-2026-00003",
+      "WO-2026-00051",
+      "WO-2026-00063",
+      "WO-2026-00008"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [
+      "shortages: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)",
+      "automation_failures: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)"
+    ],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "dea9f908-ee29-41a8-a9d9-93bd531fffea",
+    "run_id": "7ba79ece24c5"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 29.9,
+  "steps": 4,
+  "tokens": {
+    "prompt": 25289,
+    "completion": 1091,
+    "total": 26380
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "bottleneck_lanes_reported"
+}

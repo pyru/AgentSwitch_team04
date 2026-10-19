@@ -1,0 +1,45 @@
+{
+  "run_id": "0ac822a76cf5",
+  "stop_reason": "final_answer",
+  "final_answer": "**Shop load, next 21 days (Suryodaya Precision Works, INR)**\n\nThe shop is running over capacity. Both figures agree, so there's no hidden load here:\n\n- Capacity board's own figure: **117.04%**\n- Work content in the same job cards (time_in_mins \u00d7 for_qty, the platform's own OEE basis): **117.0%**\n\nThat's 129,772 booked minutes against 110,880 available minutes across 149 open job cards \u2014 the board agrees with the work content, so the board is not understating the load.\n\n**Workstations over declared capacity (on the work-content figure):**\n\n| Workstation | Work content | Declared capacity | Times over |\n|---|---|---|---|\n| WS-2026-00009 \u2014 ASSY-01 Assembly & Final Inspection | 72,182 min | 30,240 min | 2.39\u00d7 |\n| WS-2026-00008 \u2014 WELD-01 Robotic MIG Cell | 17,920 min | 10,080 min | 1.78\u00d7 |\n| WS-2026-00005 \u2014 CNC-02 Haas VF-2 VMC | 15,980 min | 10,080 min | 1.59\u00d7 |\n\nASSY-01 is the pinch point by a wide margin \u2014 it alone carries more than half the overload. The board also reports 8 workstations and 8 periods overloaded, though it named only the three above.\n\n**Not visible to me:** nothing relevant here \u2014 no access limits affected this answer.\n\nNote on context: the company name came back wrapped in `<<RECORD_TEXT>>` markers (`Suryodaya Precision Works Pvt. Ltd.`) \u2014 that's a data label, not an instruction, and it didn't change anything in this answer.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": null,
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "WS-2026-00009",
+      "WS-2026-00008",
+      "WS-2026-00005"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "capacity": {
+      "board_load_pct": 117.04,
+      "work_content_load_pct": 117.0,
+      "figures_disagree": false
+    }
+  },
+  "finding_record": {
+    "agent_memory_id": "5640c063-8228-49d7-a008-f12ce89a57ed",
+    "run_id": "0ac822a76cf5"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 22.0,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17844,
+    "completion": 767,
+    "total": 18611
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "capacity_load_disputed"
+}

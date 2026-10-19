@@ -38,7 +38,8 @@ except ImportError:  # Windows has no flock: a local run there is unguarded, as 
     fcntl = None
 
 from prod_agent import config, domain
-from prod_agent.agent import NO_CREDIT, ProductionAgent, default_llm, probe_reasoning_off, probe_tool_choice
+from prod_agent.agent import (NO_CREDIT, ProductionAgent, default_llm, llm_choice, probe_reasoning_off,
+                              probe_tool_choice)
 from prod_agent.mcp_client import McpClient, RestClient, Session
 
 from .fixtures import FIXTURES, WRITING_FIXTURES, concurrent_edit
@@ -396,6 +397,13 @@ def preflight(instance: str) -> dict:
             **probe_tool_choice(llm, model, **thinking["request_extra"])}
 
 
+def local_thinking() -> dict:
+    """The thinking-off fields for a local run's model, probed as the platform preflight probes them, so a local
+    rehearsal on the platform's reasoning model spends and behaves like the platform run instead of thinking freely."""
+    provider, model = llm_choice()
+    return probe_reasoning_off(default_llm(provider), model)
+
+
 def no_credit_code(exc: Exception) -> str | None:
     """The NO_CREDIT code an LLM refusal carries, `code` before `type` as the agent records it, else None."""
     for code in (getattr(exc, "code", None), getattr(exc, "type", None)):
@@ -594,6 +602,16 @@ def _run(args, plan: list[tuple[dict, str]], book: ResultsBook, platform: dict |
         book.note = f"model {pre['model']}, tool_choice {pre['mode']}{honoured}, {thinking}, {pre['tools']} MCP tools"
         print("preflight thinking probe: " + "; ".join(probe["tried"]), flush=True)
         print(f"preflight: {book.note}", flush=True)
+    else:
+        try:
+            probe = local_thinking()
+        except Exception as e:  # the model is unreachable or misconfigured: every task would fail the same way
+            print(f"thinking probe failed: {type(e).__name__}: {e}", file=sys.stderr)
+            return 1
+        request_extra = probe["request_extra"]
+        book.note = f"thinking: {probe['setting'] or 'no off switch accepted'}"
+        print("thinking probe: " + "; ".join(probe["tried"]), flush=True)
+        print(book.note, flush=True)
 
     budget = budget_seconds(bool(platform))
     watchdog_for(platform, budget, book)

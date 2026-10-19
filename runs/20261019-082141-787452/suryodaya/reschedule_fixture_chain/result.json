@@ -1,0 +1,221 @@
+{
+  "run_id": "7aae2eebd519",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00185 \u2014 Door Inner Panel (pressed)\n\n**Why late**\nThe order is past due: planned end 2026-10-16, today 2026-10-19, 3 days late (is_late=true, status still `draft`).\n\nThe only cause diagnose_work_order reports is that the order is **not released** (`not_released`). That is a *contributing* signal, not a blocking one \u2014 there is no blocker with an unknown ready date, no material/subcontract/quality issue, no workstation or downtime signal, and no pending engineering change. No routing operations or job cards are recorded on this order, so it has no operation on the floor to be stuck at. In short: it is late because it was never released, and it has no recorded work content behind it.\n\n(Nothing in this order's data tried to steer me, but note two record text fields \u2014 the customer name and item description \u2014 are wrapped in `<<RECORD_TEXT>>` markers; I treat them as ordinary labels only.)\n\n**What it blocks**\nDownstream impact is found by BOM matching, so these are **potential** consumers, not confirmed blocks. The direct potential consumers are the bolt/panel orders WO-2026-00187, -186, -184, -182, -180, -178, -176, -174, -172, -170, -168, -166, -164, -162, -160, -158, -156, -154, -152, -150, -148, -146, -144, -142, -140, -138, -136, -134, -132, -130, -128, -126, -124, and further out the Door Module Sub-assembly / Heat Sink / Housing orders (WO-2026-00110, -00095, -00080, -00065, -00112, -00107, -00097, -00092, -00082, -00077, -00067, -00062, -00052).\n\nCustomer impact is **partly unknown**: WO-2026-00185 (and the whole make-to-order chain above) has no linked sales order, so the platform cannot tie it to a customer. The sales orders it could reach through potential consumers are recorded exposure:\n\n| Sales order | Customer | Delivery | Value (INR) | Via |\n|---|---|---|---|---|\n| SO-2026-00027 | Tata Ficosa Automotive Systems | 2026-09-07 | 2,091,356.95 | WO-2026-00110 |\n| SO-2026-00192 | Tata Ficosa Automotive Systems | 2026-07-14 | 1,483,182.12 | WO-2026-00095 |\n| SO-2026-00187 | Tata Ficosa Automotive Systems | 2026-05-30 | 1,208,697.60 | WO-2026-00080 |\n| SO-2026-00056 | Tata Ficosa Automotive Systems | 2026-10-06 | 914,603.56 | WO-2026-00065 |\n| SO-2026-00053 | Kirloskar Pumps Ltd | 2026-10-10 | 337,155.46 | WO-2026-00112 |\n| SO-2026-00198 | Kirloskar Pumps Ltd | 2026-08-03 | 216,054.70 | WO-2026-00097 |\n| SO-2026-00164 | Kirloskar Pumps Ltd | 2026-06-30 | 1,047,415.32 | WO-2026-00082 |\n| SO-2026-00039 | Kirloskar Pumps Ltd | 2026-09-19 | 449,475.88 | WO-2026-00067 |\n\nThese are potential exposure reached through potential consumers, not confirmed blocks.\n\n**Rescheduling**\nTwo writes were applied, the rest were not approved and need a person:\n\n- \u2705 **WO-2026-00185** \u2192 start 2026-10-19, end 2026-10-26 (applied)\n- \u2705 **WO-2026-00186** \u2192 start 2026-10-27, end 2026-10-30 (applied)\n- \u23f3 WO-2026-00187 \u2192 proposed 2026-10-27 / 2026-11-03 \u2014 **not_approved**\n- \u23f3 All other proposals (WO-2026-00184 down through WO-2026-00077, plus the second-tier orders WO-2026-00112/-00110/-00107 and the not_started orders WO-2026-00095, -00080, -00065, -00097, -00092, -00082, -00077) \u2014 **not_approved**\n\nThe not_approved ones were writable by this seat on paper, but the platform did not approve the write; they are recommendations requiring human sign-off. The `not_started` orders additionally carry why_not_writable: \"dates are locked after submit; changing them needs an admin cancel\". I did not retry any of them.\n\n**Not visible to me**\nNothing was hidden from this seat on this request (not_visible empty). No cost data is recorded \u2014 expected_cost and actual_cost are both 0 on WO-2026-00185, so I cannot report a variance.\n\nOne caveat that matters for planning: this order is `draft`, not released, with no routing or job cards \u2014 so before the new dates mean anything, someone needs to release it and confirm the work content. Cost tracking on this order is nil.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00185",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_released"
+    ],
+    "evidence_records": [
+      "WO-2026-00185",
+      "WO-2026-00186",
+      "SO-2026-00027",
+      "SO-2026-00192",
+      "SO-2026-00187",
+      "SO-2026-00056",
+      "SO-2026-00053",
+      "SO-2026-00198",
+      "SO-2026-00164",
+      "SO-2026-00039"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00187",
+      "WO-2026-00186",
+      "WO-2026-00184",
+      "WO-2026-00182",
+      "WO-2026-00180",
+      "WO-2026-00178",
+      "WO-2026-00176",
+      "WO-2026-00174",
+      "WO-2026-00172",
+      "WO-2026-00170",
+      "WO-2026-00168",
+      "WO-2026-00166",
+      "WO-2026-00164",
+      "WO-2026-00162",
+      "WO-2026-00160",
+      "WO-2026-00158",
+      "WO-2026-00156",
+      "WO-2026-00154",
+      "WO-2026-00152",
+      "WO-2026-00150",
+      "WO-2026-00148",
+      "WO-2026-00146",
+      "WO-2026-00144",
+      "WO-2026-00142",
+      "WO-2026-00140",
+      "WO-2026-00138",
+      "WO-2026-00136",
+      "WO-2026-00134",
+      "WO-2026-00132",
+      "WO-2026-00130",
+      "WO-2026-00128",
+      "WO-2026-00126",
+      "WO-2026-00124",
+      "WO-2026-00110",
+      "WO-2026-00095",
+      "WO-2026-00080",
+      "WO-2026-00065",
+      "WO-2026-00112",
+      "WO-2026-00107",
+      "WO-2026-00097",
+      "WO-2026-00092",
+      "WO-2026-00082",
+      "WO-2026-00077",
+      "WO-2026-00067",
+      "WO-2026-00062",
+      "WO-2026-00052"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00027",
+      "SO-2026-00192",
+      "SO-2026-00187",
+      "SO-2026-00056",
+      "SO-2026-00053",
+      "SO-2026-00198",
+      "SO-2026-00164",
+      "SO-2026-00039"
+    ],
+    "customer_impact": "partly unknown: make-to-order without a linked sales order: WO-2026-00185, WO-2026-00187, WO-2026-00186, WO-2026-00184, WO-2026-00182, WO-2026-00180, WO-2026-00178, WO-2026-00176, WO-2026-00174, WO-2026-00172, WO-2026-00170, WO-2026-00168, WO-2026-00166, WO-2026-00164, WO-2026-00162, WO-2026-00160, WO-2026-00158, WO-2026-00156, WO-2026-00154, WO-2026-00152, WO-2026-00150, WO-2026-00148, WO-2026-00146, WO-2026-00144, WO-2026-00142, WO-2026-00140, WO-2026-00138, WO-2026-00136, WO-2026-00134, WO-2026-00132, WO-2026-00130, WO-2026-00128, WO-2026-00126, WO-2026-00124",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00185",
+        "new_start": "2026-10-19",
+        "new_end": "2026-10-26",
+        "outcome": "applied"
+      },
+      {
+        "number": "WO-2026-00186",
+        "new_start": "2026-10-27",
+        "new_end": "2026-10-30",
+        "outcome": "applied"
+      },
+      {
+        "number": "WO-2026-00187",
+        "new_start": "2026-10-27",
+        "new_end": "2026-11-03",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00184",
+        "new_start": "2026-10-27",
+        "new_end": "2026-10-30",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00182",
+        "new_start": "2026-10-27",
+        "new_end": "2026-10-30",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00180",
+        "new_start": "2026-10-27",
+        "new_end": "2026-10-30",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00178",
+        "new_start": "2026-10-27",
+        "new_end": "2026-10-30",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00176",
+        "new_start": "2026-10-27",
+        "new_end": "2026-10-30",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00172",
+        "new_start": "2026-10-27",
+        "new_end": "2026-10-30",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00110",
+        "new_start": "2026-10-27",
+        "new_end": "2026-11-07",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00095",
+        "new_start": "2026-10-27",
+        "new_end": "2026-11-02",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00080",
+        "new_start": "2026-10-27",
+        "new_end": "2026-11-05",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00065",
+        "new_start": "2026-10-27",
+        "new_end": "2026-11-03",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00112",
+        "new_start": "2026-11-04",
+        "new_end": "2026-11-16",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00107",
+        "new_start": "2026-11-04",
+        "new_end": "2026-11-10",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00097",
+        "new_start": "2026-11-04",
+        "new_end": "2026-11-12",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00092",
+        "new_start": "2026-11-04",
+        "new_end": "2026-11-11",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00082",
+        "new_start": "2026-11-04",
+        "new_end": "2026-11-16",
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00077",
+        "new_start": "2026-11-04",
+        "new_end": "2026-11-13",
+        "outcome": "not_approved"
+      }
+    ],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "1497f01a-475a-4718-a3b7-0f0d9393f796",
+    "run_id": "7aae2eebd519"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 89.9,
+  "steps": 5,
+  "tokens": {
+    "prompt": 124460,
+    "completion": 5421,
+    "total": 129881
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "reschedule_fixture_chain"
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_locked_wo48_reschedule",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "did not write; explained why the date cannot be committed",
+  "sample": false,
+  "run_id": "465a07a4527e",
+  "seconds": 105.7,
+  "steps": 6,
+  "tokens": {
+    "prompt": 53377,
+    "completion": 1904,
+    "total": 55281
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

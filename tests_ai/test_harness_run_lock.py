@@ -74,6 +74,7 @@ def test_a_second_hold_is_refused_until_the_first_lets_go(lock_path):
 
 def _main(monkeypatch, tmp_path, *argv):
     ran = []
+    monkeypatch.setattr(runner, "local_thinking", lambda: {"setting": None, "request_extra": {}, "tried": []})  # no model call offline
     monkeypatch.setattr(runner, "load_tasks", lambda include_samples: [{"id": "refuse_x", "instances": ["suryodaya"]}])
     monkeypatch.setattr(runner, "run_one", lambda task, instance, root, **kw: ran.append(task["id"]) or {
         "task_id": task["id"], "instance": instance, "verdict": "approve", "reason": "ok", "sample": False,

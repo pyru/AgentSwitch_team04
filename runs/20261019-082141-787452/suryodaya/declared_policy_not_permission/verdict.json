@@ -1,0 +1,17 @@
+{
+  "task_id": "declared_policy_not_permission",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "declared policy read and reported; 3 declared-denied entities this seat can read were not claimed as its own limits",
+  "sample": false,
+  "run_id": "145241841ba7",
+  "seconds": 25.6,
+  "steps": 4,
+  "tokens": {
+    "prompt": 25058,
+    "completion": 954,
+    "total": 26012
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

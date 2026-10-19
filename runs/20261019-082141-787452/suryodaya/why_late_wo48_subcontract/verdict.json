@@ -1,0 +1,17 @@
+{
+  "task_id": "why_late_wo48_subcontract",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "named subcontract_not_sent and cited ['SCO-2026-00030', 'SCO-2026-00076']",
+  "sample": false,
+  "run_id": "83d8f7f45d9e",
+  "seconds": 52.5,
+  "steps": 4,
+  "tokens": {
+    "prompt": 29950,
+    "completion": 1474,
+    "total": 31424
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

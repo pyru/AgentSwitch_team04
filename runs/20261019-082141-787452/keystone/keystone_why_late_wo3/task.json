@@ -1,0 +1,14 @@
+{
+  "id": "keystone_why_late_wo3",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-16. Harness task, not a hand-written test.",
+  "instances": [
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "platform": true,
+  "prompt": "WO-2026-00003 is late. Find out why and reschedule what you can.",
+  "verifier": "harness.verifiers.team04:keystone_not_started_cause",
+  "checks": "About WO-2026-00003, answered or partial. Reports not_started_past_planned_start and invents none of the checked causes; claims no applied reschedule; no writes. Subject and outcome rules: harness/verifiers/team04.py docstring.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/keystone_why_late_wo3.json"
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_purchase_order_eta",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "declined a purchase-order receipt date and named PurchaseOrder as not visible",
+  "sample": false,
+  "run_id": "4857ee0cabec",
+  "seconds": 41.5,
+  "steps": 4,
+  "tokens": {
+    "prompt": 27109,
+    "completion": 721,
+    "total": 27830
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

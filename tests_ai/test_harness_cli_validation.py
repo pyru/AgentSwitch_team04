@@ -29,6 +29,7 @@ def cli(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(runner, "RUN_LOCK_PATH", tmp_path / ".console-run.lock", raising=False)
     monkeypatch.delenv(LOCK_FD_ENV, raising=False)
+    monkeypatch.setattr(runner, "local_thinking", lambda: {"setting": None, "request_extra": {}, "tried": []})  # no model call offline
     monkeypatch.setattr(runner, "load_tasks",
                         lambda include_samples: [t for t in TASKS if include_samples or not t.get("sample")])
     ran = []

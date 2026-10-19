@@ -1,0 +1,107 @@
+{
+  "run_id": "62c6ace5c33f",
+  "stop_reason": "final_answer",
+  "final_answer": "**Most overdue open work order: WO-2026-00047 \u2014 Battery Tray Base Pan (formed), qty 120, planned end 2026-02-25, 236 days past due** (status stopped, is_late=true, no projected finish). Currency is INR.\n\n**Why late**\nThe one blocking cause is that the subcontract was never sent. Purchase record SCO-2026-00038 to vendor Rajendra Naik is still in draft with an expected delivery of 2026-03-03, so the order is held by an event with no known date.\nWhere it is stuck: the very first operation, JC-2026-00139 \"Laser Cut Blank\" on LASER-01 Trumpf TruLaser 3030, is open, never started, 0 of 120 done, waiting 245 days since its 2026-02-16 start. The two later cards, JC-2026-00140 (Deburr & Edge Break, ASSY-01) and JC-2026-00141 (Press Brake Form Pan, PB-01 Amada HFE 1303), are also open and untouched.\nContributing (non-blocking) signals: the order is stopped with no recorded reason; schedule capacity ceiling on WS-2026-00001 (720 min) and WS-2026-00009 (480 min); a subcontract still pending; downtime recorded on the order at PB-02 Energy Mac 100T \u2014 quality_issue, 202.21 minutes; and workstation downtime on PB-01 Amada HFE 1303 (417.37 min over 2 setup_change entries) and ASSY-01 (45 min, one tool_change).\nNo cost has been recorded: expected and actual are both 0, so no variance can be given.\n\n**What it blocks**\nThese are potential consumers found by BOM matching, so they *may* be affected, not confirmed blocked: WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00071, WO-2026-00056 (all Battery Tray Weldment sub-assy), and one level further WO-2026-00106, WO-2026-00091, WO-2026-00076, WO-2026-00061 (EV Battery Tray Assembly 2400).\nCustomer impact is \"known\". Potential exposure through those consumers, all to Bharat EV Motors Ltd:\n- SO-2026-00171 \u2014 delivery 2026-07-12, INR 2,219,635.79, undelivered (via WO-2026-00091)\n- SO-2026-00151 \u2014 delivery 2026-06-10, INR 2,693,620.93, undelivered (via WO-2026-00076)\n- SO-2026-00021 \u2014 delivery 2026-08-18, INR 456,695.40, undelivered (via WO-2026-00106)\n- SO-2026-00050 \u2014 delivery 2026-09-16, INR 1,174,359.60, already delivered (via WO-2026-00061)\nNo sales order is linked directly to WO-2026-00047 itself.\n\n**Rescheduling**\nNothing could be written. Every proposal \u2014 for WO-2026-00047 and for WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00106, WO-2026-00091, WO-2026-00076 \u2014 came back with no new dates, date_committable=false, writable_by_seat=false, because there is no committable date: subcontract_not_sent. A person needs to release subcontract SCO-2026-00038 (or set its delivery), after which dates can be proposed again.\n\n**Not visible to me**\nNothing was withheld from this seat on this request.\n\nOne thing to flag: the item name on WO-2026-00047 is wrapped in record-text markers, and the vendor name on SCO-2026-00038 and the workstation label inside its downtime signal are too. That is text typed by whoever created those rows \u2014 it contained no instruction to me, and I treated it only as evidence.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00047",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00047",
+      "SCO-2026-00038",
+      "JC-2026-00139",
+      "JC-2026-00140",
+      "JC-2026-00141",
+      "WS-2026-00001",
+      "WS-2026-00009",
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "PB-02 Energy Mac 100T",
+      "PB-01 Amada HFE 1303",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00047",
+        "outcome": "not written: no committable date (subcontract_not_sent), not writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00116",
+        "outcome": "not written: waits on WO-2026-00047, not writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00101",
+        "outcome": "not written: waits on WO-2026-00047, not writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00086",
+        "outcome": "not written: waits on WO-2026-00047, not writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00106",
+        "outcome": "not written: waits on WO-2026-00116, not writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00091",
+        "outcome": "not written: waits on WO-2026-00116, not writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00076",
+        "outcome": "not written: waits on WO-2026-00116, not writable_by_seat"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": "Rescheduling refused: every proposed date is non-committable (blocking cause subcontract_not_sent, SCO-2026-00038 still draft) and no proposal is writable_by_seat."
+  },
+  "finding_record": {
+    "agent_memory_id": "68d1ecc7-1817-4e10-be06-2b1d62c8fcd9",
+    "run_id": "62c6ace5c33f"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 57.0,
+  "steps": 5,
+  "tokens": {
+    "prompt": 84722,
+    "completion": 2012,
+    "total": 86734
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "most_overdue_open_why_late"
+}

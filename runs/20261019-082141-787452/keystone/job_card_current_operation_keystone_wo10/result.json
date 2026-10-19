@@ -1,0 +1,58 @@
+{
+  "run_id": "76375122b397",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00010 \u2014 Tillage Toolbar Mounting Plate, 22in (qty 100) \u2014 confirmed late: 58 days past due**\n\n**Why late / where it is stuck**\n\nThe order hasn't started. It is stuck at the very first operation:\n\n- **JC-2026-00035 \u2014 Laser Cut \u2014 LASER-01 (6kW Fiber Laser)**: status open, started_at is null, completed_qty 0 of 100. Planned to run 2026-07-25 \u2192 2026-08-22; it has been waiting **86 days** without starting.\n- Every downstream operation is also unstarted and sitting on the same old plan: JC-2026-00036 Form/Brake (BRAKE-02), JC-2026-00037 Robotic Weld (WELD-03), JC-2026-00038 Powder Coat (COAT-06).\n\nNothing here is a hard blocker (no material request open, no subcontract, no quality hold, no unverified stock) \u2014 the causes are contributory:\n\n- `operation_not_started` on JC-2026-00035 \u2014 the primary symptom: 86 days of no start at the laser.\n- `schedule_predecessor_operation` \u2014 WS-2026-00002, WS-2026-00003, WS-2026-00006: successor operations are waiting on the unstarted first pass.\n- Recorded downtime on the route workstations since 2026-07-21: WELD-03 1,320 min (2 breakdown, 2 tool change, 2 material shortage), BRAKE-02 480 min (2 operator unavailable), COAT-06 300 min (2 setup change), LASER-01 210 min (1 material shortage, 1 quality issue).\n\nSo: the floor never released the job to LASER-01. There is no recorded ready date for that operation. The schedule projects finish 2026-10-24 \u2014 **63 days late** against the planned end of 2026-08-22.\n\n**What it blocks**\n\n- **SO-2026-00001 \u2014 Cardinal Tillage Works**, delivery date 2026-07-24, value **USD 320,011.20**, undelivered \u2014 linked directly on this work order (recorded exposure, not a potential one).\n- No other work orders consume this item's output (BOM walk found no potential consumers).\n\n**Costs**\n\nexpected_cost and actual_cost are both 0 on the work order \u2014 no cost has been recorded, so no variance can be computed.\n\n**Rescheduling**\n\nNot proposed here \u2014 if you want new dates I'll run propose_reschedule to see which of the order and its dependants this seat can actually write.\n\n**Not visible to me**\n\nNothing was withheld \u2014 all records needed for this diagnosis were visible.\n\nOne note for the planner: several fields in this book carry `<<RECORD_TEXT>>` wrappers (e.g. the customer name \"Cardinal Tillage Works\", the item name, and the workstation labels). That is just stored row text, not instructions \u2014 I've treated it as data only.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00010",
+    "is_late": true,
+    "currency": "USD",
+    "cost": null,
+    "blocking_causes": [],
+    "contributing_causes": [
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00010",
+      "JC-2026-00035",
+      "JC-2026-00036",
+      "JC-2026-00037",
+      "JC-2026-00038",
+      "WS-2026-00002",
+      "WS-2026-00003",
+      "WS-2026-00006",
+      "SO-2026-00001",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00001"
+    ],
+    "rescheduled": [],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "5e33f6d4-225a-4fa0-8241-4bb67044a398",
+    "run_id": "76375122b397"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 57.1,
+  "steps": 4,
+  "tokens": {
+    "prompt": 28475,
+    "completion": 1206,
+    "total": 29681
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "job_card_current_operation_keystone_wo10"
+}

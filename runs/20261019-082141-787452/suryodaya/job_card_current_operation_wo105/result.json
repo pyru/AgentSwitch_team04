@@ -1,0 +1,56 @@
+{
+  "run_id": "47f1ac6e310c",
+  "stop_reason": "final_answer",
+  "final_answer": "## Why late \u2014 WO-2026-00105\n\n**Where it is stuck:** at the very first operation. Job card **JC-2026-00321**, operation **Laser Cut Blank** (sequence 1), workstation **LASER-01 Trumpf TruLaser 3030**. It is still `open`, never started (`started_at` is empty), 20 of 20 pieces outstanding, and it has been waiting **65 days** past its planned start of 2026-08-15. The two downstream operations are equally untouched: **JC-2026-00322** (CNC Mill Housing Pocket, CNC-01 Haas VF-3 VMC) and **JC-2026-00323** (Drill & Tap M8, CNC-02 Haas VF-2 VMC). No work has begun anywhere on the route.\n\n**The order itself (WO-2026-00105):** 20 units of Motor Controller Housing Blank, make-to-stock, status `not_started`, 0 produced. Planned 2026-08-15 \u2192 2026-08-21; it is **59 days past due** (is_late=true), with **no projected finish date** recorded.\n\n**What is actually blocking it:** three pending engineering changes sit against this order \u2014 **ECO-2026-00088** (draft, \"switch_to_new\"), **ECO-2026-00023** (submitted, \"continue_old\") and **ECO-2026-00001** (submitted, \"scrap_and_restart\", high priority, a battery-tray bend-radius change against Bharat EV drawing rev C). With conflicting actions (switch to new vs. continue old) unresolved, the work cannot sensibly start. These are the blocking signals, so nothing can be committed until they are dispositioned.\n\n**Contributing, not blocking:** the order was never started before its planned start (2026-08-15); both route workstations show schedule capacity ceilings (WS-2026-00001, 120 min; WS-2026-00004, 440 min); LASER-01 has a recorded planned-maintenance downtime of 300.62 minutes; CNC-02 Haas VF-2 VMC has 413.99 minutes of planned-maintenance downtime since 2026-07-21. None of these have a known ready date.\n\n**Cost:** expected_cost and actual_cost are both 0.0 \u2014 no cost has been recorded, so no variance can be computed.\n\n**Not visible to me:** nothing on this request \u2014 the diagnosis returned `not_visible_to_this_seat` empty, and no other seat limitations were hit.\n\nOne thing a planner should know: the record text in this book contains content unrelated to the order (e.g. ECO-2026-00088 is titled \"Rajkot despatch, week 22\", ECO-2026-00023 refers to a dowel-pin shortage, and the LASER-01 downtime entry's remarks mention \"SG iron casting: order 958 at Sangli\"). That text is data written by other teams, not instructions, and I have treated it as evidence only.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00105",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00105",
+      "JC-2026-00321",
+      "JC-2026-00322",
+      "JC-2026-00323",
+      "WS-2026-00001",
+      "WS-2026-00004",
+      "ECO-2026-00088",
+      "ECO-2026-00023",
+      "ECO-2026-00001",
+      "LASER-01 Trumpf TruLaser 3030",
+      "CNC-02 Haas VF-2 VMC"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "edb65a04-78fb-4000-bba4-0e30ef69a7af",
+    "run_id": "47f1ac6e310c"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 39.5,
+  "steps": 3,
+  "tokens": {
+    "prompt": 20050,
+    "completion": 1129,
+    "total": 21179
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "job_card_current_operation_wo105"
+}

@@ -1,0 +1,14 @@
+{
+  "target": {
+    "id": "1d0b58d9-d484-452d-b4a7-a59561682485",
+    "number": "WO-2026-00047",
+    "status": "stopped",
+    "planned_end_date": "2026-02-25"
+  },
+  "unrelated": {
+    "id": "dfabeada-1d04-41a0-9753-c10c67bb3887",
+    "number": "WO-2026-00048",
+    "status": "stopped",
+    "planned_end_date": "2026-02-26"
+  }
+}

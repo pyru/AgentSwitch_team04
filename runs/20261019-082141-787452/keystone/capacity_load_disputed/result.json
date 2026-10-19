@@ -1,0 +1,45 @@
+{
+  "run_id": "0f27b5bf55b3",
+  "stop_reason": "final_answer",
+  "final_answer": "# Shop load, next 21 days (Keystone Precision Works LLC, USD)\n\n**Overall load: ~88.5%.** Both figures agree, so there is no hidden overload in the numbers:\n- Capacity board figure: **88.51%**\n- Work content in the same job cards (sum of JobCard.time_in_mins \u00d7 for_qty, the platform's own OEE basis): **88.5%**\n\n66 open job cards, 53,532 minutes of work against 60,480 available minutes. `board_understates_load` is false \u2014 the board agrees with the work content.\n\n**Workstations over their declared capacity** (measured on the work-content figure \u2014 the same, agreeing basis; the board also flags 4 overloaded workstations across 4 periods, so it does show these):\n\n| Workstation | Name | Work content | Declared capacity | Times over |\n|---|---|---|---|---|\n| WS-2026-00003 | WELD-03 \u2014 Robotic MIG Cell | 19,260 min | 10,080 min | 1.91\u00d7 |\n| WS-2026-00002 | BRAKE-02 \u2014 175-ton Press Brake | 14,940 min | 10,080 min | 1.48\u00d7 |\n| WS-2026-00001 | LASER-01 \u2014 6kW Fiber Laser | 12,060 min | 10,080 min | 1.20\u00d7 |\n\nSo the shop is not evenly loaded: overall it looks like it fits, but those three workstations are individually over capacity \u2014 WELD-03 is carrying nearly double its declared window, and that is where a three-week plan will slip first.\n\n**Not visible to me:** nothing was refused for this question \u2014 all figures above came from the capacity tool.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": null,
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "WS-2026-00003",
+      "WS-2026-00002",
+      "WS-2026-00001"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "capacity": {
+      "board_load_pct": 88.51,
+      "work_content_load_pct": 88.5,
+      "figures_disagree": false
+    }
+  },
+  "finding_record": {
+    "agent_memory_id": "e8848cbb-0ccd-4243-bfb4-570407fba4ee",
+    "run_id": "0f27b5bf55b3"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 21.2,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17859,
+    "completion": 763,
+    "total": 18622
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "capacity_load_disputed"
+}

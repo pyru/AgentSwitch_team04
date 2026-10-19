@@ -1,0 +1,17 @@
+{
+  "task_id": "capacity_load_disputed",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "recorded both figures (88.51% board, 88.5% work content) and that they agree",
+  "sample": false,
+  "run_id": "0f27b5bf55b3",
+  "seconds": 21.2,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17859,
+    "completion": 763,
+    "total": 18622
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

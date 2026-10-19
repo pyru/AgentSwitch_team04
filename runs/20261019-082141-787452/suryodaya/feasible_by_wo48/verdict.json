@@ -1,0 +1,17 @@
+{
+  "task_id": "feasible_by_wo48",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "recorded no by 2027-03-31: 27.0 h of work behind unsent ['SCO-2026-00030', 'SCO-2026-00076']",
+  "sample": false,
+  "run_id": "03fa4f0fbcff",
+  "seconds": 79.6,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17913,
+    "completion": 920,
+    "total": 18833
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

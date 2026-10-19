@@ -1,0 +1,17 @@
+{
+  "task_id": "complex_order_by_item_name",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "resolved the item to WO-2026-00003; causes match DB",
+  "sample": false,
+  "run_id": "3391613dc0c2",
+  "seconds": 49.4,
+  "steps": 5,
+  "tokens": {
+    "prompt": 37322,
+    "completion": 1226,
+    "total": 38548
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

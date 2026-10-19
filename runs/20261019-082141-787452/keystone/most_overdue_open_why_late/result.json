@@ -1,0 +1,61 @@
+{
+  "run_id": "52b08e83d43a",
+  "stop_reason": "final_answer",
+  "final_answer": "**Most overdue open WO: WO-2026-00004** \u2014 Grain Cart Ladder Guard Weldment, qty 80, planned end 2026-08-15, **65 days past due** (today is 2026-10-19), status *not_started*, 0 produced.\n\n## Why late\nIt is late (record: `is_late=true`), but **nothing is a hard blocker** \u2014 no signal has a \"no known ready date\" block. The schedule can't project a finish date for it (projected_finish is null). What is holding it:\n\n- **Never started.** First operation is JC-2026-00013, *Laser Cut*, on LASER-01 \u2014 6kW Fiber Laser; planned start 2026-06-12, waiting 129 days, not started. The other three cards are also open at 0 done: JC-2026-00014 Form/Brake (BRAKE-02), JC-2026-00015 Robotic Weld (WELD-03), JC-2026-00016 Powder Coat (COAT-06).\n- **Capacity ceiling** on routing workstation WS-2026-00001 (720 minutes).\n- **Recorded downtime since 2026-07-21** on its route: WELD-03 1,320 min (6 entries: 2 breakdown, 2 tool change, 2 material shortage); BRAKE-02 480 min (2 operator unavailable); COAT-06 300 min (2 setup change); LASER-01 210 min (1 material shortage, 1 quality issue).\n- No cost has been recorded (expected and actual both 0), so no variance to report.\n\n## What it blocks\n- **Recorded exposure:** sales order **SO-2026-00003**, customer **Tri-State Farm Equipment**, delivery date 2026-06-09, value **USD 158,929.52**, undelivered, linked directly to WO-2026-00004.\n- **Downstream work orders:** none found via BOM matching \u2014 no other open work order may be affected.\n\n## Rescheduling\nI could **not write** a new date. The proposal is WO-2026-00004 new start 2026-10-19 \u2192 new end 2026-12-22, but `writable_by_seat=false`: its status is *not_started*, dates are locked after submit, and changing them needs an admin cancel. That is a recommendation for a person, not a committed date. (This seat has no escalate tool available, so I could not raise it \u2014 a planner or admin needs to action the admin cancel.)\n\n## Not visible to me\nNothing was reported as outside this seat's visibility.\n\nOne thing to flag: the item names and workstation/operation labels in these records came wrapped in `<<RECORD_TEXT>>` markers \u2014 i.e. text typed by whoever created the rows (e.g. the WO-2026-00004 item name, JC-2026-00013's \"Laser Cut\" operation). They read as ordinary data, but you should know those fields are free text from other teams.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00004",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00004",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "WS-2026-00001",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser",
+      "SO-2026-00003"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00004",
+        "outcome": "not written \u2014 writable_by_seat=false; status 'not_started' locks dates, changing them needs an admin cancel. Recommendation only: 2026-10-19 \u2192 2026-12-22, needs a person to apply."
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": "Reschedule could not be written by this seat: the order is 'not_started' and its dates are locked after submit; an admin cancel is required. No escalation tool is available to this seat."
+  },
+  "finding_record": {
+    "agent_memory_id": "0d0fcd8a-136d-4acf-860e-d084b7c41fcf",
+    "run_id": "52b08e83d43a"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 50.0,
+  "steps": 5,
+  "tokens": {
+    "prompt": 52043,
+    "completion": 1415,
+    "total": 53458
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "most_overdue_open_why_late"
+}

@@ -1,0 +1,39 @@
+{
+  "run_id": "a7ca175a76fe",
+  "stop_reason": "final_answer",
+  "final_answer": "**Most breakdown downtime (last 90 days: 2026-07-21 \u2192 2026-10-19)**\n\n- **CNC-04 \u2014 VMC 40-taper (WS-2026-00004): 960 minutes (16 hours)** across 2 breakdown entries \u2014 480 min on 2026-07-23 and 480 min on 2026-08-08. Both were spindle vibration surveys taking the machine out of rotation for a full shift; the toolbar release was moved to CNC-05.\n- Runner-up: **WELD-03 \u2014 Robotic MIG Cell (WS-2026-00003): 720 minutes (12 hours)** across 2 entries (2026-08-02, 2026-08-18), both fixture collisions with torch straightening and TCP re-teach.\n\nSo CNC-04 lost the most, at 960 minutes. Only 4 breakdown entries were recorded in the window in total, so these two workstations account for all of it.\n\nNote: the workstation names in the downtime log are wrapped in record text markers \u2014 that text came from whoever wrote the row; I've treated it as data only.\n\n**Not visible to me:** nothing outstanding for this question (downtime entries and workstations are visible to this seat).",
+  "finding": {
+    "outcome": "answered",
+    "work_order": null,
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "WS-2026-00004",
+      "WS-2026-00003"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "4afd2891-d957-409c-9767-981af8a80960",
+    "run_id": "a7ca175a76fe"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 18.1,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17901,
+    "completion": 606,
+    "total": 18507
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "downtime_breakdown_top_machine"
+}

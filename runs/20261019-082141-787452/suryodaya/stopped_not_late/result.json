@@ -1,0 +1,48 @@
+{
+  "run_id": "72e4b5763ef5",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00122 is not late.** The system says `is_late=false`. Its planned window is 2027-06-08 to 2027-06-12, and today is 2026-10-19 \u2014 so it's roughly eight months *before* its planned end date, not past due. Status is not_started, qty 1, produced 0, priority low, make-to-order for the Pump Mounting Bracket Assembly. No cost has been recorded (expected and actual both 0), so no variance can be computed.\n\n**Why it would be held up (nothing blocking)**\n- No blocking signals at all. Two contributing notes: a schedule capacity ceiling on workstation WS-2026-00009 (9 minutes), and recorded downtime on ASSY-01 Assembly & Final Inspection \u2014 1 entry, 45 minutes, tool_change, since 2026-07-21.\n- The order is sitting at JC-2026-00327, operation Fastener Assembly (seq 1), not yet started. Two more open cards follow: JC-2026-00328 Leak / Torque Test and JC-2026-00329 Final Inspection & CMM.\n\n**What it blocks**\n- Nothing found. No open work order consumes this item via BOM matching, so no potential consumers. The order has no linked sales order (make-to-order without one), so customer impact is **partly unknown** \u2014 the platform can't name a customer for it.\n\n**Rescheduling**\n- Nothing to reschedule. propose_reschedule returned an empty proposal list and no downstream orders to consider, and there are no blocking causes to resolve. No write was made.\n\n**Not visible to me**\n- Nothing was outside this seat's reach; the only gap is the missing sales-order link on WO-2026-00122, which is a data gap in the order itself, not a seat limit.\n\nOne flag for you: several fields on this row (company name, item name, workstation name, customer-impact text) come back wrapped in `<<RECORD_TEXT>>` markers, meaning they were typed by whoever created the records. Nothing in them directed me, but you should know those labels are free text, not platform-generated.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00122",
+    "is_late": false,
+    "currency": "INR",
+    "cost": null,
+    "blocking_causes": [],
+    "contributing_causes": [
+      "schedule_capacity_ceiling",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00122",
+      "JC-2026-00327",
+      "JC-2026-00328",
+      "JC-2026-00329",
+      "WS-2026-00009",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "customer_impact": "partly unknown: make-to-order without a linked sales order: WO-2026-00122",
+    "not_visible": [],
+    "refusal_reason": "The premise is false: WO-2026-00122 is not late (is_late=false, planned end 2027-06-12, today 2026-10-19). No blocking causes, no downstream consumers, and no reschedule proposal exists for it."
+  },
+  "finding_record": {
+    "agent_memory_id": "478d505a-0b1c-4ced-9b8e-04f98485a103",
+    "run_id": "72e4b5763ef5"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 57.1,
+  "steps": 4,
+  "tokens": {
+    "prompt": 27025,
+    "completion": 1077,
+    "total": 28102
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "stopped_not_late"
+}

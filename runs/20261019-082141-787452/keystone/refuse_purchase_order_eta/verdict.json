@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_purchase_order_eta",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "declined a purchase-order receipt date and named PurchaseOrder as not visible",
+  "sample": false,
+  "run_id": "627d41d7af8d",
+  "seconds": 56.0,
+  "steps": 7,
+  "tokens": {
+    "prompt": 67209,
+    "completion": 1552,
+    "total": 68761
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

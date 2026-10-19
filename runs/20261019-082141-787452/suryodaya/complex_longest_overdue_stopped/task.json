@@ -1,0 +1,14 @@
+{
+  "id": "complex_longest_overdue_stopped",
+  "note": "Written with Claude (AI-assisted), 2026-10-07, for the hidden-benchmark preparation. Target chosen at run time by its fixture.",
+  "instances": [
+    "suryodaya",
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "prompt": "Which stopped work order has been overdue the longest, and what is holding it up?",
+  "verifier": "harness.verifiers.team04:longest_overdue_stopped",
+  "checks": "Selection by criteria, no number given: must pick the stopped order with the earliest past-due planned end (matched without regard to case), answer or partial, mark it late, and report the causes the DB proves. Subject and outcome rules: harness/verifiers/team04.py docstring.",
+  "fixture": null,
+  "_path": "harness/tasks/team04/complex_longest_overdue_stopped.json"
+}

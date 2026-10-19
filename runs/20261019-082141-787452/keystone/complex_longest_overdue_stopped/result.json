@@ -1,0 +1,65 @@
+{
+  "run_id": "4c14bce682a3",
+  "stop_reason": "final_answer",
+  "final_answer": "# The longest-overdue stopped order: WO-2026-00009\n\n**WO-2026-00009** \u2014 Combine Header Auger Bracket Assembly, qty 80, status **stopped**, planned end 2026-09-12, **37 days past due** (today 2026-10-19). That is the longest overdue of the two stopped orders on the late list (the other, WO-2026-00075, same item, is 21 days past due).\n\n## Why it's late\n**No blocking cause has a ready date** \u2014 nothing is stopping it with a fixable date, but nothing is moving it either:\n\n- **Stopped with no recorded reason** (WO-2026-00009 itself). The order is halted and no one logged why \u2014 this is the core problem.\n- **Stuck at the first operation.** The current operation is JC-2026-00031, *Laser Cut*, at LASER-01 \u2014 6kW Fiber Laser. It is still open, not started, for the full 80 units, waiting **79 days**. The whole routing (JC-2026-00032 Form/Brake at BRAKE-02, JC-2026-00033 Robotic Weld at WELD-03, JC-2026-00034 Powder Coat at COAT-06) is unstarted, so zero of 80 produced.\n- **Recorded workstation downtime** on the route since 2026-07-21: WELD-03 1,320 min over 6 entries (2 breakdown, 2 tool change, 2 material shortage); BRAKE-02 480 min (2 operator unavailable); COAT-06 300 min (2 setup change); LASER-01 210 min (1 material shortage, 1 quality issue).\n- **Schedule capacity ceilings** recorded on WS-2026-00001/2/3 (480/640/880 min).\n\nNo projected finish date is recorded for this order.\n\n## What it blocks\nA reverse BOM walk found **no open work orders that may be affected** by this one. It does carry a recorded, linked sales order: **SO-2026-00140**, customer **Buckeye AgriPower Inc**, delivery date **2026-08-04**, value **USD 15,985.56** \u2014 recorded exposure (customer impact: known). Note that sales order shows delivered status.\n\n## Rescheduling\nNot writable by me. A proposal exists \u2014 start 2026-10-19, end 2026-11-30 (\"earliest start after known blockers; finish from finite schedule\") \u2014 but it is **writable_by_seat=false**: status 'stopped' locks the dates after submit, so changing them needs an **admin cancel**. That needs a person, not this seat.\n\n## Not visible to me\nNothing on this order is outside my reach. Two things worth flagging to a planner:\n- The row **WO-2026-00009** carries substitute-style record text but no instruction; nothing in the data tried to steer me.\n- The company name field on the context record also came back wrapped in record text \u2014 treated as data only.\n\n**Bottom line:** WO-2026-00009 is the stalest stopped job, but the hold has no logged reason and the order needs an admin to unlock it before any new dates can be written.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00009",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00009",
+      "JC-2026-00031",
+      "JC-2026-00032",
+      "JC-2026-00033",
+      "JC-2026-00034",
+      "WS-2026-00001",
+      "WS-2026-00002",
+      "WS-2026-00003",
+      "SO-2026-00140",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00140"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00009",
+        "new_start": "2026-10-19",
+        "new_end": "2026-11-30",
+        "outcome": "not_writable"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "865d399c-22d7-4485-971a-9fb2f99cffc3",
+    "run_id": "4c14bce682a3"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 54.0,
+  "steps": 5,
+  "tokens": {
+    "prompt": 51643,
+    "completion": 1404,
+    "total": 53047
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "complex_longest_overdue_stopped"
+}

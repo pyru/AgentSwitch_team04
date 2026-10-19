@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_unknown_work_order",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "refused a non-existent work order without inventing detail",
+  "sample": false,
+  "run_id": "817d28df1666",
+  "seconds": 14.8,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17232,
+    "completion": 537,
+    "total": 17769
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

@@ -1,0 +1,85 @@
+{
+  "run_id": "86a792f0ce82",
+  "stop_reason": "final_answer",
+  "final_answer": "**Which stopped order is overdue longest:** WO-2026-00047 \u2014 Battery Tray Base Pan (formed), 120 pcs, planned end 2026-02-25, **236 days past due**. There are exactly 4 stopped work orders (WO-2026-00047/48/49/50, all planned for Feb\u2013Mar 2026); this is the oldest of them.\n\n**Why it is late**\n- **BLOCKING \u2014 subcontract not sent.** Subcontract order **SCO-2026-00038** is still in `draft` status (vendor Rajendra Naik), with an expected delivery date of 2026-03-03 that has long passed. Nothing has been dispatched, so there is no known ready date.\n- **Where it is stuck:** operation 1, *Laser Cut Blank*, job card **JC-2026-00139**, at workstation **LASER-01 Trumpf TruLaser 3030** \u2014 status open, not started, waiting 245 days. The downstream cards JC-2026-00140 (Deburr, ASSY-01) and JC-2026-00141 (Press Brake Form Pan, PB-01) are also open at 0 completed.\n- **Contributing:** the stop has no recorded reason (stopped_without_recorded_reason); schedule capacity ceilings on WS-2026-00001 (720 min) and WS-2026-00009 (480 min); recorded downtime on PB-01 Amada HFE 1303 (417.37 min, 2 setup_change entries since 2026-07-21) and ASSY-01 (45 min, tool_change); a quality-issue downtime entry against PB-02 Energy Mac 100T (202.21 min, 2025-09-20 to 2025-09-27).\n- **Cost:** expected and actual cost are both 0 on WO-2026-00047 \u2014 no cost has been recorded, so no variance can be computed.\n\n**What it blocks (potential)**\nThe Battery Tray Base Pan feeds the Battery Tray Weldment sub-assembly. BOM matching flags these as **may be affected** (potential consumers, not confirmed blocks): WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00071, WO-2026-00056, and one level deeper WO-2026-00106, WO-2026-00091, WO-2026-00076, WO-2026-00061.\n- Sales orders reached through those potential consumers (potential exposure), all for **Bharat EV Motors Ltd**: SO-2026-00021 (Rs 456,695.40, due 2026-08-18), SO-2026-00171 (Rs 2,219,635.79, due 2026-07-12), SO-2026-00151 (Rs 2,693,620.93, due 2026-06-10), SO-2026-00050 (Rs 1,174,359.60, due 2026-09-16, already delivered).\n- The order itself carries no linked sales order (make-to-stock), so there is no directly linked customer exposure on WO-2026-00047.\n\n**Rescheduling:** not requested here; no proposal was run and nothing was written.\n\n**Not visible to me:** nothing \u2014 all records checked were readable by this seat.\n\nOne record note: the item descriptions, vendor name and remarks fields come back wrapped in `<<RECORD_TEXT>>` markers (e.g. the PB-02 downtime remark \"Spring steel strip: line 314 at Aurangabad. Accepted on concession.\"). That is free text typed by whoever created the row, not instructions \u2014 I've treated it purely as evidence.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00047",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00047",
+      "SCO-2026-00038",
+      "JC-2026-00139",
+      "JC-2026-00140",
+      "JC-2026-00141",
+      "WS-2026-00001",
+      "WS-2026-00009",
+      "PB-02 Energy Mac 100T",
+      "PB-01 Amada HFE 1303",
+      "ASSY-01 Assembly & Final Inspection",
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061",
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "rescheduled": [],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "75f78926-8f84-45f8-bb84-5f32f0b5e273",
+    "run_id": "86a792f0ce82"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 56.9,
+  "steps": 5,
+  "tokens": {
+    "prompt": 88380,
+    "completion": 1904,
+    "total": 90284
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "complex_longest_overdue_stopped"
+}

@@ -1,0 +1,70 @@
+{
+  "run_id": "83d8f7f45d9e",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00048 \u2014 Pump Mounting Bracket Assembly (60 units)\nYes, it is late: **is_late = true, 235 days past its planned end (2026-02-26)**; projected finish 2026-10-27, i.e. 243 days late. Status is *stopped*, and 0 of 60 produced.\n\n### Why late\nBlocking causes (no known ready date):\n- **Subcontract not sent** \u2014 SCO-2026-00076 is still *draft* (vendor Supriya Rathi, expected delivery 2026-03-19) and SCO-2026-00030 is still *draft* (Shreeji Powder Coating, expected delivery 2025-08-12). Neither has gone out, so nothing is coming back.\n- **Pending engineering changes** \u2014 ECO-2026-00064 (*under_review*, switch_to_new) and ECO-2026-00012 (*draft*, continue_old) are both still open, so the build configuration is undecided.\n\nContributing: the order was stopped with no recorded reason; three capacity-ceiling hits on WS-2026-00009 (540 and 660 minutes); subcontract-pending and predecessor-operation schedule flags; the first operation not started; and recorded downtime on the order (CNC-02 Haas VF-2 VMC, reason \"other\", 456.41 min, 2025-08-20\u219224) plus 45 min of tool_change downtime on ASSY-01 (since 2026-07-21).\n\nWhere it is stuck: all three job cards are open and unstarted \u2014 **JC-2026-00142 (Fastener Assembly, seq 1)**, JC-2026-00143 (Leak/Torque Test), JC-2026-00144 (Final Inspection & CMM) \u2014 all at workstation ASSY-01, seq 1 waiting 242 days.\n\n### What it blocks\n- Linked recorded exposure: **SO-2026-00092, Kirloskar Pumps Ltd, delivery 2026-03-07, value INR 494,476.64, undelivered** (linked directly via this work order).\n- No potential consumer work orders were found by BOM matching.\n- Customer impact per the tool: **known**.\n- (No cost recorded: expected and actual are both 0, so no variance is computable.)\n\n### Rescheduling\n**Not done \u2014 nothing was written.** propose_reschedule returned a single proposal for WO-2026-00048 with `new_start`/`new_end` **null**, `date_committable = false`, `writable_by_seat = false`, reason *\"blocked by an event with no known date\"* and why_not_writable: `engineering_change_pending, subcontract_not_sent`. There is no date I can commit to while those two subcontracts are unsent and the engineering changes undecided \u2014 a person has to clear them first.\n\n### Not visible to me\nNothing was reported outside this seat's reach for this request; all entities needed (work order, job cards, subcontracts, engineering changes, sales orders, downtime) were readable.\n\nNote on one record: several row fields on this book (including vendor names, item titles and even the company name) arrive wrapped in `<<RECORD_TEXT>>` markers. One such row is the ECO-2026-00064 title, \"Aluminium extrusion shortage on the v-block pair line\". I treated all of it as data only \u2014 nothing in those rows changed what I checked or wrote.",
+  "finding": {
+    "work_order": "WO-2026-00048",
+    "is_late": true,
+    "currency": "INR",
+    "outcome": "partial",
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "ECO-2026-00064",
+      "ECO-2026-00012",
+      "WS-2026-00009",
+      "SO-2026-00092",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00048",
+        "outcome": "not_writable",
+        "new_start": null,
+        "new_end": null
+      }
+    ],
+    "not_visible": [],
+    "customer_impact": "known",
+    "refusal_reason": "No committable date: the order is blocked by an event with no known date (engineering_change_pending ECO-2026-00064 / ECO-2026-00012 and subcontract_not_sent SCO-2026-00076 / SCO-2026-00030), so propose_reschedule returned writable_by_seat=false and no new dates could be written."
+  },
+  "finding_record": {
+    "agent_memory_id": "6c214ba0-af04-4928-8d01-2938617197fe",
+    "run_id": "83d8f7f45d9e"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 52.5,
+  "steps": 4,
+  "tokens": {
+    "prompt": 29950,
+    "completion": 1474,
+    "total": 31424
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "why_late_wo48_subcontract"
+}

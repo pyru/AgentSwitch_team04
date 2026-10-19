@@ -25,6 +25,7 @@ def no_side_effects(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(runner, "RUN_LOCK_PATH", tmp_path / ".console-run.lock", raising=False)
     monkeypatch.delenv(LOCK_FD_ENV, raising=False)
+    monkeypatch.setattr(runner, "local_thinking", lambda: {"setting": None, "request_extra": {}, "tried": []})  # no model call offline
 
 
 def test_runs_dir_puts_the_run_root_and_summary_under_the_given_directory(monkeypatch, tmp_path):

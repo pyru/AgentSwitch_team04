@@ -1,0 +1,17 @@
+{
+  "task_id": "most_overdue_open_why_late",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "picked WO-2026-00047 (due 2026-02-25); causes match DB",
+  "sample": false,
+  "run_id": "62c6ace5c33f",
+  "seconds": 57.0,
+  "steps": 5,
+  "tokens": {
+    "prompt": 84722,
+    "completion": 2012,
+    "total": 86734
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

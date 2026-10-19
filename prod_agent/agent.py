@@ -363,6 +363,20 @@ def default_llm(provider: str):
     return OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1", max_retries=8)
 
 
+def llm_choice(model: str | None = None) -> tuple[str, str]:
+    """The provider and model a run sends its completions to; `model` overrides the configured one."""
+    # The harness runner supplies one OpenAI-compatible model through OPENAI_* and nothing else.
+    provider = "openai" if config.on_platform() else (config.env("LLM_PROVIDER", "openai") or "openai").strip().lower()
+    if provider == "openai":
+        return provider, model or config.env("OPENAI_MODEL", "gpt-4.1")
+    if provider == "openrouter":
+        model = model or config.env("OPENROUTER_MODEL")
+        if not model:
+            raise RuntimeError("Set OPENROUTER_MODEL in .env")
+        return provider, model
+    raise RuntimeError(f"Unknown LLM_PROVIDER {provider!r}; accepted values are openai and openrouter")
+
+
 def _malformed_causes(args: dict) -> list:
     """Cause entries that are not bare signal codes.
 
@@ -454,17 +468,7 @@ class ProductionAgent:
                  clock: Callable[[], float] = time.monotonic, token_budget: int | None = None,
                  request_extra: dict | None = None, require_finding: bool = False):
         self.mcp = mcp
-        # The harness runner supplies one OpenAI-compatible model through OPENAI_* and nothing else.
-        self.provider = "openai" if config.on_platform() else \
-            (config.env("LLM_PROVIDER", "openai") or "openai").strip().lower()
-        if self.provider == "openai":
-            self.model = model or config.env("OPENAI_MODEL", "gpt-4.1")
-        elif self.provider == "openrouter":
-            self.model = model or config.env("OPENROUTER_MODEL")
-            if not self.model:
-                raise RuntimeError("Set OPENROUTER_MODEL in .env")
-        else:
-            raise RuntimeError(f"Unknown LLM_PROVIDER {self.provider!r}; accepted values are openai and openrouter")
+        self.provider, self.model = llm_choice(model)
         self.run_id = run_id or uuid.uuid4().hex[:12]
         self.apply_mode = apply_mode
         self.approve = approve or (lambda proposal: False)
@@ -1456,7 +1460,7 @@ class ProductionAgent:
         self.requested_orders = {_wo_key(m.group(0)) for m in WO_LOOSE.finditer(request)}
         self.trace({"type": "start", "run_id": self.run_id, "instance": self.mcp.session.instance,
                     "provider": self.provider, "model": self.model, "apply_mode": self.apply_mode, "request": request,
-                    "forced_tool_choice": self.forced_tool_choice,
+                    "forced_tool_choice": self.forced_tool_choice, "request_extra": self.request_extra,
                     "seconds_allowed": None if left is None else round(left, 1)})
         final, stop_reason = None, "max_steps"
         llm_error = None

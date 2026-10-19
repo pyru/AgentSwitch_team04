@@ -1,0 +1,36 @@
+{
+  "run_id": "1d7a8e2189e4",
+  "stop_reason": "final_answer",
+  "final_answer": "**Refused \u2014 work order not found.**\n\nWO-2026-09999 does not exist on this instance (Keystone Precision Works LLC, USD). There is no work order with that number or id, so I cannot tell you why it is late, what it blocks, or reschedule it.\n\n**Why late** \u2014 not applicable: the order does not exist.\n**What it blocks** \u2014 not applicable: no such order to trace.\n**Rescheduling** \u2014 not applicable: nothing to reschedule.\n**Not visible to me** \u2014 nothing; this is a \"record not found\", not an access limit.\n\nPlease double-check the work order number. If you have the item being made (for example an FG- code) or the customer/sales order, I can find the live order from that instead.",
+  "finding": {
+    "outcome": "refused",
+    "work_order": "WO-2026-09999",
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "WO-2026-09999 does not exist on this instance: no work order has that number or id."
+  },
+  "finding_record": {
+    "agent_memory_id": "ff52e53b-9b3c-4b43-b135-3d4211cd4767",
+    "run_id": "1d7a8e2189e4"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 13.7,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17229,
+    "completion": 541,
+    "total": 17770
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "refuse_unknown_work_order"
+}

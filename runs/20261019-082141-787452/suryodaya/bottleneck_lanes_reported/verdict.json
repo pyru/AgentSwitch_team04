@@ -1,0 +1,17 @@
+{
+  "task_id": "bottleneck_lanes_reported",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "cited a real blocked record (2 rejected inspections / 53 subcontracts on open orders); unreadable lanes ['automation_failures', 'shortages'] named as not visible",
+  "sample": false,
+  "run_id": "7ba79ece24c5",
+  "seconds": 29.9,
+  "steps": 4,
+  "tokens": {
+    "prompt": 25289,
+    "completion": 1091,
+    "total": 26380
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

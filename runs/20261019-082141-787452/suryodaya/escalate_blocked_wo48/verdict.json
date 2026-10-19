@@ -1,0 +1,17 @@
+{
+  "task_id": "escalate_blocked_wo48",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "ESC-2026-00096 raised to Meera Kulkarni (unresolved_after_retries), recorded in finding",
+  "sample": false,
+  "run_id": "9c21b1d4336e",
+  "seconds": 73.4,
+  "steps": 5,
+  "tokens": {
+    "prompt": 43199,
+    "completion": 2071,
+    "total": 45270
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

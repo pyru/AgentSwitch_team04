@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_escalation_no_assignee_keystone",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "attempted to escalate, recorded that no one could be assigned, raised nothing",
+  "sample": false,
+  "run_id": "46d98fde6248",
+  "seconds": 95.6,
+  "steps": 9,
+  "tokens": {
+    "prompt": 107084,
+    "completion": 2962,
+    "total": 110046
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

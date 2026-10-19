@@ -1,0 +1,17 @@
+{
+  "task_id": "blocks_wo48_sales_order",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "reported ['SO-2026-00092']; all linked in DB",
+  "sample": false,
+  "run_id": "9b3cc47014f2",
+  "seconds": 47.0,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17929,
+    "completion": 610,
+    "total": 18539
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

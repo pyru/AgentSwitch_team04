@@ -1,0 +1,79 @@
+{
+  "run_id": "4a679a9691ba",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00004 \u2014 Grain Cart Ladder Guard Weldment (80 pcs)\n\n**One correction to the premise first:** WO-2026-00004 is not holding up WO-2026-00001. Both are late and both are stuck at the same first operation, but they are separate make-to-order jobs \u2014 WO-2026-00001 is the Combine Header Auger Bracket Assembly (120 pcs), and it does not consume WO-2026-00004's output. The platform's BOM walk over open work orders found **no** work orders consuming WO-2026-00004 (potentially_blocked_work_orders is empty), and WO-2026-00004's item FG-GRD-1150 is consumed in no BOM at all \u2014 it only appears as the output of BOM-2026-00004. So there is no downstream WO dependency to confirm. WO-2026-00001 is late in its own right (is_late=true, 56 days past due), and I've flagged the cause separately below.\n\n### Why late (WO-2026-00004)\n- is_late = **true**, 65 days past its planned end of 2026-08-15; status not_started, 0 of 80 produced, no projected finish date.\n- Stuck at **JC-2026-00013, \"Laser Cut\", workstation LASER-01 \u2014 6kW Fiber Laser**, open, never started, waiting 129 days (planned start 2026-06-12). The three later cards (JC-2026-00014 Form/Brake, JC-2026-00015 Robotic Weld, JC-2026-00016 Powder Coat) are all still open too.\n- Contributing signals only \u2014 **no blocking signal** (no material, subcontract or quality hold): `not_started_past_planned_start`, `schedule_capacity_ceiling` on WS-2026-00001 (720 min), `operation_not_started`, and recorded downtime on the route workstations: WELD-03 1,320 min / 6 entries (2 breakdown, 2 tool change, 2 material shortage), BRAKE-02 480 min (operator unavailable), COAT-06 300 min (setup change), LASER-01 210 min (material shortage, quality issue).\n- Costs: expected and actual are both 0.00 USD \u2014 no cost recorded, so no variance is computed.\n\n### What it blocks\n- **SO-2026-00003**, customer Tri-State Farm Equipment, delivery date 2026-06-09, value **USD 158,929.52**, undelivered \u2014 linked directly on WO-2026-00004 (`confidence: linked`), so this is recorded exposure. customer_impact = \"known\".\n- No potential consumers were found, so no potential exposure to report.\n\n### Rescheduling\nA proposal exists but this seat **cannot write it**: new start 2026-10-19 \u2192 new end 2026-12-22 (earliest start after known blockers, finish from finite schedule), `writable_by_seat = false` \u2014 \"status 'not_started': dates are locked after submit; changing them needs an admin cancel.\" Treat it as a recommendation for a planner/admin, not a change I made. I attempted to escalate it for the admin cancel, but **no escalation was raised (raised=false, no assignee assigned)** \u2014 a planner or admin at Keystone Precision Works must action the date change directly.\n\n### Not visible to me\nNothing is hidden from this seat for these records. Separately, on the shop-floor sweep the **shortages** and **automation_failures** lanes came back permission_denied \u2014 those two lanes are unknown, not clear. What I could read: 14 high-severity quality blocks (2 on open orders, e.g. QI-2026-00002 on WO-2026-00002) and 7 high-severity subcontract blocks (0 on open orders).\n\n**Suggested action:** the binding item is the locked date on WO-2026-00004, not a material shortage. Get an admin to cancel/re-date it to the proposed 2026-10-19 \u2192 2026-12-22, and chase the Laser Cut queue at LASER-01, which is where both late orders are sitting. WO-2026-00001 also carries a **blocking** pending engineering change, ECO-2026-00001 (submitted, high priority, \"continue_old\") \u2014 that one needs an engineering decision and is the real blocker there.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00004",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00004",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "WS-2026-00001",
+      "SO-2026-00003",
+      "WO-2026-00001",
+      "JC-2026-00001",
+      "ECO-2026-00001",
+      "SO-2026-00101",
+      "BOM-2026-00004",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "customer_impact": "known",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00004",
+        "outcome": "not writable by this seat - recommendation only: status 'not_started' locks dates after submit; changing them needs an admin cancel",
+        "new_start": "2026-10-19",
+        "new_end": "2026-12-22"
+      }
+    ],
+    "not_visible": [
+      "shortages: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)",
+      "automation_failures: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)"
+    ],
+    "refusal_reason": null,
+    "escalations": [
+      {
+        "raised": false,
+        "number": "WO-2026-00004",
+        "reason_code": "locked_order_needs_admin_cancel",
+        "assignee": null
+      }
+    ]
+  },
+  "finding_record": {
+    "agent_memory_id": "c6b7d3d5-4d4b-4495-bc9a-2fd03451b944",
+    "run_id": "4a679a9691ba"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 93.3,
+  "steps": 5,
+  "tokens": {
+    "prompt": 47365,
+    "completion": 1934,
+    "total": 49299
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "complex_false_downstream_link"
+}
