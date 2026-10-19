@@ -1,0 +1,57 @@
+{
+  "run_id": "2080182a409e",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00010 \u2014 Tillage Toolbar Mounting Plate, 22in (qty 100, urgent, make-to-order)**\n\n**Why late**\nConfirmed late: `is_late=true`, 58 days past the planned end date of 2026-08-22, projected finish 2026-10-24 (63 days late).\n\nThe order is stuck at the very first operation. It sits on **JC-2026-00035, \"Laser Cut\", sequence 0, workstation LASER-01 \u2014 6kW Fiber Laser** \u2014 status open, **not started** (`started_at` null), 0 of 100 completed, and it has been waiting **86 days** past its planned start of 2026-07-25. Nothing has been produced at all (`produced_qty` 0), and the three downstream job cards are all still open and unstarted: JC-2026-00036 (Form/Brake, BRAKE-02), JC-2026-00037 (Robotic Weld, WELD-03), JC-2026-00038 (Powder Coat, COAT-06).\n\nContributing signals \u2014 none of them blocking (no signal carries blocking=true, and the tool reports no blockers such as material shortages, subcontract or quality holds):\n- `operation_not_started` \u2014 JC-2026-00035, first operation, LASER-01.\n- `schedule_predecessor_operation` \u2014 WS-2026-00002, WS-2026-00003, WS-2026-00006 (the later routing steps are waiting on the first).\n- `workstation_downtime_recorded` on all four route workstations since 2026-07-21: WELD-03 1,320 min over 6 entries (2 breakdown, 2 tool change, 2 material shortage); BRAKE-02 480 min over 2 entries (operator unavailable); COAT-06 300 min over 2 entries (setup change); LASER-01 210 min over 2 entries (1 material shortage, 1 quality issue).\n\nSo: no hard blocker is recorded, but the job has never been started at Laser Cut and a queue has built up behind it.\n\nCost: `expected_cost` and `actual_cost` are both 0 \u2014 no cost has been recorded on this order, so no variance can be computed.\n\n**What it blocks**\nNo work orders were found that consume this output (no potential consumers by BOM matching). One sales order is directly linked on this order (confidence \"linked\", recorded exposure):\n- **SO-2026-00001 \u2014 Cardinal Tillage Works**, delivery date **2026-07-24**, value **$320,011.20**, status confirmed, undelivered. Customer impact is \"known\".\n\n**Rescheduling**\n`propose_reschedule` returned **no proposals** \u2014 the platform offered no new dates for this order or any dependants (downstream_considered empty, causes_found only the three non-blocking signals above). There is nothing this seat can write, so no reschedule was made. This needs a planner to set dates by hand.\n\n**Not visible to me**\nNothing was reported as outside this seat's visibility for this request (`not_visible_to_this_seat` empty).\n\nOne note for you: several record text fields in this book are wrapped in instruction-style markers \u2014 the company name, the item name, and workstation/operation labels came back inside `<<RECORD_TEXT>>` blocks. They contained no attempt to direct me, and I treated them purely as data.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00010",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00010",
+      "JC-2026-00035",
+      "JC-2026-00036",
+      "JC-2026-00037",
+      "JC-2026-00038",
+      "WS-2026-00002",
+      "WS-2026-00003",
+      "WS-2026-00006",
+      "SO-2026-00001",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00001"
+    ],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "customer_impact": "known"
+  },
+  "finding_record": {
+    "agent_memory_id": "d0fecfa6-a9f8-4653-8b68-b86feb94eb3d",
+    "run_id": "2080182a409e"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 76.3,
+  "steps": 4,
+  "tokens": {
+    "prompt": 29151,
+    "completion": 1298,
+    "total": 30449
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "job_card_current_operation_keystone_wo10"
+}

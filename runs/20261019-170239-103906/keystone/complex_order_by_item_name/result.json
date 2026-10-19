@@ -1,0 +1,63 @@
+{
+  "run_id": "b51a32960fc1",
+  "stop_reason": "final_answer",
+  "final_answer": "Recorded. Summary: WO-2026-00003 is 49 days past due and has never started \u2014 the job is stuck unstarted at JC-2026-00009 (Laser Cut, LASER-01), with downtime recorded on every remaining workstation in the route. It holds up no open production orders, but it is tied to SO-2026-00123 for Cardinal Tillage Works (USD 80,095.52, delivery 2026-07-10), whose status shows delivered and should be verified. The reschedule to 2026-11-27 needs an admin, not this seat.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00003",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00003",
+      "JC-2026-00009",
+      "JC-2026-00010",
+      "JC-2026-00011",
+      "JC-2026-00012",
+      "WS-2026-00001",
+      "SO-2026-00123",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00123"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00003",
+        "new_start": "2026-10-19",
+        "new_end": "2026-11-27",
+        "outcome": "not_writable_by_seat: status 'not_started' locks dates after submit; changing them needs an admin cancel"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "426fdde6-5866-444d-a317-2ea327c7d58e",
+    "run_id": "b51a32960fc1"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 55.3,
+  "steps": 5,
+  "tokens": {
+    "prompt": 37835,
+    "completion": 1348,
+    "total": 39183
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "complex_order_by_item_name"
+}

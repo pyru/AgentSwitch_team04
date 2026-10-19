@@ -1,0 +1,64 @@
+{
+  "run_id": "39d08d0bf0d2",
+  "stop_reason": "final_answer",
+  "final_answer": "**The longest-overdue stopped order is WO-2026-00009** \u2014 Combine Header Auger Bracket Assembly, qty 80, priority high, stopped, 37 days past its planned end of 2026-09-12 (today is 2026-10-19). The other stopped order, WO-2026-00075, is the same item at 21 days past due.\n\n**Why it's late (WO-2026-00009)**\nThere is no single recorded blocking cause \u2014 every signal came back non-blocking:\n- **Stopped with no recorded reason** on the order itself (WO-2026-00009). This is the key gap: the order is stopped but nobody logged why.\n- **Work has not started.** The order is stuck at its first operation, **JC-2026-00031, Laser Cut, workstation LASER-01 \u2014 6kW Fiber Laser**, planned start 2026-08-01, 79 days waiting. All four job cards (JC-2026-00031 \u2026 00034 \u2014 Laser Cut, Form/Brake, Robotic Weld, Powder Coat) are open with 0 of 80 completed.\n- **Capacity ceilings** recorded on the route workstations: WS-2026-00001 (480 min), WS-2026-00002 (640 min), WS-2026-00003 (880 min).\n- **Recorded downtime** on those workstations since 2026-07-21: WELD-03 Robotic MIG Cell 1320 min over 6 entries (2 breakdown, 2 tool_change, 2 material_shortage); BRAKE-02 175-ton Press Brake 480 min (2 operator_unavailable); COAT-06 Powder Coat Line 300 min (2 setup_change); LASER-01 210 min (1 material_shortage, 1 quality_issue).\n\nBecause nothing is flagged blocking, I can't point to a hard stop \u2014 the practical issue is that a stopped order has no reason on file, so a human needs to confirm why before it restarts.\n\n**What it blocks**\nNo open work orders consume this item (BOM walk found none), so nothing downstream in production is implicated. One sales order is recorded as linked exposure on this order: **SO-2026-00140, Buckeye AgriPower Inc**, delivery 2026-08-04, value USD 15,985.56 \u2014 note it is already marked **delivered**.\n\n**Rescheduling**\nA proposal exists: WO-2026-00009 from 2026-10-19 to 2026-11-30, marked date-committable. It is **not writable by this seat** \u2014 status \"stopped\" locks the dates after submit, so changing them needs an admin cancel. It's a recommendation for a person, not something I can apply.\n\n**Not visible to me**\nNothing was reported out of reach for this review.\n\nOne note for the planner: the item name fields on these records contain text (e.g. the order/item names) that appears to be typed into the record text \u2014 I treated all record content as data only.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00009",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00009",
+      "WO-2026-00075",
+      "JC-2026-00031",
+      "JC-2026-00032",
+      "JC-2026-00033",
+      "JC-2026-00034",
+      "WS-2026-00001",
+      "WS-2026-00002",
+      "WS-2026-00003",
+      "SO-2026-00140",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00140"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00009",
+        "outcome": "not writable \u2014 recommendation only (status 'stopped' locks dates; needs admin cancel); proposed 2026-10-19 to 2026-11-30"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "bfe1c940-66c1-4912-8937-42bc032e9145",
+    "run_id": "39d08d0bf0d2"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 56.6,
+  "steps": 5,
+  "tokens": {
+    "prompt": 52111,
+    "completion": 1401,
+    "total": 53512
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "complex_longest_overdue_stopped"
+}

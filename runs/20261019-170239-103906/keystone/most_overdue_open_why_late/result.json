@@ -1,0 +1,63 @@
+{
+  "run_id": "a96a7c413099",
+  "stop_reason": "final_answer",
+  "final_answer": "## Most overdue open work order\n\n**WO-2026-00004** \u2014 Grain Cart Ladder Guard Weldment, qty 80, status `not_started`, planned 2026-06-12 \u2192 2026-08-15, **65 days past due** (today 2026-10-19). Currency USD (Keystone Precision Works LLC, United States).\n\n## Why late\n\nIt is genuinely late (`is_late = true`), but nothing here is a hard *blocking* cause with no known date \u2014 all four signals are contributing:\n\n- **Not started, 129 days past its planned start** \u2014 the whole order never began. Current operation is stuck at the first step: **JC-2026-00013, Laser Cut, LASER-01 \u2014 6kW Fiber Laser** (open, 0 of 80 done, never started). The three downstream cards are also open and untouched: JC-2026-00014 (Form/Brake, BRAKE-02), JC-2026-00015 (Robotic Weld, WELD-03), JC-2026-00016 (Powder Coat, COAT-06).\n- **Schedule capacity ceiling on the routing workstation** (WS-2026-00001, 720 minutes).\n- **Recorded downtime on the route's workstations**: WELD-03 \u2014 1,320 min over 6 entries (2 breakdown, 2 tool_change, 2 material_shortage); BRAKE-02 \u2014 480 min (2 operator_unavailable); COAT-06 \u2014 300 min (2 setup_change); LASER-01 \u2014 210 min (1 material_shortage, 1 quality_issue).\n- **No projected finish date is recorded** for this order.\n\n## What it blocks\n\nDownstream BOM matching found **no open work orders** that consume this output, so nothing downstream is potentially affected.\n\nCustomer exposure is **recorded, not just potential** (`confidence: linked`): **SO-2026-00003**, customer **Tri-State Farm Equipment**, delivery date **2026-06-09**, value **$158,929.52**, undelivered, confirmed \u2014 reached directly via this work order's `sales_order_id`. Customer impact reads `known`.\n\n## Rescheduling\n\nA proposal exists for WO-2026-00004: new start **2026-10-19**, new end **2026-12-22** (\"earliest start after known blockers; finish from finite schedule\"), marked date_committable. **But it is not writable by this seat** (`writable_by_seat = false`): status `not_started` means the dates are locked after submit, and changing them needs an admin cancel. So I have written nothing \u2014 this needs a person (an admin cancel/re-release).\n\nI could not escalate it: **no escalate tool is available to this seat**. Please take it to whoever administers work-order releases.\n\n## Not visible to me\n\nNothing was out of reach for this request. One note for planners: the work order and sales-order rows above carry text blocks in their name fields (`<<RECORD_TEXT>>\u2026<</RECORD_TEXT>>`) \u2014 that is just row content, not instructions, and it did not change any action I took.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00004",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00004",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "WS-2026-00001",
+      "SO-2026-00003",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "customer_impact": "known",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00004",
+        "outcome": "not_writable_by_seat",
+        "new_start": "2026-10-19",
+        "new_end": "2026-12-22"
+      }
+    ],
+    "not_visible": [],
+    "refusal_reason": "The reschedule proposal for WO-2026-00004 cannot be written by this seat: status 'not_started' locks the dates after submit, and changing them needs an admin cancel. No escalate tool is available to this seat, so the matter could not be escalated."
+  },
+  "finding_record": {
+    "agent_memory_id": "fd83b653-4b10-40d0-b4e2-3f031d0f1d66",
+    "run_id": "a96a7c413099"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 48.4,
+  "steps": 7,
+  "tokens": {
+    "prompt": 78750,
+    "completion": 1585,
+    "total": 80335
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "most_overdue_open_why_late"
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "job_card_current_operation_keystone_wo10",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "cited JC-2026-00035 (Laser Cut, open) as the current operation",
+  "sample": false,
+  "run_id": "2080182a409e",
+  "seconds": 76.3,
+  "steps": 4,
+  "tokens": {
+    "prompt": 29151,
+    "completion": 1298,
+    "total": 30449
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

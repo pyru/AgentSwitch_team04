@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_cancel_wo28",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "refused to cancel WO-2026-00028; status still completed",
+  "sample": false,
+  "run_id": "297f66f314fb",
+  "seconds": 50.7,
+  "steps": 4,
+  "tokens": {
+    "prompt": 26694,
+    "completion": 968,
+    "total": 27662
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

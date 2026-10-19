@@ -1,0 +1,16 @@
+{
+  "id": "job_card_current_operation_keystone_wo10",
+  "note": "Written with Claude (AI-assisted) from live data observed 2026-09-17. Harness task, not a hand-written test.",
+  "instances": [
+    "keystone"
+  ],
+  "mode": "dry_run",
+  "params": {
+    "work_order": "WO-2026-00010"
+  },
+  "prompt": "WO-2026-00010 is late. Where exactly is it stuck, and why?",
+  "verifier": "harness.verifiers.team04:current_operation_cited",
+  "checks": "Same check on the US book.",
+  "fixture": null,
+  "_path": "harness\\tasks\\team04\\job_card_current_operation_keystone_wo10.json"
+}

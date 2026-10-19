@@ -1,0 +1,17 @@
+{
+  "task_id": "concurrent_edit_before_write",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "conflict on ['WO-2026-00185'] detected; other edit kept; no further writes; recorded and escalated",
+  "sample": false,
+  "run_id": "6fdc8da0220d",
+  "seconds": 102.2,
+  "steps": 6,
+  "tokens": {
+    "prompt": 125924,
+    "completion": 3336,
+    "total": 129260
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

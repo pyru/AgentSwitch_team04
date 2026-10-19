@@ -1,0 +1,61 @@
+{
+  "run_id": "02ce619464b0",
+  "stop_reason": "final_answer",
+  "final_answer": "**What it blocks**\n\nWO-2026-00048 (Pump Mounting Bracket Assembly, qty 60, status stopped) feeds one recorded sales order:\n\n- **SO-2026-00092** \u2014 customer **Kirloskar Pumps Ltd**, delivery date **2026-03-07**, value **INR 494,476.64**, still undelivered, status confirmed. This is linked directly on the work order itself (confidence \"linked\"), so it is recorded exposure, not a guess.\n\n**Potentially blocked work orders:** none. The BOM reverse-walk found no other open work orders consuming this order's output.\n\n**Customer impact (verbatim):** known \u2014 one sales order is affected, as listed above.\n\nNote on method: the platform has no parent/child link between work orders, so the tool finds consumers by matching BOM materials; the sales order above is a direct link on this order, so it is confirmed exposure.\n\n**Why late / Rescheduling / Not visible to me** \u2014 you only asked about downstream impact, so I did not run the diagnosis or reschedule tools. Say the word and I'll pull the why-late evidence and a reschedule proposal for WO-2026-00048. Nothing on this request was invisible to this seat.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00048",
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "SO-2026-00092",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "WS-2026-00009",
+      "JC-2026-00142",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection",
+      "ECO-2026-00064",
+      "ECO-2026-00012"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "rescheduled": [],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "5e69a235-a667-47b8-961a-b7146d28ce9d",
+    "run_id": "02ce619464b0"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 45.9,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17937,
+    "completion": 651,
+    "total": 18588
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "blocks_wo48_sales_order"
+}

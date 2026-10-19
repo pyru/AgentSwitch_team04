@@ -1,0 +1,45 @@
+{
+  "run_id": "6bbf954eadce",
+  "stop_reason": "final_answer",
+  "final_answer": "**Shop load \u2014 next 21 days (Keystone Precision Works LLC, USD)**\n\nOver the next three weeks the shop is running at **88.5%** of available capacity: 53,532 booked minutes against 60,480 available (66 open job cards).\n\nThe capacity board's own figure and the work-content figure (time_in_mins \u00d7 for_qty, the platform's OEE basis) agree \u2014 88.51% vs 88.5% \u2014 so there is no hidden overload the board is missing.\n\n**Workstations over their declared capacity** (each has 10,080 declared minutes in the horizon):\n- **WS-2026-00003 \u2014 WELD-03 Robotic MIG Cell**: 19,260 min of work, **1.91\u00d7 over** capacity\n- **WS-2026-00002 \u2014 BRAKE-02 175-ton Press Brake**: 14,940 min, **1.48\u00d7 over**\n- **WS-2026-00001 \u2014 LASER-01 6kW Fiber Laser**: 12,060 min, **1.20\u00d7 over**\n\nThe board reports 4 workstation-period overloads across the horizon; three workstations are clearly over on the work-content measure in the three above. So overall the shop is heavily loaded but not universally over \u2014 the pinch is concentrated in welding, press brake and laser cutting.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": null,
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "WS-2026-00003",
+      "WS-2026-00002",
+      "WS-2026-00001"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "capacity": {
+      "board_load_pct": 88.51,
+      "work_content_load_pct": 88.5,
+      "figures_disagree": false
+    }
+  },
+  "finding_record": {
+    "agent_memory_id": "a1b4b3ac-3856-4188-99b4-23a5bd11af1f",
+    "run_id": "6bbf954eadce"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 22.0,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17860,
+    "completion": 674,
+    "total": 18534
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "capacity_load_disputed"
+}

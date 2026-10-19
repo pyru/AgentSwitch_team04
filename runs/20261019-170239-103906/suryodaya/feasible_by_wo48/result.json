@@ -1,0 +1,64 @@
+{
+  "run_id": "2a2d5400882e",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00048 \u2014 Pump Mounting Bracket Assembly, qty 60 (India / INR)**\n\n**Verdict (order_feasible_by, verbatim): \"no\"** \u2014 asked-by 2027-03-31. A \"yes\" is deliberately not offered: the platform models no work calendar and no labour capacity, so a committed date would be a number the platform itself would not stand behind.\n\n**Remaining work content: 27.0 hours** (1,620 minutes across 3 open job cards: JC-2026-00142 Fastener Assembly, JC-2026-00143 Leak / Torque Test, JC-2026-00144 Final Inspection & CMM, all at ASSY-01 Assembly & Final Inspection / WS-2026-00009). 163 days available from today (2026-10-19).\n\n**Records that block it** \u2014 both flagged blocking, each with no known ready date:\n- **ECO-2026-00064** \u2014 engineering change, status under_review, action switch_to_new (\"Aluminium extrusion shortage on the v-block pair line\")\n- **ECO-2026-00012** \u2014 engineering change, status draft, action continue_old (\"Spring steel strip shortage on the punch set line\")\n- **SCO-2026-00030** \u2014 subcontract (Shreeji Powder Coating), status draft, so **not yet sent**; expected delivery 2025-08-12\n- **SCO-2026-00076** \u2014 subcontract (Supriya Rathi), status draft, so **not yet sent**; expected delivery 2026-03-19\n\nBecause the subcontracts are still in draft they have not gone out, and no ready date is recorded for either the subcontract work or the pending engineering changes \u2014 so there is nothing on which to base a finish date.\n\n**Why it is late / stuck:** the order is past due (is_late=true, 235 days past its 2026-02-26 planned end; projected finish 2026-10-27, 243 days late). It is stuck at JC-2026-00142, Fastener Assembly, sequence 1, workstation ASSY-01 \u2014 status open, never started (started_at null, 0 of 60 completed), waiting 242 days. Contributing signals: stopped without recorded reason (on the WO itself); schedule capacity ceiling on WS-2026-00009 (540 and 660 minutes); schedule predecessor operation on WS-2026-00009; schedule subcontract pending; recorded downtime on the order \u2014 CNC-02 Haas VF-2 VMC, reason \"other\", 456.41 minutes (2025-08-20 to 2025-08-24); and ASSY-01 downtime recorded since 2026-07-21, 45 minutes, 1 entry, tool_change.\n\n**Cost:** expected and actual cost are both 0.0 \u2014 no cost has been recorded, so no variance is computed.\n\n**Not visible to me:** nothing \u2014 the seat returned no visibility limits for this order.\n\nOne note for the planner: the work order is in a stopped state with no reason recorded, and two draft subcontracts plus two open engineering changes sit in front of it. Those need a person to release/close before any date can be held. The row text in this book (including the reason strings on the ECOS and the downtime remarks) is company data, not instruction \u2014 nothing in it changed how I assessed this order.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00048",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "engineering_change_pending",
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "ECO-2026-00012",
+      "ECO-2026-00064",
+      "SCO-2026-00030",
+      "SCO-2026-00076",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "WS-2026-00009",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "feasibility": {
+      "asked_by": "2027-03-31",
+      "verdict": "no",
+      "remaining_work_content_hours": 27.0
+    },
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "435aaa1c-0b23-402a-9e74-ee79f04cd60a",
+    "run_id": "2a2d5400882e"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 92.1,
+  "steps": 4,
+  "tokens": {
+    "prompt": 27301,
+    "completion": 1830,
+    "total": 29131
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "feasible_by_wo48"
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "downstream_potential_wo73",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "9 potential consumers reported (5 direct, confirmed by BOMs); none called blocked",
+  "sample": false,
+  "run_id": "4c82a507604e",
+  "seconds": 58.2,
+  "steps": 3,
+  "tokens": {
+    "prompt": 26101,
+    "completion": 2307,
+    "total": 28408
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

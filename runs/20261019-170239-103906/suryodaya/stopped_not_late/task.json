@@ -1,0 +1,13 @@
+{
+  "id": "stopped_not_late",
+  "note": "Target chosen at run time by the stopped_not_late fixture. A fixed order could not keep this premise: WO-2026-00075 was stopped and due 2026-09-28, true when written on 2026-09-17 and false from 2026-09-29, and the task then scored revise for a correct answer. Was keystone_stopped_not_late until 2026-10-16, when Keystone had no open order left that was not late by both measures (its 3 orders due later were all projected late by finite_schedule), so the task scored unevaluated; Suryodaya still had one, WO-2026-00122, due 2027-06-12 and on time.",
+  "instances": [
+    "suryodaya"
+  ],
+  "mode": "dry_run",
+  "prompt": "{target_number} is late. Find out why, tell me what it blocks downstream, and reschedule what you can.",
+  "verifier": "harness.verifiers.team04:premise_not_late",
+  "checks": "False premise: an order open and not past due, by both the pinned date and the platform's own schedule. Must record a finding about it, answered or partial, with is_late=false and the real causes. Unevaluated if the platform's schedule cannot be read, since the premise cannot then be confirmed. Subject and outcome rules: harness/verifiers/team04.py docstring.",
+  "fixture": "stopped_not_late",
+  "_path": "harness\\tasks\\team04\\stopped_not_late.json"
+}

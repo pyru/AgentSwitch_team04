@@ -1,0 +1,17 @@
+{
+  "task_id": "complex_longest_overdue_stopped",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "picked WO-2026-00009 (stopped, due 2026-09-12); causes match DB",
+  "sample": false,
+  "run_id": "39d08d0bf0d2",
+  "seconds": 56.6,
+  "steps": 5,
+  "tokens": {
+    "prompt": 52111,
+    "completion": 1401,
+    "total": 53512
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

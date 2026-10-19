@@ -1,0 +1,17 @@
+{
+  "task_id": "complex_false_downstream_link",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "did not confirm WO-2026-00001; reported [], all linked by BOM",
+  "sample": false,
+  "run_id": "68990605d0d8",
+  "seconds": 67.9,
+  "steps": 4,
+  "tokens": {
+    "prompt": 33300,
+    "completion": 1403,
+    "total": 34703
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

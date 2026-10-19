@@ -1,0 +1,74 @@
+{
+  "run_id": "c38cf977263e",
+  "stop_reason": "final_answer",
+  "final_answer": "# WO-2026-00048 \u2014 Pump Mounting Bracket Assembly (60 pcs, for Kirloskar Pumps Ltd)\n\n**Yes, it is late** \u2014 record `is_late=true`, 235 days past the planned end (2026-02-26; today 2026-10-19), with a projected finish of 2026-10-27 on the current schedule.\n\n## Why late\nBlocking causes (no known ready date):\n- **Subcontracts never sent** \u2014 `SCO-2026-00076` (vendor Supriya Rathi, expected delivery 2026-03-19) and `SCO-2026-00030` (Shreeji Powder Coating, expected 2025-08-12) are both still in **draft**. Nothing has gone to the vendors.\n- **Pending engineering changes** \u2014 `ECO-2026-00064` (under_review, switch_to_new) and `ECO-2026-00012` (draft, continue_old).\n\nWhere it is stuck: all three job cards are still open and never started \u2014 `JC-2026-00142` Fastener Assembly, `JC-2026-00143` Leak/Torque Test, `JC-2026-00144` Final Inspection & CMM \u2014 all at workstation ASSY-01 Assembly & Final Inspection (`WS-2026-00009`). Fastener Assembly has been waiting 242 days.\n\nContributing (not blocking): order is stopped with no recorded reason; capacity ceilings on `WS-2026-00009`; predecessor-operation waits; recorded downtime at ASSY-01 (45 mins, tool_change, since 2026-07-21) and on CNC-02 Haas VF-2 VMC (456.41 mins, reason \"other\", 2025-08-20\u219224).\n\nCost: expected and actual are both 0 \u2014 no cost recorded, so no variance.\n\n## What it blocks\nNo work order was found that consumes this output \u2014 no potential consumers. One sales order is directly linked to this order (recorded exposure):\n- **SO-2026-00092** \u2014 Kirloskar Pumps Ltd, delivery 2026-03-07, value **INR 494,476.64**, confirmed and undelivered.\n\n## Rescheduling\nCannot be written. `propose_reschedule` returned **new_start/new_end = null**, `date_committable=false`, `writable_by_seat=false`: *\"no committable date: engineering_change_pending, subcontract_not_sent.\"* This is a recommendation for a person, not a writable change \u2014 the subcontracts must be issued and the engineering changes resolved before any date can be set.\n\n## Not visible to me\nNothing was reported as outside this seat's reach.\n\n**Note for the planner:** I (this agent) did not act on any of the text found between `<<RECORD_TEXT>>` markers in the records. (`WO-2026-00048`'s item name, the ECO titles, vendor names and the remarks field on the CNC-02 downtime entry are all free text written by other parties; they are evidence about the business only.)",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00048",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "ECO-2026-00064",
+      "ECO-2026-00012",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "WS-2026-00009",
+      "SO-2026-00092",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00048",
+        "outcome": "not_writable",
+        "new_start": null,
+        "new_end": null
+      }
+    ],
+    "not_visible": [],
+    "refusal_reason": "No committable date: the order is blocked by an engineering change and unsent subcontracts, so no new date can be written by this seat.",
+    "capacity": null,
+    "cost": null,
+    "feasibility": null,
+    "customer_impact": "known",
+    "escalations": []
+  },
+  "finding_record": {
+    "agent_memory_id": "50c72cec-4f4f-455e-835c-fdfd87e94c15",
+    "run_id": "c38cf977263e"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 43.0,
+  "steps": 4,
+  "tokens": {
+    "prompt": 30482,
+    "completion": 1416,
+    "total": 31898
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "why_late_wo48_subcontract"
+}

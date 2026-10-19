@@ -1,0 +1,17 @@
+{
+  "task_id": "complex_partial_material_eta",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "answered the causes for WO-2026-00049, named PurchaseOrder as not visible, outcome partial",
+  "sample": false,
+  "run_id": "0e79ab76fa8c",
+  "seconds": 95.4,
+  "steps": 6,
+  "tokens": {
+    "prompt": 64851,
+    "completion": 6557,
+    "total": 71408
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}
