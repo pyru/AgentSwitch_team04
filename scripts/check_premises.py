@@ -73,21 +73,27 @@ def main(argv: list[str]) -> int:
 
     tasks = [t for t in runner.load_tasks(False) if not args.task or t["id"] in args.task]
     if args.platform_set:
-        tasks = [t for t in tasks if t.get("platform")]
+        tasks = [t for t in tasks if runner.platform_instances(t)]
     instances = sorted(config.INSTANCES) if args.instance == "all" else [args.instance]
+
+    def runs_on(task: dict, instance: str) -> bool:
+        if args.platform_set:
+            return instance in runner.platform_instances(task)
+        return instance in task.get("instances", sorted(config.INSTANCES))
+
     counts: dict[str, int] = {}
     with tempfile.TemporaryDirectory() as tmp:
         for instance in instances:
             session = Session(instance)
-            for task in (t for t in tasks if instance in t.get("instances", sorted(config.INSTANCES))):
+            for task in (t for t in tasks if runs_on(t, instance)):
                 try:
                     status, reason = check(task, instance, session, Path(tmp))
                 except Exception as e:  # one unreadable premise must not hide the rest
                     status, reason = "OTHER", f"{type(e).__name__}: {e}"
                 counts[status] = counts.get(status, 0) + 1
                 note = "" if status == "holds" else f"  {reason}"
-                print(f"{status:5}  {instance:10} {task['id']}{' [platform]' if task.get('platform') else ''}{note}",
-                      flush=True)
+                tag = " [platform]" if instance in runner.platform_instances(task) else ""
+                print(f"{status:5}  {instance:10} {task['id']}{tag}{note}", flush=True)
     print("\n" + ", ".join(f"{n} {s}" for s, n in sorted(counts.items())))
     return 1 if counts.get("GONE") or counts.get("OTHER") else 0
 

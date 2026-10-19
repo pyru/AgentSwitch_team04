@@ -365,6 +365,16 @@ def order_plan(plan: list[tuple[dict, str]]) -> list[tuple[dict, str]]:
     return sorted(plan, key=lambda p: p[0].get("max_seconds", TASK_SECONDS_DEFAULT))
 
 
+def platform_instances(task: dict) -> list[str]:
+    """The instances a task runs on in the platform set: `"platform": true` is every instance it declares, a list
+    names some of them. Both instances share one submission budget, so a task can join only where it fits."""
+    declared = task.get("instances", sorted(config.INSTANCES))
+    flag = task.get("platform")
+    if isinstance(flag, list):
+        return [i for i in declared if i in flag]
+    return declared if flag else []
+
+
 def isolated(task: dict) -> bool:
     """Safe to run beside other tasks. Verifiers count every work order write and every escalation this seat made
     since a task started, so a task that may write or escalate, or whose fixture writes, always runs alone."""
@@ -558,8 +568,10 @@ def main() -> int:
             ap.error(f"unknown task id(s): {', '.join(unknown)}")
     tasks = [t for t in loaded if not args.task or t["id"] in args.task]
     if args.platform_set:
-        tasks = [t for t in tasks if t.get("platform")]
-    plan = order_plan([(t, i) for t in tasks for i in t.get("instances", sorted(config.INSTANCES)) if i in allowed])
+        pairs = [(t, i) for t in tasks for i in platform_instances(t)]
+    else:
+        pairs = [(t, i) for t in tasks for i in t.get("instances", sorted(config.INSTANCES))]
+    plan = order_plan([(t, i) for t, i in pairs if i in allowed])
     # Locally an empty plan is a mistake (a task on an instance it does not declare, a sample without
     # --include-samples) and would leave an empty run root. Under the platform runner it is not refused: results.json
     # then carries the failed no_tasks entry, which is what the runner's panel shows (results.py doc()).
