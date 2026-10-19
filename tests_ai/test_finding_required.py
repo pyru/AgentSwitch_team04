@@ -72,10 +72,12 @@ def test_an_early_reply_is_sent_back_and_the_finding_is_forced(persisted):
     assert out["stop_reason"] == "final_answer" and out["final_answer"] == "Refused."
 
 
-def test_it_is_sent_back_only_once(persisted):
-    out, llm, _ = run([message(content="No."), message(content="Still no.")])
-    assert persisted == [] and len(llm.calls) == 2
-    assert out["final_answer"] == "Still no."
+def test_it_is_sent_back_once_asked_once_more_and_then_ends(persisted):
+    # The forced reply after the send-back gets the last ask too (2026-10-19, why_late_wo48_subcontract answered
+    # it with an empty message and saved nothing); a third reply without the finding still ends the run.
+    out, llm, _ = run([message(content="No."), message(content="Still no."), message(content="Never.")])
+    assert persisted == [] and len(llm.calls) == 3
+    assert out["final_answer"] == "Never."
 
 
 def test_a_reply_after_the_finding_ends_the_run_at_once(persisted):

@@ -1575,7 +1575,10 @@ class ProductionAgent:
                     messages.append({"role": "user", "content": FINDING_NUDGE + note})
                     self.trace({"type": "finding_nudge", "step": step})
                     continue
-                if forced and self.finding is None and self._finding_nudged and not self._asked_again \
+                # Either first ask earns the last one. Platform-set rehearsal 2026-10-19 (why_late_wo48_subcontract):
+                # an early prose reply was sent back as finding_missing, the forced record_finding that followed was
+                # answered with an empty message, and with no reminder ever given the run ended with no finding.
+                if forced and self.finding is None and sent_back and not self._asked_again \
                         and step < self.max_steps - 1:
                     self._asked_again = self._reask_step = True
                     note = "" if self.escalate_mode else NO_ESCALATION_NOTE
