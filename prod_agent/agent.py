@@ -514,6 +514,7 @@ class ProductionAgent:
         self.finding_record: dict | None = None
         self._seen_calls: dict[tuple[str, str], int] = {}
         self._retried_reads: set[tuple[str, str]] = set()
+        self._entity_status: dict[str, int | None] = {}  # REST status per entity named in not_visible, asked once
         self.requested_orders: set[str] = set()  # WO numbers named in the request, by _wo_key
         self.missing_orders: set[str] = set()  # refs a work-order tool reported as not found, by _order_key
         # Off by default so the bare loop still stops on the first final answer; the harness and the CLI turn it
@@ -981,6 +982,37 @@ class ProductionAgent:
                     "why": "unreadable cockpit lanes named as not visible", "added": added})
         return {**args, "not_visible": entries + added}
 
+    # A capitalised name in a not_visible entry may be an entity; lane keys are snake_case and never match.
+    ENTITY_NAME = re.compile(r"\b[A-Z][A-Za-z0-9]{2,}\b")
+
+    def _drop_readable_entities(self, args: dict) -> dict:
+        """Take out of not_visible every entry naming only entities this seat can read, asking the platform.
+
+        Platform-set rehearsal, 2026-10-19 (deepseek-v4.1-flash, declared_policy_not_permission, 1 of 4 runs): the
+        model checked eight entities with seat_capability but not AgentPersona, AgentToolPolicy or AgentFloorConfig,
+        and listed all three as not visible because the declared policy names them as denied. That policy configures
+        the hosted persona; this seat reads all three (REST 200). Seat limits are probed, not assumed: an entry goes
+        only when every name in it answers 200. A 403 is a real limit and stays, and a lane key, a plain word or a
+        name the platform does not answer for (404, or no answer at all) is left as the model wrote it.
+        """
+        entries = args.get("not_visible")
+        if not isinstance(entries, list) or not entries:
+            return args  # nothing claimed, or the wrong shape: _mistyped's to refuse
+        kept, dropped = [], []
+        for entry in entries:
+            names = self.ENTITY_NAME.findall(entry) if isinstance(entry, str) else []
+            (dropped if names and all(self._readable(n) for n in names) else kept).append(entry)
+        if not dropped:
+            return args
+        self.trace({"type": "finding_corrected", "work_order": args.get("work_order"),
+                    "why": "entities this seat can read taken out of not_visible", "dropped": dropped})
+        return {**args, "not_visible": kept}
+
+    def _readable(self, entity: str) -> bool:
+        if entity not in self._entity_status:
+            self._entity_status[entity] = domain._rest_status(self.mcp, entity)
+        return self._entity_status[entity] == 200
+
     # What a model writes in a field it has no value for, when it writes a word instead of JSON null.
     NO_ORDER = {"", "null", "none", "n/a", "na", "nil", "-", "undefined"}
 
@@ -1251,6 +1283,7 @@ class ProductionAgent:
         args = self._drop_unproduced_causes(args)
         args = self._cite_evidence(args)
         args = self._restore_unread_lanes(args)
+        args = self._drop_readable_entities(args)
         args = self._refuse_missing_order(args)
         mistyped = _mistyped(args)
         if mistyped:
