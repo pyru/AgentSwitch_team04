@@ -1,0 +1,47 @@
+{
+  "run_id": "d8e9c42aaa72",
+  "stop_reason": "final_answer",
+  "final_answer": "## Where the shop floor is stuck (Suryodaya Precision Works, INR)\n\nThe exception scan returned 33 items. Two lanes could not be filled, so this is a partial picture:\n\n**Quality blocks \u2014 28 high-severity, 2 on open orders (lane state: ready)**\nOn open/current work:\n- **QI-2026-00049** \u2014 high, on WO-2026-00051 (in progress)\n- **QI-2026-00061** \u2014 high, on WO-2026-00063 (in progress)\n\nThe rest are on closed orders (e.g. **QI-2026-00008** on WO-2026-00008, completed) \u2014 that's history, not where the floor is stuck now. 26 of the 28 sit on closed orders.\n\n**Subcontract blocks \u2014 5 high-severity (lane state: ready)**\nExamples: **SCO-2026-00001**, **SCO-2026-00002**, **SCO-2026-00003**. None are on open work orders (on_open_orders = 0).\n\n## Not visible to me / unknown\n- **Shortages lane: unknown, not clear.** The platform returned `permission_denied` for this lane \u2014 it could not be filled, so I can't tell you whether the floor is stuck on shortages.\n- **Automation failures lane: unknown, not clear.** Same `permission_denied`.\n- **StockEntry** is outside this seat (REST 403), so I can't read stock movements directly. Material requests *are* visible, but the exception tool's own shortage lane is blocked, so I won't use raw MR rows to claim what the shortage lane says.\n- The scan was **not truncated** (33 of 33 returned), so this is the full set of what the tool could fill.\n\n## Notes\n- Customer impact: no sales orders were surfaced in this view.\n- Nothing here named a work order for me to reschedule, so there's no reschedule proposal to report.\n\nIf you want the shortage and automation pictures, that needs a seat or role with access to those lanes \u2014 the two lanes themselves are the gap, not the data underneath.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": null,
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "QI-2026-00049",
+      "QI-2026-00061",
+      "QI-2026-00008",
+      "SCO-2026-00001",
+      "SCO-2026-00002",
+      "SCO-2026-00003"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [
+      "StockEntry",
+      "shortages: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)",
+      "automation_failures: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)"
+    ],
+    "refusal_reason": "Two exception lanes (shortages, automation_failures) came back permission_denied, so the platform could not fill them; their state is unknown, not clear."
+  },
+  "finding_record": {
+    "agent_memory_id": "d10559cf-af36-4e91-946e-0af6957d0453",
+    "run_id": "d8e9c42aaa72"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 51.0,
+  "steps": 6,
+  "tokens": {
+    "prompt": 109356,
+    "completion": 1349,
+    "total": 110705
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "bottleneck_lanes_reported"
+}

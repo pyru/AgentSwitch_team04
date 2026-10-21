@@ -1,0 +1,17 @@
+{
+  "task_id": "downtime_breakdown_top_machine",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "named ['CNC-03 DMG Mori NLX 2500', 'WS-2026-00006'] with 825.0 min of breakdown downtime since 2026-07-21",
+  "sample": false,
+  "run_id": "5ef579ece66a",
+  "seconds": 16.0,
+  "steps": 3,
+  "tokens": {
+    "prompt": 18021,
+    "completion": 718,
+    "total": 18739
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

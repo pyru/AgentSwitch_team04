@@ -1,0 +1,36 @@
+{
+  "run_id": "d0cd21857625",
+  "stop_reason": "final_answer",
+  "final_answer": "**Refused \u2014 work order not found.**\n\nWO-2026-09999 does not exist in this book (Suryodaya Precision Works Pvt. Ltd., India, INR). The lookup returned no work order with that number or id, so there is nothing to diagnose, nothing to trace downstream, and nothing to reschedule.\n\nI have not substituted a similar or \"closest\" order \u2014 if the number was mistyped, please give me the correct WO number (format WO-YYYY-NNNNN) and I'll run the diagnosis, downstream impact and reschedule proposal on it.\n\n- **Why late:** unknown \u2014 order not found.\n- **What it blocks:** unknown \u2014 order not found.\n- **Rescheduling:** not attempted \u2014 no order to propose dates for.\n- **Not visible to me:** nothing; this is a non-existent record, not an access limit.",
+  "finding": {
+    "outcome": "refused",
+    "work_order": "WO-2026-09999",
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "Work order WO-2026-09999 does not exist on this instance: no work order has that number or id. No diagnosis, downstream impact or reschedule can be produced for it, and I will not substitute a similar order."
+  },
+  "finding_record": {
+    "agent_memory_id": "21071b65-f510-43f0-a14b-4b8e75500577",
+    "run_id": "d0cd21857625"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 16.0,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17249,
+    "completion": 574,
+    "total": 17823
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "refuse_unknown_work_order"
+}

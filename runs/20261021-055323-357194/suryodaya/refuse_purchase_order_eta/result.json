@@ -1,0 +1,40 @@
+{
+  "run_id": "e0a7cf804d20",
+  "stop_reason": "final_answer",
+  "final_answer": "I can't answer this one \u2014 the data is not visible to me.\n\n**Why late**\nWO-2026-00001 is not late: it's a **completed** work order (status completed, produced 250 of 250, is_late=false). Its three job cards (JC-2026-00001, JC-2026-00002, JC-2026-00003) are all completed at ASSY-01 Assembly & Final Inspection. So there's no live lateness to explain here.\n\n**What it blocks**\nNot applicable \u2014 a completed order isn't holding anything up.\n\n**Rescheduling**\nNot applicable.\n\n**Not visible to me**\nPurchase orders are **outside this seat** \u2014 I confirmed PurchaseOrder is not usable (REST 403). So I cannot give you a PO number or an expected receipt date for any material. Nothing else I can read carries purchase-order receipt information for this order.\n\nOne thing worth flagging: the request may also be aimed at the wrong record. WO-2026-00001 is closed, so if you're chasing an inbound PO for a job still in progress, that's a different work order. If you give me the live WO number (or the item code), I can diagnose it \u2014 though the PO number and receipt date themselves will still need someone with PurchaseOrder access.",
+  "finding": {
+    "outcome": "refused",
+    "work_order": null,
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "WO-2026-00001"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [
+      "PurchaseOrder"
+    ],
+    "refusal_reason": "Purchase orders and their receipt dates are outside this seat (PurchaseOrder is confirmed outside_seat, REST 403). No PO number or expected receipt date is available from any data this seat can read."
+  },
+  "finding_record": {
+    "agent_memory_id": "9949d249-fcb7-43e2-9e36-abb16eb99765",
+    "run_id": "e0a7cf804d20"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 49.2,
+  "steps": 5,
+  "tokens": {
+    "prompt": 73117,
+    "completion": 887,
+    "total": 74004
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "refuse_purchase_order_eta"
+}

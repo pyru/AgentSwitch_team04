@@ -5,6 +5,8 @@
     "suryodaya"
   ],
   "mode": "dry_run",
+  "platform": true,
+  "max_tokens": 27000,
   "params": {
     "work_order": "WO-2026-00048",
     "due": "2027-03-31"

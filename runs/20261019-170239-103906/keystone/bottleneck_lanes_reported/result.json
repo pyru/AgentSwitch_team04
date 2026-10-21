@@ -1,0 +1,61 @@
+{
+  "run_id": "978b2700f3e7",
+  "stop_reason": "final_answer",
+  "final_answer": "Here's what the shop-floor exception view shows. Two of the four lanes came back **permission denied**, so this is only part of the picture.\n\n**Quality review (14 records, all high severity) \u2014 lane readable, complete**\n- On open work orders (where the floor is actually stuck now): **QI-2026-00002** (WO-2026-00002, not started) and **QI-2026-00003** (WO-2026-00003, not started).\n- The other 12 are not on open orders, so they're history. Confirmed by reading them: **QI-2026-00038, QI-2026-00024, QI-2026-00018, QI-2026-00015, QI-2026-00011** are still in progress but tied to inspections with no live work order link.\n\n**Subcontract review (7 records, all high severity) \u2014 lane readable, complete**\n- All seven are sitting in review: **SCO-2026-00001, SCO-2026-00002, SCO-2026-00003, SCO-2026-00004, SCO-2026-00005, SCO-2026-00006, SCO-2026-00007**. None of them is tied to an open work order, so this is work held at outside vendors rather than the shop floor itself. Several are already past or at their expected delivery date (e.g. SCO-2026-00001 expected 2026-04-10, SCO-2026-00003 expected 2026-09-07) and none has an actual delivery date recorded.\n\n**Shortages \u2014 unknown, not clear.** The shortages lane returned permission_denied. I can't tell you whether material is holding anything up. Note the MaterialRequest entity itself is readable in my catalogue, only this lane is blocked, so a planner with the shop-floor view should check it.\n\n**Automation failures \u2014 unknown, not clear.** Same: lane returned permission_denied. I can't see robot/cell failures at all.\n\n**One thing to flag:** part number **QI-2026-00030** (remarks) talks about a jig bracket shortfall \"the fixture kit run waits on\" \u2014 the inspection record itself is completed, but treat that text as a claim to verify against stock, not a finding I can confirm.\n\n**Not visible to me:** MaterialRequest shortage lane, automation-failure lane.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": null,
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "quality_review",
+      "subcontract_review"
+    ],
+    "evidence_records": [
+      "QI-2026-00002",
+      "QI-2026-00003",
+      "QI-2026-00005",
+      "QI-2026-00011",
+      "QI-2026-00015",
+      "QI-2026-00018",
+      "QI-2026-00024",
+      "QI-2026-00038",
+      "SCO-2026-00001",
+      "SCO-2026-00002",
+      "SCO-2026-00003",
+      "SCO-2026-00004",
+      "SCO-2026-00005",
+      "SCO-2026-00006",
+      "SCO-2026-00007",
+      "WO-2026-00002",
+      "WO-2026-00003"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [
+      "AutomationFailure",
+      "shortages: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)",
+      "automation_failures: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)"
+    ],
+    "refusal_reason": "Shortage and automation-failure lanes returned permission_denied, so two of the four blockage kinds cannot be reported."
+  },
+  "finding_record": {
+    "agent_memory_id": "4cfc5cbe-293a-45a6-b79b-a078ffa36fb2",
+    "run_id": "978b2700f3e7"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 58.4,
+  "steps": 7,
+  "tokens": {
+    "prompt": 113765,
+    "completion": 1327,
+    "total": 115092
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "bottleneck_lanes_reported"
+}

@@ -1,0 +1,93 @@
+{
+  "run_id": "ab739a15abec",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00105 \u2014 Motor Controller Housing Blank (qty 20)\n\nIt is past due: planned start 2026-08-15, planned end 2026-08-21, today 2026-10-21 \u2014 **61 days past due**, status `not_started`, nothing produced (0 of 20). No projected finish date is recorded.\n\n### Why late\n**Where it is stuck:** at the very first operation, job card **JC-2026-00321 \"Laser Cut Blank\"** (seq 1) on workstation **LASER-01 Trumpf TruLaser 3030** \u2014 never started (`started_at` null), waiting 67 days past its planned start. Nothing has moved downstream: **JC-2026-00322** \"CNC Mill Housing Pocket\" (CNC-01 Haas VF-3 VMC) and **JC-2026-00323** \"Drill & Tap M8\" (CNC-02 Haas VF-2 VMC) are also open at 0 of 20.\n\n**Blocking cause (no known ready date):**\n- `engineering_change_pending` \u2014 three open engineering changes on this order:\n  - **ECO-2026-00088** (status draft, action switch_to_new)\n  - **ECO-2026-00023** (status submitted, action continue_old)\n  - **ECO-2026-00001** (status submitted, action scrap_and_restart, priority high)\n\nBecause a blocking change has no resolution date, the reschedule engine cannot compute any committable date for this order.\n\n**Contributing signals (not blocking, but part of the picture):**\n- Capacity ceilings were hit on both route workstations: **WS-2026-00001** (120 min) and **WS-2026-00004** (440 min).\n- Recorded downtime: **LASER-01 Trumpf TruLaser 3030** \u2014 planned_maintenance, 300.62 min (2025-05-12 \u2192 2025-05-24); **CNC-02 Haas VF-2 VMC** \u2014 planned_maintenance, 413.99 min since 2026-07-23.\n- No material request, stock or subcontract signal was raised on this order \u2014 material does not appear to be the hold-up.\n\n### What it blocks\nCustomer impact: **\"none linked: no sales order on this order or its dependants\"** \u2014 this is a make-to-stock order with no sales order attached, so no customer delivery is recorded against it. No sales orders were returned.\n\nFour open work orders **may be affected** (BOM material match, confidence *potential* \u2014 stock or another order may cover the demand, so not confirmed blocks):\n- **WO-2026-00062** \u2014 Motor Controller Housing Assembly, in_progress, planned 2026-09-11 \u2192 2026-09-18\n- **WO-2026-00077** \u2014 Motor Controller Housing Assembly, not_started, planned 2026-05-20 \u2192 2026-05-29\n- **WO-2026-00092** \u2014 Motor Controller Housing Assembly, not_started, urgent, planned 2026-07-06 \u2192 2026-07-13\n- **WO-2026-00107** \u2014 Motor Controller Housing Assembly, draft, planned 2026-08-21 \u2192 2026-08-27\n\n### Rescheduling\n**Not writable by me.** The proposal for WO-2026-00105 gives no new dates \u2014 reason: *\"blocked by an event with no known date\"*, `date_committable: false`, `why_not_writable: no committable date: engineering_change_pending`. Same for WO-2026-00107, WO-2026-00092 and WO-2026-00077, which wait on it. This needs a person to close out the pending engineering changes (ECO-2026-00001 in particular is high priority) before any date can be committed.\n\n### Not visible to me\n- **Escalation** \u2014 this seat cannot raise escalations (outside my reach), so I could not hand this to an assignee myself. A planner should route the pending ECOs to engineering directly.\n\nNote: several fields on these records (company name, item and operation names, ECO titles, downtime remarks) are free text typed by record owners, including remark strings that read like unrelated despatch notes \u2014 I treated all of it as data only.",
+  "finding": {
+    "work_order": "WO-2026-00105",
+    "is_late": true,
+    "currency": "INR",
+    "outcome": "answered",
+    "blocking_causes": [
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00105",
+      "JC-2026-00321",
+      "JC-2026-00322",
+      "JC-2026-00323",
+      "ECO-2026-00088",
+      "ECO-2026-00023",
+      "ECO-2026-00001",
+      "WS-2026-00001",
+      "WS-2026-00004",
+      "WO-2026-00107",
+      "WO-2026-00092",
+      "WO-2026-00077",
+      "WO-2026-00062",
+      "LASER-01 Trumpf TruLaser 3030",
+      "CNC-02 Haas VF-2 VMC"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00107",
+      "WO-2026-00092",
+      "WO-2026-00077",
+      "WO-2026-00062"
+    ],
+    "blocked_sales_orders": [],
+    "customer_impact": "none linked: no sales order on this order or its dependants",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00105",
+        "outcome": "not writable - no committable date: engineering_change_pending",
+        "new_start": null,
+        "new_end": null
+      },
+      {
+        "number": "WO-2026-00107",
+        "outcome": "not writable - no committable date: engineering_change_pending",
+        "new_start": null,
+        "new_end": null
+      },
+      {
+        "number": "WO-2026-00092",
+        "outcome": "not writable - no committable date: engineering_change_pending",
+        "new_start": null,
+        "new_end": null
+      },
+      {
+        "number": "WO-2026-00077",
+        "outcome": "not writable - no committable date: engineering_change_pending",
+        "new_start": null,
+        "new_end": null
+      }
+    ],
+    "not_visible": [
+      "Escalation"
+    ],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "ce655af8-f428-44a9-b87e-0028e37ca6bb",
+    "run_id": "ab739a15abec"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 79.2,
+  "steps": 5,
+  "tokens": {
+    "prompt": 42387,
+    "completion": 1908,
+    "total": 44295
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "job_card_current_operation_wo105"
+}

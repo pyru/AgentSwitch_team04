@@ -1,0 +1,64 @@
+{
+  "run_id": "f4e7322e265d",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00009** (Combine Header Auger Bracket Assembly, 80 units) is the stopped work order that has been overdue longest: due 2026-09-12, 39 days past due (today 2026-10-21). The only other stopped order, WO-2026-00075, is 23 days past due. Nothing has been produced on it (0 of 80).\n\n**Why late**\n- It is stopped with no reason recorded against it (WO-2026-00009).\n- It is stuck at the first operation: job card JC-2026-00031, \"Laser Cut\", at LASER-01 (6kW Fiber Laser). It has never been started \u2014 81 days waiting against a planned start of 2026-08-01. The later cards JC-2026-00032 (Form/Brake, BRAKE-02), JC-2026-00033 (Robotic Weld, WELD-03) and JC-2026-00034 (Powder Coat, COAT-06) are all open at zero completed.\n- Capacity ceilings are recorded on all three routed workstations (WS-2026-00001/2/3), and recorded downtime sits on every station on the route since 2026-07-23: WELD-03 1,320 min over 6 entries (2 breakdown, 2 tool change, 2 material shortage); BRAKE-02 480 min (2 operator unavailable); COAT-06 300 min (2 setup change); LASER-01 210 min (1 material shortage, 1 quality issue).\n- No single blocking signal was returned \u2014 the stop itself has no recorded cause, so the real reason is missing, not identified.\n- No cost has been recorded (expected and actual both 0), so no variance.\n\n**What it blocks**\nNo open work orders are found that consume this item. It is linked to sales order SO-2026-00140 for Buckeye AgriPower Inc, delivery 2026-08-04, value USD 15,985.56 \u2014 but that order is already marked *delivered*, so this work order is not currently holding a shipment open. Worth checking why a delivered order still has an unfinished work order behind it.\n\n**Rescheduling**\nA proposal exists (new start 2026-10-21, new end 2026-12-02) but this seat cannot write it: the order's status is \"stopped\" and dates are locked after submit \u2014 it needs an admin to cancel/fix first. Please put that to an admin.\n\n**Not visible to me**\nNothing was withheld from this seat.\n\nOne thing for you as a planner: several records have free text typed by whoever created them \u2014 the company name, item names, operation and workstation names, and the method note on the impact check. None of them tried to direct me, so nothing was ignored, but it means labels in this book are user text, not verified master data.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00009",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00009",
+      "WO-2026-00075",
+      "JC-2026-00031",
+      "JC-2026-00032",
+      "JC-2026-00033",
+      "JC-2026-00034",
+      "WS-2026-00001",
+      "WS-2026-00002",
+      "WS-2026-00003",
+      "SO-2026-00140",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00140"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00009",
+        "outcome": "not writable by this seat \u2014 status 'stopped' locks dates; needs admin cancel/fix, then new start 2026-10-21 / end 2026-12-02 could be applied by a person"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "85cd875e-c185-4dbf-8579-d27e699cbb51",
+    "run_id": "f4e7322e265d"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 64.4,
+  "steps": 5,
+  "tokens": {
+    "prompt": 51651,
+    "completion": 1335,
+    "total": 52986
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "complex_longest_overdue_stopped"
+}

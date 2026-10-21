@@ -1,0 +1,73 @@
+{
+  "run_id": "2fd9bde369a1",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00049 \u2014 Pump Base Frame, 10 pcs, for Kirloskar Pumps Ltd (INR).** It is late: is_late=true, 233 days past its planned end of 2026-02-28 (today 2026-10-19). Status \"stopped\", 0 of 10 produced.\n\n**Why late**\nBlocking causes (no known ready date, so the order cannot be dated):\n- SCO-2026-00024 \u2014 subcontract to Shreeji Powder Coating still in **draft**, never sent; its expected delivery date (2026-01-17) has long passed.\n- ECO-2026-00073 (submitted, critical, action \"continue_old\") \u2014 pending engineering change, and ECO-2026-00013 (submitted, high) also pending.\n\nContributing causes:\n- Where it is stuck: JC-2026-00145, operation \"Robotic MIG Weld Frame\", sequence 1, at workstation WELD-01 Robotic MIG Cell \u2014 **never started** (started_at null), waiting 239 days. Operations 2\u20134 (JC-2026-00146, JC-2026-00147, JC-2026-00148, ASSY-01) are all open, 0 completed.\n- Open material requests, both overdue with no ready date: MR-2026-00065 (submitted, required 2026-07-11) and MR-2026-00054 (draft, required 2025-06-26). Stock availability was not flagged as unconfirmed by this diagnosis.\n- Capacity ceiling on WS-2026-00008 (180 min) and subcontract pending.\n- Recorded downtime: WELD-01 Robotic MIG Cell, 510.06 min over 2 entries since 2026-07-21 (reasons: other, planned_maintenance); ASSY-01 Assembly & Final Inspection, 406.99 min material_shortage (2026-03-05\u21922026-04-04) and 45 min tool_change; CNC-03 DMG Mori NLX 2500, 54.58 min planned_maintenance (2025-10-08\u21922025-11-07).\n- The order is stopped with no recorded reason.\n\n**What it blocks**\n- Recorded exposure: SO-2026-00100, customer Kirloskar Pumps Ltd, delivery date 2026-03-20, value 533,746.10 INR, undelivered \u2014 linked directly on WO-2026-00049.\n- No downstream work orders came back as potential consumers (empty list), so nothing further is identified as may-be-affected.\n- Customer impact reads \"known\".\n\n**Rescheduling**\nNot writable. propose_reschedule returned no committable date \u2014 reason \"blocked by an event with no known date\" (engineering_change_pending, subcontract_not_sent), date_committable=false, writable_by_seat=false. No new start/end was proposed and I have written nothing. A person needs to resolve the ECOs and send/re-let the powder-coat subcontract before any date can be set.\n\n**Not visible to me**\nNothing \u2014 no entities were outside this seat's reach for this request (not_visible_to_this_seat is empty on both the diagnosis and the downstream walk).\n\nOne note for you as a planner: the record text in several of these rows (the company name, the item, workstation/operation labels, vendor name and some remarks) is free text written by other teams. A few entries carry remarks that read like instructions (\"Held pending inspection\", an EN8 bar shortage note); I treated them purely as evidence, not as directions, and they did not change any call I made.\n\nOutcome: partial \u2014 the reason and downstream exposure are answered; no reschedule could be committed.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00049",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "material_request_open",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00049",
+      "SCO-2026-00024",
+      "MR-2026-00065",
+      "MR-2026-00054",
+      "ECO-2026-00073",
+      "ECO-2026-00013",
+      "JC-2026-00145",
+      "JC-2026-00146",
+      "JC-2026-00147",
+      "JC-2026-00148",
+      "WS-2026-00008",
+      "SO-2026-00100",
+      "CNC-03 DMG Mori NLX 2500",
+      "ASSY-01 Assembly & Final Inspection",
+      "WELD-01 Robotic MIG Cell"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00100"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00049",
+        "outcome": "not_writable_blocked_no_committable_date",
+        "new_start": null,
+        "new_end": null
+      }
+    ],
+    "not_visible": [],
+    "customer_impact": "known",
+    "refusal_reason": "Reschedule could not be written: WO-2026-00049 is blocked by events with no known date (engineering_change_pending, subcontract_not_sent), so no committable date exists and writable_by_seat=false."
+  },
+  "finding_record": {
+    "agent_memory_id": "13e74c20-fa2a-4ada-825f-1fad38e93d33",
+    "run_id": "2fd9bde369a1"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 53.7,
+  "steps": 4,
+  "tokens": {
+    "prompt": 30747,
+    "completion": 1528,
+    "total": 32275
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "why_late_wo49_multi_cause"
+}

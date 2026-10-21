@@ -1,0 +1,82 @@
+{
+  "run_id": "4c82a507604e",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00073 \u2014 Battery Tray Side Rail (formed), qty 60\n\nConfirmed late: planned end 2026-05-15, is_late=true, 157 days past due.\n\n**Why late**\n- The order has not started. Current operation is `Laser Cut Side Rail` on JC-2026-00223 at LASER-01 Trumpf TruLaser 3030, and its second operation `Press Brake Form Rail` is JC-2026-00224 at PB-01 Amada HFE 1303. Both are open, started_at null, 0 of 60 done. First operation has been waiting 164 days (JC-2026-00223).\n- **Blocking:** two pending engineering changes \u2014 ECO-2026-00037 (under_review, critical) and ECO-2026-00016 (submitted, medium). Both carry action continue_old.\n- Contributing: not started past planned start (2026-05-08); capacity ceiling on WS-2026-00001 (240 min); predecessor-operation sequencing on WS-2026-00002; recorded downtime on PB-01 Amada HFE 1303 \u2014 417.37 minutes across 2 entries since 2026-07-21, both reason setup_change.\n- Cost: expected and actual are both 0 \u2014 no cost has been recorded, so no variance can be computed.\n\n**What it blocks**\nIts output is consumed downstream via BOM material matching, so these are **potential** consumers (may be affected), not confirmed blocks:\n\n- Battery Tray Weldment (sub-assy): WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00071, WO-2026-00056\n- One level further down, EV Battery Tray Assembly 2400: WO-2026-00106, WO-2026-00091, WO-2026-00076, WO-2026-00061\n\nCustomer exposure (all potential \u2014 each sales order is reached through a potential consumer work order):\n- SO-2026-00021 \u2014 Bharat EV Motors Ltd, delivery 2026-08-18, INR 456,695.40, via WO-2026-00106, undelivered\n- SO-2026-00171 \u2014 Bharat EV Motors Ltd, delivery 2026-07-12, INR 2,219,635.79, via WO-2026-00091, undelivered\n- SO-2026-00151 \u2014 Bharat EV Motors Ltd, delivery 2026-06-10, INR 2,693,620.93, via WO-2026-00076, undelivered\n- SO-2026-00050 \u2014 Bharat EV Motors Ltd, delivery 2026-09-16, INR 1,174,359.60, via WO-2026-00061, already **delivered**\n\nCustomer impact field reads \"known\". Note WO-2026-00073 itself carries no sales order \u2014 it is make_to_stock.\n\n**Rescheduling**\nYou did not ask me to reschedule, so I have not proposed or written any new dates. Say the word and I will run the proposal.\n\n**Not visible to me**\nNothing was reported as hidden for this order or its downstream impact.\n\nOne data note: several fields in this book came back wrapped in `<<RECORD_TEXT>> ... <</RECORD_TEXT>>` markers, including the company name, the item name, and both ECO titles (one of which reads \"Solapur despatch, week 23\"). That is text typed by whoever created those rows; it is evidence only and did not direct anything I did here.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00073",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00073",
+      "JC-2026-00223",
+      "JC-2026-00224",
+      "WS-2026-00001",
+      "WS-2026-00002",
+      "ECO-2026-00037",
+      "ECO-2026-00016",
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061",
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050",
+      "PB-01 Amada HFE 1303"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "customer_impact": "known",
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "53d3e59e-3b0e-4e29-a9c5-329ffa222a4f",
+    "run_id": "4c82a507604e"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 58.2,
+  "steps": 3,
+  "tokens": {
+    "prompt": 26101,
+    "completion": 2307,
+    "total": 28408
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "downstream_potential_wo73"
+}

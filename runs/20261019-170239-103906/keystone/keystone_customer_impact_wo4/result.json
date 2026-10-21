@@ -1,0 +1,60 @@
+{
+  "run_id": "c70035287b98",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00004** (Grain Cart Ladder Guard Weldment, qty 80) \u2014 confirmed late: planned end 2026-08-15, 65 days past due (is_late=true).\n\n**Customer order at risk**\n- **SO-2026-00003** \u2014 customer **Tri-State Farm Equipment**, delivery date 2026-06-09, value **USD 158,929.52**, status confirmed, undelivered. This is a *recorded* link (the sales order is on the work order itself), not a guessed one.\n\n**Why it is late** (nothing is flagged as a hard blocker \u2014 all signals are contributing)\n- The order has not started at all: it is past its planned start (2026-06-12) and no operation has begun. It sits at **JC-2026-00013, Laser Cut, LASER-01 \u2014 6kW Fiber Laser**, waiting 129 days.\n- Remaining operations are all open and unstarted: JC-2026-00014 Form/Brake (BRAKE-02), JC-2026-00015 Robotic Weld (WELD-03), JC-2026-00016 Powder Coat (COAT-06).\n- WS-2026-00001 carries a schedule capacity ceiling of 720 minutes.\n- Recorded downtime since 2026-07-21: WELD-03 1,320 min over 6 entries (breakdown \u00d72, tool_change \u00d72, material_shortage \u00d72); BRAKE-02 480 min (operator_unavailable \u00d72); COAT-06 300 min (setup_change \u00d72); LASER-01 210 min (material_shortage \u00d71, quality_issue \u00d71).\n- No projected finish date is recorded, so I can't give one.\n\n**What it blocks**\n- No downstream work orders consume this output (none found by BOM matching), so no other work order may be affected.\n- Customer impact is recorded as **known**: only SO-2026-00003 is exposed.\n\n**Rescheduling** \u2014 not requested, so I ran nothing here.\n\n**Not visible to me** \u2014 nothing was out of reach for this question.\n\nOne note for you: several of these records carry free-text labels (company name, item name, workstation names) wrapped in record-text markers, including the downtime entries \u2014 that's normal row text in this book, and none of it changed how I read the data.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00004",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00004",
+      "SO-2026-00003",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "WS-2026-00001",
+      "WELD-03",
+      "BRAKE-02",
+      "COAT-06",
+      "LASER-01",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "customer_impact": "known"
+  },
+  "finding_record": {
+    "agent_memory_id": "be8d4466-98c5-425c-99e7-778a6aa008d7",
+    "run_id": "c70035287b98"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 43.8,
+  "steps": 3,
+  "tokens": {
+    "prompt": 21134,
+    "completion": 1035,
+    "total": 22169
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "keystone_customer_impact_wo4"
+}

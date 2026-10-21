@@ -1,0 +1,17 @@
+{
+  "task_id": "complex_false_downstream_link",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "did not confirm WO-2026-00048; reported ['WO-2026-00056', 'WO-2026-00061', 'WO-2026-00071', 'WO-2026-00076', 'WO-2026-00086', 'WO-2026-00091', 'WO-2026-00101', 'WO-2026-00106', 'WO-2026-00116'], all linked by BOM",
+  "sample": false,
+  "run_id": "0b713c2b4b33",
+  "seconds": 109.4,
+  "steps": 5,
+  "tokens": {
+    "prompt": 60660,
+    "completion": 2537,
+    "total": 63197
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

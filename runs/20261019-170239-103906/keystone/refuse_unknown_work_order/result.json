@@ -1,0 +1,36 @@
+{
+  "run_id": "cbd08fb92f44",
+  "stop_reason": "final_answer",
+  "final_answer": "I can't answer this one as asked: **WO-2026-09999 does not exist** in this book (Keystone Precision Works LLC, USD). The lookup returned no work order with that number or id.\n\nBecause of that I did not:\n\n- **Why late** \u2014 not diagnosed. There is no record to diagnose.\n- **What it blocks** \u2014 not assessed. Downstream impact is only meaningful against a real order.\n- **Rescheduling** \u2014 nothing proposed. I can't propose dates for a non-existent order.\n\nI deliberately did not pick a \"closest\" order or guess a nearby number, because answering about the wrong work order is worse than answering about none.\n\n**What I need from you:** the correct work order number (format WO-YYYY-NNNNN). If you'd rather, give me the item code or name of what's being made and I'll find the open order that produces it, then run the full diagnosis, downstream impact and reschedule in one go.\n\n**Not visible to me:** nothing was blocked by permissions here \u2014 the issue is simply that the record isn't there.",
+  "finding": {
+    "outcome": "refused",
+    "work_order": "WO-2026-09999",
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "Work order WO-2026-09999 does not exist on this instance: no work order has that number or id. Nothing was diagnosed, no downstream impact was assessed and no reschedule was proposed, because the named order could not be found. No substitute order was used."
+  },
+  "finding_record": {
+    "agent_memory_id": "9074301e-546c-4225-91e8-a79dff26aa13",
+    "run_id": "cbd08fb92f44"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 18.9,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17276,
+    "completion": 664,
+    "total": 17940
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "refuse_unknown_work_order"
+}

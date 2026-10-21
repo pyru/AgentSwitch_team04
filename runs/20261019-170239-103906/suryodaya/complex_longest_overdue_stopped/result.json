@@ -1,0 +1,107 @@
+{
+  "run_id": "e8ca322c46a6",
+  "stop_reason": "final_answer",
+  "final_answer": "**Which order:** WO-2026-00047 \u2014 Battery Tray Base Pan (formed), 120 pcs, status **stopped**, planned end 2026-02-25, **236 days past due** (today 2026-10-19). It is the oldest of only 4 stopped orders on the book (the other three \u2014 WO-2026-00048, WO-2026-00049, WO-2026-00050 \u2014 are 235, 233 and 230 days past due).\n\n**Why late**\n- **Blocking:** a subcontract has **not been sent** \u2014 SCO-2026-00038 is still **draft** (vendor Rajendra Naik, expected delivery 2026-03-03). With no dispatch date, this has no known ready date and is what actually holds the order.\n- **Where it is stuck:** the order has not started any operation. Current operation is job card **JC-2026-00139** (Laser Cut Blank, seq 1) at workstation **LASER-01 Trumpf TruLaser 3030** \u2014 open, started_at null, waiting **245 days**. Two later operations are also open: JC-2026-00140 (Deburr & Edge Break, ASSY-01) and JC-2026-00141 (Press Brake Form Pan, PB-01 Amada HFE 1303).\n- Contributing signals: schedule capacity ceilings on WS-2026-00001 (720 min) and WS-2026-00009 (480 min); the stopped status itself has **no recorded reason**; recorded downtime on related workstations \u2014 a 202.21-min quality_issue event on PB-02 Energy Mac 100T, 417.37 min of setup_change on PB-01 since 2026-07-21, and 45 min tool_change on ASSY-01.\n\n**What it blocks**\n- Sales-order impact is **known**. There is no sales order on WO-2026-00047 itself (make-to-stock), so the exposure is all **potential** (reached through BOM-matched consumers, not confirmed blocks): **SO-2026-00021** (Bharat EV Motors, delivery 2026-08-18, \u20b9456,695.40), **SO-2026-00171** (Bharat EV Motors, 2026-07-12, \u20b92,219,635.79), **SO-2026-00151** (Bharat EV Motors, 2026-06-10, \u20b92,693,620.93), and **SO-2026-00050** (Bharat EV Motors, 2026-09-16, \u20b91,174,359.60 \u2014 already delivered).\n- Work orders that **may be affected** (BOM material match, \"potential\" \u2014 stock or another order could cover them): WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00071, WO-2026-00056, and one level deeper WO-2026-00106, WO-2026-00091, WO-2026-00076, WO-2026-00061.\n\n**Rescheduling:** cannot be written. propose_reschedule found **no committable date** for WO-2026-00047 (blocked by an event with no known date: `subcontract_not_sent`), so it is not writable by this seat. The dependent orders WO-2026-00116, WO-2026-00101, WO-2026-00086 (and WO-2026-00106, WO-2026-00091, WO-2026-00076 behind them) also cannot be committed. A person needs to dispatch the subcontract (SCO-2026-00038) before any dates can be set.\n\n**Cost:** expected_cost and actual_cost are both 0 on the work order \u2014 no cost recorded, so no variance can be computed.\n\n**Not visible to me:** nothing was outside this seat's reach.\n\nOne note: several record text fields (the company name, item/operation/workstation labels, remarks on the downtime entry) carry `<<RECORD_TEXT>>` markers but none of them tried to direct this agent \u2014 they read as ordinary data.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00047",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00047",
+      "SCO-2026-00038",
+      "JC-2026-00139",
+      "JC-2026-00140",
+      "JC-2026-00141",
+      "WS-2026-00001",
+      "WS-2026-00009",
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "PB-02 Energy Mac 100T",
+      "PB-01 Amada HFE 1303",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00047",
+        "outcome": "not writable - no committable date (subcontract_not_sent)"
+      },
+      {
+        "number": "WO-2026-00116",
+        "outcome": "not writable - waits on WO-2026-00047"
+      },
+      {
+        "number": "WO-2026-00101",
+        "outcome": "not writable - waits on WO-2026-00047"
+      },
+      {
+        "number": "WO-2026-00086",
+        "outcome": "not writable - waits on WO-2026-00047"
+      },
+      {
+        "number": "WO-2026-00106",
+        "outcome": "not writable - waits on WO-2026-00116"
+      },
+      {
+        "number": "WO-2026-00091",
+        "outcome": "not writable - waits on WO-2026-00116"
+      },
+      {
+        "number": "WO-2026-00076",
+        "outcome": "not writable - waits on WO-2026-00116"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "b647b36d-4161-47e2-9955-3ac9d0c90a57",
+    "run_id": "e8ca322c46a6"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 83.1,
+  "steps": 5,
+  "tokens": {
+    "prompt": 89162,
+    "completion": 2188,
+    "total": 91350
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "complex_longest_overdue_stopped"
+}

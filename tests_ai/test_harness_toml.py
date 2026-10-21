@@ -46,18 +46,20 @@ def test_install_pins_the_openai_sdk_and_brings_no_other_vendor_sdk():
 
 
 # What the first official run (2026-10-12) spent before every call was refused with budget_exhausted. Both
-# instances share it, and each run's preflight spends a little before any task.
+# instances share it, and each run's preflight spends a little before any task: about 300 tokens per instance in the
+# 2026-10-19 official run (172,829 in all against 172.2k for its eight tasks), so 2,000 leaves room to spare.
 SUBMISSION_TOKEN_BUDGET = 300_000
-PREFLIGHT_TOKENS = 10_000
+PREFLIGHT_TOKENS = 2_000
 
 
 def test_every_platform_task_can_start_within_its_instances_share():
     run = SPEC["run"].split()
     assert "--platform-set" in run and "--token-budget" in run
     share = int(run[run.index("--token-budget") + 1])
-    platform_tasks = [t for t in runner.load_tasks(False) if t.get("platform")]
+    platform_tasks = [t for t in runner.load_tasks(False) if runner.platform_instances(t)]
     for instance in SPEC["instances"]:
-        limits = [t.get("max_tokens", runner.TASK_TOKENS_DEFAULT) for t in platform_tasks if instance in t["instances"]]
+        limits = [t.get("max_tokens", runner.TASK_TOKENS_DEFAULT) for t in platform_tasks
+                  if instance in runner.platform_instances(t)]
         assert limits, f"no platform task on {instance}"
         assert sum(limits) <= share, f"{instance}: {sum(limits)} tokens of task limits in a {share} share"
     assert (share + PREFLIGHT_TOKENS) * len(SPEC["instances"]) <= SUBMISSION_TOKEN_BUDGET

@@ -1,0 +1,135 @@
+{
+  "run_id": "10879c7eea69",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00185 \u2014 Door Inner Panel (pressed)\n\nIt is late: 3 days past its planned end of 2026-10-18 (planned run 2026-10-11 \u2192 2026-10-18). It is still **draft**, qty 1, nothing produced.\n\n**Why late**\n- The only cause found is that the order was never released (`not_released`) \u2014 and that signal is **not blocking** by the platform's judgement.\n- No routing or operations are recorded, so there is no job card and no current operation to point at. No subcontract, material request, stock or quality signals are recorded against it. **[WO-2026-00185]**\n- It is a make-to-order job with **no linked sales order**, so its own customer exposure can't be established.\n- Cost: expected and actual are both 0.0, so no cost has been recorded and I'm not computing a variance.\n\n**What it blocks** *(potential only \u2014 BOM matching, not confirmed)*\n34 open work orders may be affected, chiefly **WO-2026-00187, WO-2026-00186, WO-2026-00184, WO-2026-00182, WO-2026-00180, WO-2026-00178, WO-2026-00176, WO-2026-00174, WO-2026-00172, WO-2026-00170, WO-2026-00168, WO-2026-00166, WO-2026-00164, WO-2026-00162, WO-2026-00160, WO-2026-00158, WO-2026-00156, WO-2026-00154, WO-2026-00152, WO-2026-00150, WO-2026-00148, WO-2026-00146, WO-2026-00144, WO-2026-00142, WO-2026-00140, WO-2026-00138, WO-2026-00136, WO-2026-00134, WO-2026-00132, WO-2026-00130, WO-2026-00128, WO-2026-00126, WO-2026-00124**, plus **WO-2026-00110, WO-2026-00095, WO-2026-00080, WO-2026-00065, WO-2026-00112, WO-2026-00107, WO-2026-00097, WO-2026-00092, WO-2026-00082, WO-2026-00077, WO-2026-00067, WO-2026-00062, WO-2026-00052**. Stock or another order may cover the demand, so treat these as \"may be affected\".\n\nRecorded sales exposure (all potential, reached through potential consumers \u2014 none is a linked exposure):\n- SO-2026-00027 \u2014 Tata Ficosa Automotive Systems, due 2026-09-07, \u20b920,91,356.95\n- SO-2026-00192 \u2014 Tata Ficosa Automotive Systems, due 2026-07-14, \u20b914,83,182.12\n- SO-2026-00187 \u2014 Tata Ficosa Automotive Systems, due 2026-05-30, \u20b912,08,697.60\n- SO-2026-00056 \u2014 Tata Ficosa Automotive Systems, due 2026-10-06, \u20b99,14,603.56 (already delivered)\n- SO-2026-00053 \u2014 Kirloskar Pumps Ltd, due 2026-10-10, \u20b93,37,155.46 (already delivered)\n- SO-2026-00198 \u2014 Kirloskar Pumps Ltd, due 2026-08-03, \u20b92,16,054.70\n- SO-2026-00164 \u2014 Kirloskar Pumps Ltd, due 2026-06-30, \u20b910,47,415.32\n- SO-2026-00039 \u2014 Kirloskar Pumps Ltd, due 2026-09-19, \u20b94,49,475.88\n\nCustomer impact is **partly unknown**: 34 make-to-order work orders \u2014 WO-2026-00185 itself and the first 33 in the list above \u2014 have no linked sales order, so their customers can't be named.\n\n**Rescheduling**\n- Proposed (and within my write rights): WO-2026-00185 start 2026-10-21, end 2026-10-28; then WO-2026-00187 \u2192 2026-10-29/2026-11-05, WO-2026-00186 \u2192 2026-10-29/2026-11-01, and the other draft consumers \u2192 2026-10-29/2026-11-01; WO-2026-00110 \u2192 2026-10-29/2026-11-09.\n- **Nothing was applied.** The first write on WO-2026-00185 returned `changed_underneath`: the order was edited by someone else during this run (updated_at 2026-10-21T11:43:17). Every further write in this run is refused, so I did not retry.\n- Escalated: **ESC-2026-00101**, assigned to **Meera Kulkarni**, due 2026-10-21 15:43. She needs to reconcile the concurrent edit before any new dates are written.\n- Seven downstream orders are date-locked and need an admin cancel, not this seat: **WO-2026-00095, WO-2026-00080, WO-2026-00065, WO-2026-00097, WO-2026-00092, WO-2026-00082, WO-2026-00077**.\n\n**Not visible to me**\nNothing was outside this seat's reach. Employee contact details were not needed here; I have not read payroll or any contact data.\n\nOne data note for you: the item, company and customer names come back wrapped in record-text markers, which means they are free text typed by whoever created the row \u2014 including the customer names above. I've treated them as data only; none of it tried to instruct me.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00185",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_released"
+    ],
+    "evidence_records": [
+      "WO-2026-00185",
+      "WO-2026-00187",
+      "WO-2026-00186",
+      "WO-2026-00110",
+      "WO-2026-00095",
+      "WO-2026-00080",
+      "WO-2026-00065",
+      "SO-2026-00027",
+      "SO-2026-00192",
+      "SO-2026-00187",
+      "SO-2026-00056",
+      "ESC-2026-00101"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00187",
+      "WO-2026-00186",
+      "WO-2026-00184",
+      "WO-2026-00182",
+      "WO-2026-00180",
+      "WO-2026-00178",
+      "WO-2026-00176",
+      "WO-2026-00174",
+      "WO-2026-00172",
+      "WO-2026-00170",
+      "WO-2026-00168",
+      "WO-2026-00166",
+      "WO-2026-00164",
+      "WO-2026-00162",
+      "WO-2026-00160",
+      "WO-2026-00158",
+      "WO-2026-00156",
+      "WO-2026-00154",
+      "WO-2026-00152",
+      "WO-2026-00150",
+      "WO-2026-00148",
+      "WO-2026-00146",
+      "WO-2026-00144",
+      "WO-2026-00142",
+      "WO-2026-00140",
+      "WO-2026-00138",
+      "WO-2026-00136",
+      "WO-2026-00134",
+      "WO-2026-00132",
+      "WO-2026-00130",
+      "WO-2026-00128",
+      "WO-2026-00126",
+      "WO-2026-00124",
+      "WO-2026-00110",
+      "WO-2026-00095",
+      "WO-2026-00080",
+      "WO-2026-00065",
+      "WO-2026-00112",
+      "WO-2026-00107",
+      "WO-2026-00097",
+      "WO-2026-00092",
+      "WO-2026-00082",
+      "WO-2026-00077",
+      "WO-2026-00067",
+      "WO-2026-00062",
+      "WO-2026-00052"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00027",
+      "SO-2026-00192",
+      "SO-2026-00187",
+      "SO-2026-00056",
+      "SO-2026-00053",
+      "SO-2026-00198",
+      "SO-2026-00164",
+      "SO-2026-00039"
+    ],
+    "customer_impact": "partly unknown: make-to-order without a linked sales order: WO-2026-00185, WO-2026-00187, WO-2026-00186, WO-2026-00184, WO-2026-00182, WO-2026-00180, WO-2026-00178, WO-2026-00176, WO-2026-00174, WO-2026-00172, WO-2026-00170, WO-2026-00168, WO-2026-00166, WO-2026-00164, WO-2026-00162, WO-2026-00160, WO-2026-00158, WO-2026-00156, WO-2026-00154, WO-2026-00152, WO-2026-00150, WO-2026-00148, WO-2026-00146, WO-2026-00144, WO-2026-00142, WO-2026-00140, WO-2026-00138, WO-2026-00136, WO-2026-00134, WO-2026-00132, WO-2026-00130, WO-2026-00128, WO-2026-00126, WO-2026-00124",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00185",
+        "new_start": "2026-10-21",
+        "new_end": "2026-10-28",
+        "outcome": "changed_underneath"
+      }
+    ],
+    "cost": null,
+    "not_visible": [],
+    "escalations": [
+      {
+        "raised": true,
+        "number": "ESC-2026-00101",
+        "assignee": "Meera Kulkarni",
+        "reason_code": "unresolved_after_retries"
+      }
+    ],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "569786b1-6b0e-4f0c-ae1a-a4a868c66e4d",
+    "run_id": "10879c7eea69"
+  },
+  "escalations": [
+    {
+      "raised": true,
+      "escalation_id": "f5b660b6-8e1a-4978-847e-468f94aca2f9",
+      "number": "ESC-2026-00101",
+      "status": "open",
+      "assignee": "Meera Kulkarni",
+      "due_at": "2026-10-21T15:43:30.696558+00:00"
+    }
+  ],
+  "agent_session_id": "66ae22de-e5a4-42e2-a5ff-88cedf5adc95",
+  "conflicts": [
+    "WO-2026-00185"
+  ],
+  "seconds": 98.0,
+  "steps": 6,
+  "tokens": {
+    "prompt": 125484,
+    "completion": 3312,
+    "total": 128796
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "concurrent_edit_before_write"
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "stopped_not_late",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "corrected the premise: WO-2026-00122 due 2027-06-12 is not late; causes match DB",
+  "sample": false,
+  "run_id": "48b779f19281",
+  "seconds": 51.3,
+  "steps": 4,
+  "tokens": {
+    "prompt": 27040,
+    "completion": 1126,
+    "total": 28166
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

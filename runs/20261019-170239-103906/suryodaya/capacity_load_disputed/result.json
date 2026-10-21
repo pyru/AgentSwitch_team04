@@ -1,0 +1,45 @@
+{
+  "run_id": "c9c2edb56066",
+  "stop_reason": "final_answer",
+  "final_answer": "**Shop load, next 21 days (Suryodaya Precision Works, INR)**\n\nThe shop is overloaded. Both figures agree:\n\n- Capacity board: **117.04%** load \u2014 129,772 booked minutes against 110,880 available.\n- Work content in the same job cards (time_in_mins \u00d7 for_qty, the platform's OEE basis): **117.0%**.\n\nThe board and the work content agree here (board_understates_load = false), so this is one consistent picture: 149 open job cards, roughly 18,900 minutes more work than the horizon can absorb.\n\n**Workstations over declared capacity on the work-content figure:**\n\n| Workstation | Work content | Declared capacity | Times over |\n|---|---|---|---|\n| WS-2026-00009 \u2014 ASSY-01 Assembly & Final Inspection | 72,182 min | 30,240 min | 2.39\u00d7 |\n| WS-2026-00008 \u2014 WELD-01 Robotic MIG Cell | 17,920 min | 10,080 min | 1.78\u00d7 |\n| WS-2026-00005 \u2014 CNC-02 Haas VF-2 VMC | 15,980 min | 10,080 min | 1.59\u00d7 |\n\nThe board itself also flags 8 workstations and 8 periods overloaded.\n\n**Where the load concentrates:** Assembly & Final Inspection is the dominant constraint \u2014 it alone accounts for 72,182 of the 129,772 minutes, more than half the shop's work content, and it's running at nearly 2.4\u00d7 its stated capacity. Welding and CNC-02 are each well over too, but at a much smaller absolute volume. Relieving Assembly is where any meaningful load reduction would come from.\n\n**Not visible to me:** nothing relevant \u2014 this seat can see the capacity board and job cards for this question.\n\nNote one record carried embedded text: the company name row and the capacity basis row both came wrapped in `<<RECORD_TEXT>>` markers. That's just row content, not an instruction, and it didn't change anything here.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": null,
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "WS-2026-00009",
+      "WS-2026-00008",
+      "WS-2026-00005"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "capacity": {
+      "board_load_pct": 117.04,
+      "work_content_load_pct": 117.0,
+      "figures_disagree": false
+    }
+  },
+  "finding_record": {
+    "agent_memory_id": "05c23716-7a1d-436c-adeb-2af734f93546",
+    "run_id": "c9c2edb56066"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 22.5,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17839,
+    "completion": 827,
+    "total": 18666
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "capacity_load_disputed"
+}

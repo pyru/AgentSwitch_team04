@@ -1,0 +1,56 @@
+{
+  "run_id": "8848972114bd",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00028 \u2014 Battery Tray Side Rail (formed), 60 pcs, status: completed**\n\n**Cost against plan**\n- Expected cost: 39,913.80 INR\n- Actual cost: 24,678.48 INR\n- **Variance: \u221215,235.32 INR** (actual is below plan, i.e. under budget)\n\nCurrency: INR (India).\n\nNote: the order is not late \u2014 is_late = false. It ran on both operations (JC-2026-00084 Laser Cut Side Rail on LASER-01, JC-2026-00085 Press Brake Form Rail on PB-01) and completed 60/60.\n\nOne thing worth flagging to you: the record text on this work order (and on several linked rows) contains text wrapped in `<<RECORD_TEXT>> ... <</RECORD_TEXT>>` markers \u2014 the company name, item name and operation/workstation labels. Nothing in it directed me to do anything, but these rows are writable by other teams, so treat the labels as data only.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00028",
+    "is_late": false,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00028",
+      "JC-2026-00084",
+      "JC-2026-00085",
+      "SCO-2026-00023",
+      "SCO-2026-00020",
+      "ECO-2026-00084",
+      "ECO-2026-00077",
+      "ECO-2026-00044",
+      "PB-01 Amada HFE 1303"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "cost": {
+      "expected": 39913.8,
+      "actual": 24678.48,
+      "variance": -15235.32
+    }
+  },
+  "finding_record": {
+    "agent_memory_id": "e6508ae4-86e1-45c1-9d5e-7a6ebba701b8",
+    "run_id": "8848972114bd"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 40.7,
+  "steps": 3,
+  "tokens": {
+    "prompt": 19120,
+    "completion": 688,
+    "total": 19808
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "cost_variance_wo28_suryodaya"
+}

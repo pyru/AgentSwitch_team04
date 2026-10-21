@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_cost_variance_keystone",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "declined to compute a variance without recorded cost",
+  "sample": false,
+  "run_id": "e655c423170e",
+  "seconds": 40.1,
+  "steps": 3,
+  "tokens": {
+    "prompt": 20122,
+    "completion": 813,
+    "total": 20935
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

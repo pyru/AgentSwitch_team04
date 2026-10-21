@@ -1,0 +1,17 @@
+{
+  "task_id": "why_late_wo49_multi_cause",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "causes match DB: ['material_request_open', 'stopped_without_recorded_reason', 'subcontract_not_sent']",
+  "sample": false,
+  "run_id": "2fd9bde369a1",
+  "seconds": 53.7,
+  "steps": 4,
+  "tokens": {
+    "prompt": 30747,
+    "completion": 1528,
+    "total": 32275
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

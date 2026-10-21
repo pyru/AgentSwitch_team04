@@ -1,0 +1,47 @@
+{
+  "run_id": "48b779f19281",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00122 \u2014 Pump Mounting Bracket Assembly\n\n**First, a correction to the premise:** this order is **not late**. `diagnose_work_order` returns `is_late=false` \u2014 its planned window is 2027-06-08 to 2027-06-12, and today is 2026-10-19. It is actually ~236 days *ahead* of its planned end date. It is also `not_started`, low priority, qty 1, with 0 produced. Nothing is currently blocking it.\n\n### Why late\nIt isn't. There are no blocking causes. Two contributing signals are recorded, neither blocking:\n- `schedule_capacity_ceiling` (WS-2026-00009, 9 minutes) \u2014 a capacity ceiling on the routing workstation.\n- `workstation_downtime_recorded` (ASSY-01 Assembly & Final Inspection, 45 minutes since 2026-07-21, reason: tool_change) \u2014 1 downtime entry.\n\nThe work is sitting at operation 1 (Fastener Assembly, JC-2026-00327), with JC-2026-00328 (Leak / Torque Test) and JC-2026-00329 (Final Inspection & CMM) still open after it, all on ASSY-01. None have started.\n\n### What it blocks\n`downstream_impact` found **no** potential consumer work orders and **no** linked sales orders. Because it is make-to-order with no linked sales order, the customer impact is recorded as: *\"partly unknown: make-to-order without a linked sales order: WO-2026-00122\"* \u2014 so I cannot say no customer is affected; the customer side is **partly unknown** for that reason.\n\n### Rescheduling\n`propose_reschedule` returned **no proposals** (`proposals: []`, `downstream_considered: []`) \u2014 there is nothing writable and nothing to write, so I did not and cannot reschedule this order. Its lead-time is already far in the future, so no date change is warranted.\n\n### Not visible to me\nNothing was flagged as outside this seat's visibility for this request.\n\nOne note for the record: several row labels carry embedded `<<RECORD_TEXT>>` markup (the company name, the item name, workstation names, the customer_impact text). None of it contained instructions directed at me \u2014 I'm flagging it only because these rows are written by many teams.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00122",
+    "is_late": false,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "schedule_capacity_ceiling",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00122",
+      "JC-2026-00327",
+      "JC-2026-00328",
+      "JC-2026-00329",
+      "WS-2026-00009",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "Work order is not past due (is_late=false) and propose_reschedule returned no proposals, so nothing can be rescheduled.",
+    "customer_impact": "partly unknown: make-to-order without a linked sales order: WO-2026-00122"
+  },
+  "finding_record": {
+    "agent_memory_id": "48f284cc-09f5-41bf-aa7a-a6e3a87fd2ce",
+    "run_id": "48b779f19281"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 51.3,
+  "steps": 4,
+  "tokens": {
+    "prompt": 27040,
+    "completion": 1126,
+    "total": 28166
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "stopped_not_late"
+}

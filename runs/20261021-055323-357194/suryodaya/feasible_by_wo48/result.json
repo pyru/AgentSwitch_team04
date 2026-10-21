@@ -1,0 +1,71 @@
+{
+  "run_id": "57e25ebaee62",
+  "stop_reason": "final_answer",
+  "final_answer": "**Can we finish WO-2026-00048 by 2027-03-31?**\n\n**Verdict: no.** The order is blocked with no known ready date, so the platform will not stand behind any finish date \u2014 and note that a \"yes\" verdict is deliberately never offered, because the platform models no work calendar and no labour capacity, so committing a date would be inventing one.\n\n**Remaining work content: 27.0 hours** (1,620 minutes across 3 open job cards; 161 days available from today, 2026-10-21).\n\n**What blocks it** (blocking signals, no known ready date):\n- `engineering_change_pending` \u2014 ECO-2026-00012 (draft) and ECO-2026-00064 (under review)\n- `subcontract_not_sent` \u2014 SCO-2026-00030 (draft, Shreeji Powder Coating) and SCO-2026-00076 (draft)\n\n**Where the order is stuck:** the order itself is `stopped`, 0 of 60 produced, 237 days past its planned end (2026-02-26). It sits on JC-2026-00142, operation \"Fastener Assembly\", sequence 1, at ASSY-01 Assembly & Final Inspection \u2014 never started, waiting 244 days. JC-2026-00143 (Leak/Torque Test) and JC-2026-00144 (Final Inspection & CMM) are also open.\n\n**Also weighing on it** (contributing, not blocking): capacity ceiling on WS-2026-00009 (540 + 660 minutes), pending predecessor operations, recorded downtime on the order (CNC-02 Haas VF-2 VMC, \"other\", 456.41 min, 2025-08-20 to 2025-08-24) and on ASSY-01 (45 min, tool_change, since 2026-07-23), and the order being stopped with no recorded reason.\n\n**Shop load** (for context): the capacity board reports 117.04% and the work content in the same job cards is 117.0% \u2014 they agree, so the board is not understating the load.\n\n**Costs:** expected and actual cost are both 0 on this order, so no cost has been recorded and no variance can be computed.\n\n**One thing a planner should know:** the company name field and several record text fields in this data (item name, operation names, vendor names, ECO titles, downtime remarks) contain record text \u2014 e.g. the ECO titles describing extrusion and spring-steel strip shortages. None of it directed me; it is reported as evidence only.\n\n**What it blocks / Rescheduling:** not asked in this request, so I did not run downstream impact or a reschedule proposal. Say the word and I'll pull both.\n\n**Not visible to me:** nothing \u2014 no entity used here was outside this seat's visibility.\n\n**Missing for a firm answer:** the blocking causes have no known ready date. Two draft subcontracts need to be sent, and two engineering changes (one draft, one under review) need to be dispositioned. Those need a person. Escalation is not available to this seat, so no escalation was raised \u2014 pass these to whoever owns subcontract release and engineering change approval.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00048",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "engineering_change_pending",
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "downtime_on_order",
+      "operation_not_started",
+      "schedule_capacity_ceiling",
+      "schedule_predecessor_operation",
+      "schedule_subcontract_pending",
+      "stopped_without_recorded_reason",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "ECO-2026-00012",
+      "ECO-2026-00064",
+      "SCO-2026-00030",
+      "SCO-2026-00076",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "WS-2026-00009",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "feasibility": {
+      "asked_by": "2027-03-31",
+      "verdict": "no",
+      "remaining_work_content_hours": 27.0
+    },
+    "capacity": {
+      "board_load_pct": 117.04,
+      "work_content_load_pct": 117.0,
+      "figures_disagree": false
+    },
+    "cost": null,
+    "customer_impact": null
+  },
+  "finding_record": {
+    "agent_memory_id": "cdb0895d-0f59-4115-b37b-4d0e94cbdc87",
+    "run_id": "57e25ebaee62"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 90.8,
+  "steps": 4,
+  "tokens": {
+    "prompt": 27313,
+    "completion": 1393,
+    "total": 28706
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "feasible_by_wo48"
+}

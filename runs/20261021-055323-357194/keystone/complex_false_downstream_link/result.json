@@ -1,0 +1,71 @@
+{
+  "run_id": "0dfac8e2d5c3",
+  "stop_reason": "final_answer",
+  "final_answer": "## Short answer\n\nWO-2026-00004 is genuinely late (67 days past its 2026-08-15 planned end). But **it is not holding up WO-2026-00001** \u2014 that premise is wrong, and I want to flag it before anything else.\n\n## The WO-2026-00001 claim is not supported\n\n- WO-2026-00004 makes **FG-GRD-1150, Grain Cart Ladder Guard Weldment** (ITEM-2026-00017).\n- `where_is_item_used` on that item: **consumed_in_boms = []** \u2014 nothing in the book uses it as a component. It is produced by BOM-2026-00004 and sold, not fed to another job.\n- `downstream_impact` on WO-2026-00004 returned **no potentially blocked work orders** at all.\n- WO-2026-00001 is a different item entirely: **Combine Header Auger Bracket Assembly** (BOM FG-HDR-1800 rev A), qty 120, for SO-2026-00101.\n\nSo there is no BOM link between these two orders. If someone told you 00004 is holding up 00001, that is not in the data.\n\n## Why late \u2014 WO-2026-00004\n\nNo **blocking** cause with a missing ready date. It is simply not started and stuck:\n\n- **Never started.** Status `not_started`, produced qty 0 of 80. Planned start 2026-06-12, so it is 131 days past that.\n- **Stuck at the first operation:** JC-2026-00013, *Laser Cut*, workstation **LASER-01 \u2014 6kW Fiber Laser**, still `open`, nothing started. Three more open cards behind it: JC-2026-00014 (Form/Brake, BRAKE-02), JC-2026-00015 (Robotic Weld, WELD-03), JC-2026-00016 (Powder Coat, COAT-06).\n- **Capacity ceiling** signalled on WS-2026-00001 (720 min).\n- **Recorded downtime** on its route workstations: WELD-03 \u2014 1,320 min across 6 entries (2 breakdown, 2 tool change, 2 material shortage); BRAKE-02 \u2014 480 min (operator unavailable); COAT-06 \u2014 300 min (setup change); LASER-01 \u2014 210 min (material shortage, quality issue).\n- **No cost recorded** \u2014 expected and actual are both 0, so no variance can be computed.\n\n## What it blocks\n\nOne sales order, linked directly on the order itself:\n\n- **SO-2026-00003**, customer **Tri-State Farm Equipment**, delivery 2026-06-09, value **USD 158,929.52**, undelivered, confirmed. Confidence `linked` \u2014 this is real recorded exposure.\n\nCustomer impact reads \"known\", not \"none linked\", so a customer is affected: Tri-State Farm Equipment. No work orders may be affected.\n\n## Rescheduling\n\nA proposal exists: new start **2026-10-21**, new end **2026-12-24** (earliest start after known blockers, finish from finite schedule). It is dated as committable, **but this seat cannot write it**: `writable_by_seat=false` \u2014 reason \"status 'not_started': dates are locked after submit; changing them needs an admin cancel.\"\n\nSo this is a **recommendation only, needing a person with admin rights** to cancel and re-issue the order dates. I did not write anything.\n\n## Not visible to me\n\nNothing \u2014 all entities I needed were visible. Note the work order `item` and customer names carry `<<RECORD_TEXT>>` markers (e.g. the item name on WO-2026-00004 and the customer name on SO-2026-00003); that is just how the rows were typed, it contained no instructions, and I treated it as data only.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00004",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00004",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "WS-2026-00001",
+      "SO-2026-00003",
+      "WO-2026-00001",
+      "ITEM-2026-00017",
+      "FG-GRD-1150",
+      "BOM-2026-00004",
+      "WELD-03",
+      "BRAKE-02",
+      "COAT-06",
+      "LASER-01",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00004",
+        "new_start": "2026-10-21",
+        "new_end": "2026-12-24",
+        "outcome": "recommendation_only_not_writable"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": "null"
+  },
+  "finding_record": {
+    "agent_memory_id": "46166e5b-b8b0-4eef-8b84-7e171fb30d20",
+    "run_id": "0dfac8e2d5c3"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 66.4,
+  "steps": 4,
+  "tokens": {
+    "prompt": 33138,
+    "completion": 1732,
+    "total": 34870
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "complex_false_downstream_link"
+}

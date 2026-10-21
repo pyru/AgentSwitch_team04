@@ -1,0 +1,9 @@
+{
+  "target": {
+    "id": "c73030e3-83ab-4c21-8a61-3b73e18128a6",
+    "number": "WO-2026-00049",
+    "status": "stopped",
+    "planned_end_date": "2026-02-28",
+    "material_requests": "MR-2026-00054,MR-2026-00065"
+  }
+}

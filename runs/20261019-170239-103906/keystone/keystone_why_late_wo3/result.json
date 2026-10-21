@@ -1,0 +1,63 @@
+{
+  "run_id": "58c88baaa9d9",
+  "stop_reason": "final_answer",
+  "final_answer": "## WO-2026-00003 \u2014 Skid-Steer Quick-Attach Plate (qty 60)\n\nIt is late: 49 days past its planned end (2026-08-31), and it hasn't started (produced_qty 0). It is stuck at its first operation, **Laser Cut on JC-2026-00009** (LASER-01 \u2014 6kW Fiber Laser), waiting 88 days since its planned start of 2026-07-23.\n\n**Why late**\n- No blocking signal \u2014 nothing has *no known ready date*. All four signals are contributing:\n  - `not_started_past_planned_start` \u2014 planned start 2026-07-23 passed with no start (WO-2026-00003).\n  - `operation_not_started` \u2014 JC-2026-00009 not started, 88 days waiting.\n  - `schedule_capacity_ceiling` \u2014 WS-2026-00001 ceiling of 480 min.\n  - `workstation_downtime_recorded` on every route station since 2026-07-21: WELD-03 (1320 min / 6 entries \u2014 breakdown \u00d72, tool_change \u00d72, material_shortage \u00d72), BRAKE-02 (480 min / 2 \u2014 operator_unavailable \u00d72), COAT-06 (300 min / 2 \u2014 setup_change \u00d72), LASER-01 (210 min / 2 \u2014 material_shortage, quality_issue).\n\n**What it blocks**\nNo downstream work orders may be affected \u2014 `downstream_impact` found no potential consumers. One sales order is recorded exposure, linked directly on this order: **SO-2026-00123**, customer Cardinal Tillage Works, delivery date 2026-07-10, value **USD 80,095.52** \u2014 already marked delivered. Customer impact: \"known\".\n\n**Rescheduling**\n`propose_reschedule` suggests new start 2026-10-19, new end 2026-11-27 (earliest start after known blockers; finish from finite schedule). **This is not writable by this seat** \u2014 `writable_by_seat=false`, reason: status `not_started`, dates are locked after submit and changing them needs an admin cancel. `apply_reschedule` is not available on this seat, so nothing was written. This is a recommendation for a person.\n\n**Not visible to me**\nNothing is hidden from this seat. Note: cost fields (expected and actual) are both 0, so no cost has been recorded and no variance can be computed.\n\n\u26a0\ufe0f One note for you: the item name, workstation names and this company's name came back wrapped in `<<RECORD_TEXT>>` markers \u2014 i.e. text typed by whoever created those rows. None of it tried to steer me; I'm flagging it only so you know those rows carry author-typed text.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00003",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00003",
+      "JC-2026-00009",
+      "JC-2026-00010",
+      "JC-2026-00011",
+      "JC-2026-00012",
+      "WS-2026-00001",
+      "SO-2026-00123",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00123"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00003",
+        "outcome": "recommended_not_writable",
+        "new_start": "2026-10-19",
+        "new_end": "2026-11-27"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": "The proposed reschedule for WO-2026-00003 is not writable by this seat: status 'not_started' locks dates after submit and needs an admin cancel. apply_reschedule is not available on this seat."
+  },
+  "finding_record": {
+    "agent_memory_id": "dbd5e910-77d1-4d88-9308-027635946a9c",
+    "run_id": "58c88baaa9d9"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 51.7,
+  "steps": 6,
+  "tokens": {
+    "prompt": 47568,
+    "completion": 1373,
+    "total": 48941
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "keystone_why_late_wo3"
+}

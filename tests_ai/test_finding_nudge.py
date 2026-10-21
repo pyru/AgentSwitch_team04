@@ -108,6 +108,26 @@ def test_the_2026_10_18_failure_now_records_its_finding(recording_mcp):
     assert "last_call" in [e["type"] for e in events]
 
 
+def test_the_2026_10_19_failure_now_records_its_finding(recording_mcp):
+    """Platform-set rehearsal 2026-10-19 (why_late_wo48_subcontract): an early prose reply was sent back as
+    finding_missing, and the forced record_finding after it was answered with an empty message. The last ask now
+    follows either first ask, offering only record_finding, and the finding lands."""
+    mcp, _ = recording_mcp
+    llm = MeteredLLM([_tool(), _prose("Both blockers have no known date. Let me escalate."), _prose(""), _record(),
+                      _prose("done")])
+    events = []
+
+    out = ProductionAgent(mcp, llm=llm, model="m", require_finding=True, trace=events.append).run("why late?")
+
+    assert out["finding"] is not None and len(llm.requests) == 5
+    kinds = [e["type"] for e in events]
+    assert kinds.count("finding_missing") == 1 and kinds.count("finding_nudge") == 1
+    assert llm.requests[2]["tool_choice"] == FORCE_FINDING, "the send-back forces record_finding next"
+    assert _names(llm.requests[3]) == ["record_finding"] and llm.requests[3]["tool_choice"] == FORCE_FINDING
+    last_ask = [m for m in llm.requests[3]["messages"] if m.get("role") == "user"][-1]["content"]
+    assert last_ask == FINDING_LAST_ASK + NO_ESCALATION_NOTE
+
+
 def test_a_run_that_can_escalate_is_not_told_it_cannot(recording_mcp):
     mcp, _ = recording_mcp
     llm = MeteredLLM([_tool(10_000), _prose(), _record(), _prose("done")])

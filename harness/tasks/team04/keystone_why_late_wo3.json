@@ -6,6 +6,7 @@
   ],
   "mode": "dry_run",
   "platform": true,
+  "max_tokens": 35000,
   "prompt": "WO-2026-00003 is late. Find out why and reschedule what you can.",
   "verifier": "harness.verifiers.team04:keystone_not_started_cause",
   "checks": "About WO-2026-00003, answered or partial. Reports not_started_past_planned_start and invents none of the checked causes; claims no applied reschedule; no writes. Subject and outcome rules: harness/verifiers/team04.py docstring.",

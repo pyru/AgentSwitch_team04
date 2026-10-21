@@ -1,0 +1,405 @@
+{
+  "run_id": "aecf969f28a8",
+  "stop_reason": "final_answer",
+  "final_answer": "## Why it's late\n\nWO-2026-00185 (Door Inner Panel (pressed), qty 1) is **late \u2014 3 days past due**: planned 11\u201318 Oct 2026, today 21 Oct, produced qty 0.\n\nThe only signal on it is **`not_released`** \u2014 it is still in **draft**, so it was never released to the floor. Nothing else is holding it: no material request, subcontract, stock, quality or downtime signal came back, and the platform records **no operations, no route workstations and no current job card**, so I can't tell you which machine or operation it is waiting on. Cost: expected and actual are both 0, so no cost has been recorded and no variance can be computed.\n\n## What it blocks\n\nThe platform found **45 potential consumer work orders** by BOM matching \u2014 these are \"may be affected\", not confirmed blocks, because stock or another order could cover the need. They include:\n\n- 33 door-related orders (WO-2026-00187 through WO-2026-00124) \u2014 draft/not started, many already past their planned ends.\n- WO-2026-00110, WO-2026-00095, WO-2026-00080, WO-2026-00065 (Door Module Sub-assembly), and WO-2026-00112, WO-2026-00107, WO-2026-00097, WO-2026-00092, WO-2026-00082, WO-2026-00067, WO-2026-00062, WO-2026-00052 at depth 2.\n\n**Customer impact is partly unknown.** WO-2026-00185 is make-to-order with no linked sales order, so nothing on the order itself is recorded exposure. Through the potential consumers, eight sales orders may be affected \u2014 Tata Ficosa Automotive Systems: SO-2026-00027 (\u20b920,91,356.95, due 2026-09-07), SO-2026-00192 (\u20b914,83,182.12, due 2026-07-14), SO-2026-00187 (\u20b912,08,697.60, due 2026-05-30), SO-2026-00056 (\u20b99,14,603.56, due 2026-10-06, already delivered); Kirloskar Pumps Ltd: SO-2026-00053 (\u20b93,37,155.46, due 2026-10-10, already delivered), SO-2026-00198 (\u20b92,16,054.70, due 2026-08-03), SO-2026-00164 (\u20b910,47,415.32, due 2026-06-30), SO-2026-00039 (\u20b94,49,475.88, due 2026-09-19). Treat these as **potential** exposure only.\n\n## Rescheduling\n\n**Applied:**\n- **WO-2026-00185**: 11 Oct \u2192 18 Oct becomes **21 Oct \u2192 28 Oct**.\n- **WO-2026-00186**: 22 Oct \u2192 25 Oct becomes **29 Oct \u2192 01 Nov**.\n\n**Not applied:** WO-2026-00187 was **not approved** by the platform (its planned end date needs human approval under this seat's policy), and 33 other dependants (WO-2026-00184, 00182, 00180 \u2026 00124, WO-2026-00110, WO-2026-00112, WO-2026-00107) came back **not_approved** as well. WO-2026-00187 and these dependants were still showing *writable_by_seat: true* in the proposal, so the block is at approval, not a permission gap on my side \u2014 a person needs to approve them. Six more orders \u2014 WO-2026-00095, WO-2026-00080, WO-2026-00065, WO-2026-00097, WO-2026-00092, WO-2026-00082, WO-2026-00077 \u2014 are **locked** (status \"not_started\": dates are fixed after submit and need an admin cancel), so those proposals are recommendations only. No order edited by someone else mid-run, so nothing was refused on a conflict.\n\n## Not visible to me\n\nNothing. Every entity I needed for this request was readable, and I have no reason to report a data gap other than the order having no routing/operations and no linked sales order.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00185",
+    "is_late": true,
+    "currency": "INR",
+    "cost": null,
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_released"
+    ],
+    "evidence_records": [
+      "WO-2026-00185",
+      "WO-2026-00186",
+      "WO-2026-00187",
+      "WO-2026-00184",
+      "WO-2026-00182",
+      "WO-2026-00180",
+      "WO-2026-00178",
+      "WO-2026-00176",
+      "WO-2026-00174",
+      "WO-2026-00172",
+      "WO-2026-00170",
+      "WO-2026-00168",
+      "WO-2026-00166",
+      "WO-2026-00164",
+      "WO-2026-00162",
+      "WO-2026-00160",
+      "WO-2026-00158",
+      "WO-2026-00156",
+      "WO-2026-00154",
+      "WO-2026-00152",
+      "WO-2026-00150",
+      "WO-2026-00148",
+      "WO-2026-00146",
+      "WO-2026-00144",
+      "WO-2026-00142",
+      "WO-2026-00140",
+      "WO-2026-00138",
+      "WO-2026-00136",
+      "WO-2026-00134",
+      "WO-2026-00132",
+      "WO-2026-00130",
+      "WO-2026-00128",
+      "WO-2026-00126",
+      "WO-2026-00124",
+      "WO-2026-00110",
+      "WO-2026-00095",
+      "WO-2026-00080",
+      "WO-2026-00065",
+      "WO-2026-00112",
+      "WO-2026-00107",
+      "WO-2026-00097",
+      "WO-2026-00092",
+      "WO-2026-00082",
+      "WO-2026-00067",
+      "WO-2026-00062",
+      "WO-2026-00052",
+      "SO-2026-00027",
+      "SO-2026-00192",
+      "SO-2026-00187",
+      "SO-2026-00053",
+      "SO-2026-00198",
+      "SO-2026-00164",
+      "SO-2026-00039"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00187",
+      "WO-2026-00186",
+      "WO-2026-00184",
+      "WO-2026-00182",
+      "WO-2026-00180",
+      "WO-2026-00178",
+      "WO-2026-00176",
+      "WO-2026-00174",
+      "WO-2026-00172",
+      "WO-2026-00170",
+      "WO-2026-00168",
+      "WO-2026-00166",
+      "WO-2026-00164",
+      "WO-2026-00162",
+      "WO-2026-00160",
+      "WO-2026-00158",
+      "WO-2026-00156",
+      "WO-2026-00154",
+      "WO-2026-00152",
+      "WO-2026-00150",
+      "WO-2026-00148",
+      "WO-2026-00146",
+      "WO-2026-00144",
+      "WO-2026-00142",
+      "WO-2026-00140",
+      "WO-2026-00138",
+      "WO-2026-00136",
+      "WO-2026-00134",
+      "WO-2026-00132",
+      "WO-2026-00130",
+      "WO-2026-00128",
+      "WO-2026-00126",
+      "WO-2026-00124",
+      "WO-2026-00110",
+      "WO-2026-00095",
+      "WO-2026-00080",
+      "WO-2026-00065",
+      "WO-2026-00112",
+      "WO-2026-00107",
+      "WO-2026-00097",
+      "WO-2026-00092",
+      "WO-2026-00082",
+      "WO-2026-00067",
+      "WO-2026-00062",
+      "WO-2026-00052"
+    ],
+    "blocked_sales_orders": [],
+    "customer_impact": "partly unknown: make-to-order without a linked sales order: WO-2026-00185, WO-2026-00187, WO-2026-00186, WO-2026-00184, WO-2026-00182, WO-2026-00180, WO-2026-00178, WO-2026-00176, WO-2026-00174, WO-2026-00172, WO-2026-00170, WO-2026-00168, WO-2026-00166, WO-2026-00164, WO-2026-00162, WO-2026-00160, WO-2026-00158, WO-2026-00156, WO-2026-00154, WO-2026-00152, WO-2026-00150, WO-2026-00148, WO-2026-00146, WO-2026-00144, WO-2026-00142, WO-2026-00140, WO-2026-00138, WO-2026-00136, WO-2026-00134, WO-2026-00132, WO-2026-00130, WO-2026-00128, WO-2026-00126, WO-2026-00124",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00185",
+        "new_start": "2026-10-21",
+        "new_end": "2026-10-28",
+        "outcome": "applied"
+      },
+      {
+        "number": "WO-2026-00186",
+        "new_start": "2026-10-29",
+        "new_end": "2026-11-01",
+        "outcome": "applied"
+      },
+      {
+        "number": "WO-2026-00187",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00184",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00182",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00180",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00178",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00176",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00174",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00172",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00170",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00168",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00166",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00164",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00162",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00160",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00158",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00156",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00154",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00152",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00150",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00148",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00146",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00144",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00142",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00140",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00138",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00136",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00134",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00132",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00130",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00128",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00126",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00124",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00110",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00112",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00107",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_approved"
+      },
+      {
+        "number": "WO-2026-00095",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00080",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00065",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00097",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00092",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00082",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_writable_by_seat"
+      },
+      {
+        "number": "WO-2026-00077",
+        "new_start": null,
+        "new_end": null,
+        "outcome": "not_writable_by_seat"
+      }
+    ],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "01935cb0-0d13-4339-ba6e-776971ae8e86",
+    "run_id": "aecf969f28a8"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 117.2,
+  "steps": 15,
+  "tokens": {
+    "prompt": 405717,
+    "completion": 4886,
+    "total": 410603
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "reschedule_fixture_chain"
+}

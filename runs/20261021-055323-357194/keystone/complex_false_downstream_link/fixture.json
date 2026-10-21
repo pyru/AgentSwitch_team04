@@ -1,0 +1,14 @@
+{
+  "target": {
+    "id": "c0b61e85-0a9b-4896-a5a7-c80eefda9e4c",
+    "number": "WO-2026-00004",
+    "status": "not_started",
+    "planned_end_date": "2026-08-15"
+  },
+  "unrelated": {
+    "id": "a0b971ee-f32f-4022-8fbe-22bc436e6acd",
+    "number": "WO-2026-00001",
+    "status": "not_started",
+    "planned_end_date": "2026-08-24"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "complex_longest_overdue_stopped",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "picked WO-2026-00047 (stopped, due 2026-02-25); causes match DB",
+  "sample": false,
+  "run_id": "e8ca322c46a6",
+  "seconds": 83.1,
+  "steps": 5,
+  "tokens": {
+    "prompt": 89162,
+    "completion": 2188,
+    "total": 91350
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}
