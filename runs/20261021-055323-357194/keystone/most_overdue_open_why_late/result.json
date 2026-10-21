@@ -1,0 +1,71 @@
+{
+  "run_id": "0a3a89591160",
+  "stop_reason": "final_answer",
+  "final_answer": "## Most overdue open work order: **WO-2026-00004**\nGrain Cart Ladder Guard Weldment, qty 80, status not_started \u2014 **67 days past due** (planned end 2026-08-15; today 2026-10-21). Currency: USD.\n\n### Why late\n`is_late = true`. **No blocking cause** \u2014 every signal came back blocking=false, so there is no hard stop with a missing ready date. The contributing signals:\n- **not_started_past_planned_start** \u2014 the order never started; planned start was 2026-06-12.\n- **operation_not_started** \u2014 it is stuck at the first operation, **JC-2026-00013, Laser Cut**, on **LASER-01 \u2014 6kW Fiber Laser**, waiting 131 days. The three later operations are also open and untouched: JC-2026-00014 (Form/Brake, BRAKE-02), JC-2026-00015 (Robotic Weld, WELD-03), JC-2026-00016 (Powder Coat, COAT-06).\n- **schedule_capacity_ceiling** on the routing workstation WS-2026-00001 (720 min ceiling).\n- **workstation_downtime_recorded** on the route: WELD-03 1,320 min (6 entries \u2014 2 breakdown, 2 tool change, 2 material shortage); BRAKE-02 480 min (2 operator_unavailable); COAT-06 300 min (2 setup_change); LASER-01 210 min (1 material_shortage, 1 quality_issue).\n\nNo projected finish date is recorded for this order.\n\n### What it blocks\n- **Recorded exposure (linked):** SO-2026-00003 for **Tri-State Farm Equipment**, delivery date 2026-06-09, value **$158,929.52**, status confirmed, undelivered. It is tied to this order directly via `sales_order_id`.\n- No downstream work orders were found (potential consumers list is empty), so there is no \"may be affected\" set to report.\n- Customer impact: **known**.\n\n### Rescheduling\nThe platform proposes **WO-2026-00004**: new start 2026-10-21, new end 2026-12-24 (reason: earliest start after known blockers; finish from finite schedule). **I cannot write this.** `writable_by_seat = false` \u2014 status 'not_started': dates are locked after submit, and changing them needs an admin cancel. No downstream orders were considered alongside it. This needs a person to action the admin cancel; I raised no escalation for it (none was assigned).\n\n### Not visible to me\nNothing \u2014 `not_visible_to_this_seat` was empty for both the diagnosis and the downstream walk.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00004",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00004",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "WS-2026-00001",
+      "SO-2026-00003",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00004",
+        "outcome": "not_writable_by_seat",
+        "new_start": null,
+        "new_end": null
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null,
+    "escalations": [
+      {
+        "raised": false,
+        "number": "WO-2026-00004",
+        "reason_code": "order_dates_locked",
+        "assignee": null
+      }
+    ]
+  },
+  "finding_record": {
+    "agent_memory_id": "23f81248-1e43-4499-afa5-5fc22c215bbd",
+    "run_id": "0a3a89591160"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 61.5,
+  "steps": 5,
+  "tokens": {
+    "prompt": 53596,
+    "completion": 1398,
+    "total": 54994
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "most_overdue_open_why_late"
+}

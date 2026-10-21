@@ -1,0 +1,50 @@
+{
+  "run_id": "20dca59fd7a7",
+  "stop_reason": "final_answer",
+  "final_answer": "## Where the shop floor is stuck (Keystone Precision Works LLC, USD)\n\n21 exception items in total, across four lanes. I can only see two of the four lanes clearly.\n\n**Quality blocks \u2014 14 items, all high severity, lane fully read**\nThe lane reports 14 quality reviews awaiting attention, but only **2 sit on open orders** \u2014 the rest are on orders that have already closed, so they are history, not where the floor is stuck now. The two live ones:\n- **QI-2026-00002** on **WO-2026-00002** (order not started, open)\n- **QI-2026-00003** on **WO-2026-00003** (order not started, open)\n\nThe page also shows **QI-2026-00005**, but it carries no work order link in what I read, so I can't tie it to an open order. The lane was not truncated, so 14 is the full count for this lane.\n\n**Subcontract blocks \u2014 7 items, all high severity, lane fully read**\nAll seven are high severity, but **none are on an open work order** (on_open_orders = 0). Named examples: **SCO-2026-00001**, **SCO-2026-00002**, **SCO-2026-00003**. Because none is linked to an open order, this lane is not holding up current floor work \u2014 it is a queue of subcontract reviews.\n\n**Shortages \u2014 unknown, not clear**\nThis lane came back **permission_denied**. I cannot see it, so I cannot tell you whether the floor is short of material. This is a real seat limit: StockEntry is outside this seat (REST 403).\n\n**Automation failures \u2014 unknown, not clear**\nAlso **permission_denied**. Same position: not visible, so not reportable as clear.\n\n**Not visible to me**\n- **StockEntry** \u2014 outside this seat (REST 403), which is why the shortages lane is unreadable.\n- **AgentJob** \u2014 the automation lane is likewise unread.\n\nAnything I gave you above is cited to record numbers. The two hidden lanes must be checked by someone with stock and automation visibility before anyone calls the floor clear.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": null,
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "QI-2026-00002",
+      "QI-2026-00003",
+      "QI-2026-00005",
+      "SCO-2026-00001",
+      "SCO-2026-00002",
+      "SCO-2026-00003"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00002",
+      "WO-2026-00003"
+    ],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [
+      "StockEntry",
+      "shortages: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)",
+      "automation_failures: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)"
+    ],
+    "refusal_reason": "Two of the four shop-floor lanes (shortages, automation_failures) are permission_denied to this seat, so the shop floor cannot be reported as fully clear."
+  },
+  "finding_record": {
+    "agent_memory_id": "5107dfa2-c5da-4ee6-975a-025be7cac31c",
+    "run_id": "20dca59fd7a7"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 34.4,
+  "steps": 4,
+  "tokens": {
+    "prompt": 25379,
+    "completion": 1046,
+    "total": 26425
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "bottleneck_lanes_reported"
+}

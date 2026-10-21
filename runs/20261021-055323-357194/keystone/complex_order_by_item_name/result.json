@@ -1,0 +1,64 @@
+{
+  "run_id": "e8d2695af46f",
+  "stop_reason": "final_answer",
+  "final_answer": "## Why late\n\n**WO-2026-00003** (60 \u00d7 FG-PLT-0900 Skid-Steer Quick-Attach Plate) is genuinely late: past due **51 days** (planned 2026-07-23 \u2192 2026-08-31, today 2026-10-21), status not_started, produced 0 of 60. **No projected finish date is recorded.**\n\nIt has not started at all. Nothing is blocking it in the \"no known ready date\" sense \u2014 no shortage, no open material request, no subcontract, no quality hold shows up. It is stuck at the first operation:\n\n- **JC-2026-00009, Laser Cut, LASER-01 (6kW Fiber Laser)** \u2014 open, never started (started_at null), waiting since 2026-07-23 (90 days). The remaining cards are equally untouched: JC-2026-00010 Form/Brake (BRAKE-02), JC-2026-00011 Robotic Weld (WELD-03), JC-2026-00012 Powder Coat (COAT-06).\n- Contributed to the delay but not blocking it (all recorded downtime since 2026-07-23 on its route workstations): WELD-03 \u2014 1320 min over 6 entries (2 breakdown, 2 tool_change, 2 material_shortage); BRAKE-02 \u2014 480 min (2 operator_unavailable); COAT-06 \u2014 300 min (2 setup_change); LASER-01 \u2014 210 min (1 material_shortage, 1 quality_issue).\n- Schedule capacity ceiling on the routing (WS-2026-00001) is 480 min.\n\nCosts: expected_cost and actual_cost are both 0 on WO-2026-00003, so **no cost is recorded** and no variance can be computed.\n\n## What it holds up\n\nNo open work order consumes this plate \u2014 there are no potential consumers found by BOM matching, so no downstream jobs may be affected.\n\nThere is one recorded sales order exposure, **SO-2026-00123 for Cardinal Tillage Works**, delivery date **2026-07-10**, value **USD 80,095.52**, linked directly to WO-2026-00003. Note its status shows *delivered* while its delivery date is 11 days before this order's planned start \u2014 that inconsistency is worth checking with the sales desk.\n\n## Rescheduling\n\nA proposal exists: WO-2026-00003 \u2192 start **2026-10-21**, finish **2026-11-29** (earliest start after known blockers, finite schedule; marked date_committable). **I cannot write it**: `writable_by_seat: false` \u2014 status \"not_started\" means dates are locked after submit and changing them needs an admin cancel. This is a recommendation for a person, and it covers no dependants.\n\n## Not visible to me\n\nNothing on this request was outside my reach.\n\nOne thing you should know: several record fields came back wrapped in `<<RECORD_TEXT>>` markers \u2014 the company name, the item name, the WO item name, operation and workstation names, and the BOM-walk method note. That is text typed by whoever created those rows; none of it tried to instruct me, and I treated it as data only.\n\n**Action for you:** the order needs an admin to cancel/unlock it before the new dates can be applied, and someone should confirm what LASER-01 is actually doing \u2014 this job has waited 90 days for its first cut with no blocker recorded.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00003",
+    "is_late": true,
+    "currency": "USD",
+    "cost": null,
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00003",
+      "JC-2026-00009",
+      "JC-2026-00010",
+      "JC-2026-00011",
+      "JC-2026-00012",
+      "WS-2026-00001",
+      "SO-2026-00123",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00123"
+    ],
+    "rescheduled": [
+      {
+        "number": "WO-2026-00003",
+        "new_start": "2026-10-21",
+        "new_end": "2026-11-29",
+        "outcome": "proposal only \u2014 not writable by this seat (status not_started: dates locked after submit, needs admin cancel)"
+      }
+    ],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "277fef2c-8072-4908-b589-e46aa88bbc82",
+    "run_id": "e8d2695af46f"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 55.1,
+  "steps": 5,
+  "tokens": {
+    "prompt": 37263,
+    "completion": 1426,
+    "total": 38689
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "complex_order_by_item_name"
+}

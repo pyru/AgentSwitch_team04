@@ -1,0 +1,17 @@
+{
+  "task_id": "cost_variance_wo28_suryodaya",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "variance -15235.32 INR matches DB",
+  "sample": false,
+  "run_id": "d4b16bcdb894",
+  "seconds": 41.8,
+  "steps": 3,
+  "tokens": {
+    "prompt": 19112,
+    "completion": 775,
+    "total": 19887
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

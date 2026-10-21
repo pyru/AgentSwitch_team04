@@ -1,0 +1,17 @@
+{
+  "task_id": "bottleneck_lanes_reported",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "cited a real blocked record (1 rejected inspections / 0 subcontracts on open orders); unreadable lanes ['automation_failures', 'shortages'] named as not visible",
+  "sample": false,
+  "run_id": "20dca59fd7a7",
+  "seconds": 34.4,
+  "steps": 4,
+  "tokens": {
+    "prompt": 25379,
+    "completion": 1046,
+    "total": 26425
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

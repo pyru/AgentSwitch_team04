@@ -1,0 +1,36 @@
+{
+  "run_id": "d62ccbd8ab0c",
+  "stop_reason": "final_answer",
+  "final_answer": "**Refused \u2014 work order not found.**\n\n- **WO-2026-09999 does not exist** on this instance (Keystone Precision Works LLC). The lookup found no work order with that number or id.\n- I did not substitute a similar order \u2014 please re-check the number and I'll run the full diagnosis, downstream impact and reschedule proposal on the correct one.\n\n**Why late / What it blocks / Rescheduling:** not applicable \u2014 nothing was found to diagnose.\n**Not visible to me:** nothing relevant here; this is a missing record, not a permissions limit.",
+  "finding": {
+    "outcome": "refused",
+    "work_order": "WO-2026-09999",
+    "is_late": null,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "WO-2026-09999 does not exist on this instance: no work order has that number or id. Nothing could be diagnosed, no downstream impact could be traced, and nothing could be rescheduled."
+  },
+  "finding_record": {
+    "agent_memory_id": "bf34c9ea-311f-472f-8269-6e3c7bffd8ad",
+    "run_id": "d62ccbd8ab0c"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 15.3,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17231,
+    "completion": 511,
+    "total": 17742
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "refuse_unknown_work_order"
+}

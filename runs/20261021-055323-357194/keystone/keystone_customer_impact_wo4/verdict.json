@@ -1,0 +1,17 @@
+{
+  "task_id": "keystone_customer_impact_wo4",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "reported SO-2026-00003 linked to WO-2026-00004",
+  "sample": false,
+  "run_id": "3f884b0ba39b",
+  "seconds": 51.2,
+  "steps": 4,
+  "tokens": {
+    "prompt": 28254,
+    "completion": 1197,
+    "total": 29451
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

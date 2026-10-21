@@ -1,0 +1,63 @@
+{
+  "run_id": "7645ab6094f0",
+  "stop_reason": "final_answer",
+  "final_answer": "# WO-2026-00003 \u2014 Skid-Steer Quick-Attach Plate (60 units)\n\nConfirmed late: **is_late = true**, **51 days past due** (planned end 2026-08-31, today 2026-10-21). Still `not_started`, 0 of 60 produced. No projected finish date is recorded.\n\n## Why it's late\nNo *blocking* cause is recorded \u2014 every signal is contributing. The order simply has not started:\n- **Never started, 90 days waiting** \u2014 JC-2026-00009 (Laser Cut, LASER-01 \u2014 6kW Fiber Laser) is still open, planned start 2026-07-23, no start time. All four operations (JC-2026-00009 Laser Cut, JC-2026-00010 Form/Brake, JC-2026-00011 Robotic Weld, JC-2026-00012 Powder Coat) are open at 0/60.\n- **Capacity ceiling on the routing** \u2014 WS-2026-00001 shows a 480-minute schedule capacity ceiling.\n- **Recorded downtime on every workstation in the route** since 2026-07-23: WELD-03 Robotic MIG Cell 1,320 min over 6 entries (2 breakdown, 2 tool_change, 2 material_shortage); BRAKE-02 480 min (2 operator_unavailable); COAT-06 300 min (2 setup_change); LASER-01 210 min (1 material_shortage, 1 quality_issue).\n\nNo material request, subcontract, stock or engineering-change signals were returned, and nothing is listed as not visible to this seat.\n\n## What it blocks\nCustomer impact is **known**. One sales order is linked directly on this work order: **SO-2026-00123 \u2014 Cardinal Tillage Works**, delivery date 2026-07-10, value **USD 80,095.52**, confidence \"linked\" (recorded exposure). It is already marked delivered, so this is a recorded exposure on the order, not a future shipment still waiting. No downstream work orders consume this output (no potential consumers found by BOM matching).\n\n## Rescheduling\nA proposal exists but **this seat cannot write it**:\n- New start 2026-10-21 \u2192 new end 2026-11-29 (earliest start after known blockers, finish from the finite schedule). The date is committable.\n- **writable_by_seat = false** \u2014 reason given: status `not_started`, dates are locked after submit; changing them needs an admin cancel.\n\nSo the dates above are a **recommendation for a person**, not an applied change. Someone with admin rights needs to cancel/resubmit the order to move the dates.\n\n## Not visible to me\nNothing \u2014 no entity was reported outside this seat's reach for this request.\n\nOne note for you as a planner: the record text on several rows (company name, item name, operation/workstation labels, the downstream method note) came wrapped in `<<RECORD_TEXT>>` markers, i.e. written by whoever created those rows. Nothing in it tried to direct me, but you should know the rows carry author-typed text.",
+  "finding": {
+    "work_order": "WO-2026-00003",
+    "is_late": true,
+    "currency": "USD",
+    "outcome": "partial",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00003",
+      "JC-2026-00009",
+      "JC-2026-00010",
+      "JC-2026-00011",
+      "JC-2026-00012",
+      "WS-2026-00001",
+      "SO-2026-00123",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00123"
+    ],
+    "customer_impact": "known",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00003",
+        "outcome": "not_writable",
+        "new_start": "2026-10-21",
+        "new_end": "2026-11-29"
+      }
+    ],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "02515d6e-86d0-41f7-8689-c190849e0206",
+    "run_id": "7645ab6094f0"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 53.2,
+  "steps": 4,
+  "tokens": {
+    "prompt": 29413,
+    "completion": 1292,
+    "total": 30705
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "keystone_why_late_wo3"
+}

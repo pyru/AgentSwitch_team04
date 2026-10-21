@@ -1,0 +1,45 @@
+{
+  "run_id": "c1b1397a2e32",
+  "stop_reason": "final_answer",
+  "final_answer": "## Shop load, next 21 days\n\n**Both load measures agree** \u2014 the capacity board and the work content in the same 149 open job cards give the same figure:\n\n- Board: **117.04%** load \u2014 129,772 booked minutes against 110,880 available minutes\n- Work content (time_in_mins \u00d7 for_qty, the platform's own OEE basis): **117.0%** \u2014 same 129,772 minutes\n- Board says 8 workstations / 8 periods overloaded\n\n**Yes, workstations are over declared capacity** on the work-content figure:\n\n| Workstation | Work content | Declared capacity | Times over |\n|---|---|---|---|\n| WS-2026-00009 \u2014 ASSY-01 Assembly & Final Inspection | 72,182 min | 30,240 min | 2.39\u00d7 |\n| WS-2026-00008 \u2014 WELD-01 Robotic MIG Cell | 17,920 min | 10,080 min | 1.78\u00d7 |\n| WS-2026-00005 \u2014 CNC-02 Haas VF-2 VMC | 15,980 min | 10,080 min | 1.59\u00d7 |\n\nAssembly is the real pinch point \u2014 more than twice its declared capacity, and it alone accounts for over half the shop's total work content. Any promise date that depends on ASSY-01 should be treated as soft until that queue is reduced or extra capacity is added.\n\nOne note on the data: the capacity basis and workstation names came back wrapped in `<<RECORD_TEXT>>` markers, i.e. they are text typed into the record rather than platform labels. The figures above are unaffected \u2014 that's just how the field text was stored.\n\n**Not visible to me:** nothing blocked this question \u2014 no capability limits hit, and no payroll or contact data was involved.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": null,
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [
+      "WS-2026-00009",
+      "WS-2026-00008",
+      "WS-2026-00005"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "capacity": {
+      "board_load_pct": 117.04,
+      "work_content_load_pct": 117.0,
+      "figures_disagree": false
+    }
+  },
+  "finding_record": {
+    "agent_memory_id": "0718c60f-07bc-4022-b0cb-a9cdf4223dc5",
+    "run_id": "c1b1397a2e32"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 28.9,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17797,
+    "completion": 730,
+    "total": 18527
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "capacity_load_disputed"
+}

@@ -1,0 +1,17 @@
+{
+  "task_id": "keystone_why_late_wo3",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "reported not_started_past_planned_start; no checked cause invented; no writes",
+  "sample": false,
+  "run_id": "7645ab6094f0",
+  "seconds": 53.2,
+  "steps": 4,
+  "tokens": {
+    "prompt": 29413,
+    "completion": 1292,
+    "total": 30705
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

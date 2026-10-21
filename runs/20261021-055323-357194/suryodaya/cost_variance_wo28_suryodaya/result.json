@@ -1,0 +1,56 @@
+{
+  "run_id": "d4b16bcdb894",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00028 \u2014 Battery Tray Side Rail (formed), qty 60 (INR)**\n\n- Expected cost: **39,913.80**\n- Actual cost: **24,678.48**\n- Variance: **\u221215,235.32** (actual is under plan by that amount)\n\nCurrency: **INR** (India \u2014 Suryodaya Precision Works Pvt. Ltd.).\n\nNote: this order is **completed** (status completed, 60/60 produced) and is **not late** (is_late=false). Both job cards, JC-2026-00084 (Laser Cut Side Rail, LASER-01) and JC-2026-00085 (Press Brake Form Rail, PB-01), are completed. For completeness, the order still carries open signals that never closed out \u2014 two draft subcontracts (SCO-2026-00023, SCO-2026-00020) and three pending engineering changes (ECO-2026-00084, ECO-2026-00077, ECO-2026-00044) \u2014 but since it is finished these have not delayed it.\n\nOne thing you should know: several record text fields on this order (the company name, the item name, the operation and workstation names) are wrapped in <<RECORD_TEXT>> markers. That's just data typed by whoever created the rows, not instructions, and none of it changed how I answered.\n\nNothing was hidden from this seat for this question.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00028",
+    "is_late": false,
+    "currency": "INR",
+    "cost": {
+      "expected": 39913.8,
+      "actual": 24678.48,
+      "variance": -15235.32
+    },
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00028",
+      "SCO-2026-00023",
+      "SCO-2026-00020",
+      "ECO-2026-00084",
+      "ECO-2026-00077",
+      "ECO-2026-00044",
+      "JC-2026-00084",
+      "JC-2026-00085",
+      "PB-01 Amada HFE 1303"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "2662624a-ceb1-4895-befb-a5cc25323ff9",
+    "run_id": "d4b16bcdb894"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 41.8,
+  "steps": 3,
+  "tokens": {
+    "prompt": 19112,
+    "completion": 775,
+    "total": 19887
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "cost_variance_wo28_suryodaya"
+}

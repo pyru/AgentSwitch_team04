@@ -1,0 +1,65 @@
+{
+  "run_id": "95df8f257efa",
+  "stop_reason": "final_answer",
+  "final_answer": "# WO-2026-00010 \u2014 where it's stuck and why\n\n**Where it is stuck**\n- Order: WO-2026-00010, \"Tillage Toolbar Mounting Plate, 22in\", qty 100, urgent, make-to-order. Planned 2026-07-25 \u2192 2026-08-22. Today is 2026-10-21, so it is **late by 60 days**, projected finish 2026-10-26 (65 days late).\n- Nothing has been produced (produced_qty 0). It is stuck at the **first operation**: job card **JC-2026-00035, \"Laser Cut\", at LASER-01 \u2014 6kW Fiber Laser**. It was never started (started_at is null) and has been waiting **88 days** past its 2026-07-25 planned start.\n- The three downstream cards on this route are all still open and also unstarted: **JC-2026-00036** Form/Brake at BRAKE-02, **JC-2026-00037** Robotic Weld at WELD-03, **JC-2026-00038** Powder Coat at COAT-06.\n\n**Why (contributing causes \u2014 none of these is a hard blocker)**\n- The order simply hasn't been started (`operation_not_started`, JC-2026-00035).\n- Downstream operations are gated by their predecessors (`schedule_predecessor_operation` on WS-2026-00002, WS-2026-00003, WS-2026-00006) \u2014 they can't begin until Laser Cut finishes.\n- Recorded downtime at every workstation on the route since 2026-07-23: WELD-03 1,320 min over 6 entries (2 breakdown, 2 tool change, 2 material shortage); BRAKE-02 480 min over 2 (operator unavailable); COAT-06 300 min over 2 (setup change); LASER-01 210 min over 2 (1 material shortage, 1 quality issue).\n- No blocking signal was raised \u2014 there is no material request, subcontract or stock signal holding it. The hold-up is that work at the first operation never began.\n- Cost: expected_cost and actual_cost are both 0.00 \u2014 **no cost has been recorded**, so no variance can be computed.\n\n**What it blocks**\n- The order's own sales order is exposed: **SO-2026-00001, Cardinal Tillage Works**, delivery date 2026-07-24, value **USD 320,011.20**, undelivered, confirmed, linked directly to this work order (`confidence: linked` \u2014 recorded exposure, not potential).\n- Downstream impact found **no open work orders** consuming this item via BOM matching \u2014 no potential consumers to report.\n- Customer impact: **known**.\n\n**Rescheduling**\n- Not run in this pass. If you want new dates, ask and I'll run propose_reschedule \u2014 note only proposals marked writable_by_seat can be written.\n\n**Not visible to me**\n- Nothing was flagged as outside this seat on the records I read. One caveat: on the shop-floor exceptions view, the **shortages** and **automation failures** lanes returned `permission_denied`, so those two lanes are **unknown, not clear** for the shop as a whole. The quality-blocks lane (14 items, 2 on open orders, e.g. QI-2026-00002, QI-2026-00003) and subcontract-blocks lane (7 items, none on open orders, e.g. SCO-2026-00001) were readable and are not related to this work order.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00010",
+    "is_late": true,
+    "currency": "USD",
+    "cost": null,
+    "blocking_causes": [],
+    "contributing_causes": [
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00010",
+      "JC-2026-00035",
+      "JC-2026-00036",
+      "JC-2026-00037",
+      "JC-2026-00038",
+      "WS-2026-00001",
+      "WS-2026-00002",
+      "WS-2026-00003",
+      "WS-2026-00006",
+      "SO-2026-00001",
+      "QI-2026-00002",
+      "QI-2026-00003",
+      "SCO-2026-00001",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00001"
+    ],
+    "customer_impact": "known",
+    "rescheduled": [],
+    "not_visible": [
+      "shortages: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)",
+      "automation_failures: permission_denied (the exception cockpit could not fill this lane, so it is unknown, not clear)"
+    ],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "fc707884-db0a-415d-85f3-bca309a992b1",
+    "run_id": "95df8f257efa"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 75.2,
+  "steps": 4,
+  "tokens": {
+    "prompt": 29519,
+    "completion": 1406,
+    "total": 30925
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "job_card_current_operation_keystone_wo10"
+}

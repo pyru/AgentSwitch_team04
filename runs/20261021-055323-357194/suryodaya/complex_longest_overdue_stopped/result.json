@@ -1,0 +1,85 @@
+{
+  "run_id": "33d3c872c83b",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00047** \u2014 Battery Tray Base Pan (formed), qty 120, make-to-stock. It is the longest overdue of the four \"stopped\" work orders: planned end 2026-02-25, **238 days past due** (today 2026-10-21). The others: WO-2026-00048 (237 days), WO-2026-00049 (235), WO-2026-00050 (232).\n\n## Why it's late\n**Blocking:**\n- **Subcontract not sent** \u2014 SCO-2026-00038 is still a draft with vendor Rajendra Naik; expected delivery 2026-03-03 has long passed. Nothing can move until it's released.\n\n**Contributing (not blocking):**\n- No work has started: it sits at operation 1, \"Laser Cut Blank\", on job card **JC-2026-00139** at workstation LASER-01 Trumpf TruLaser 3030 \u2014 open since its 2026-02-16 plan date, 247 days waiting, 0 of 120 done. JC-2026-00140 (Deburr) and JC-2026-00141 (Press Brake Form) are also open.\n- The order is stopped with **no recorded reason** on it.\n- Schedule capacity ceilings on WS-2026-00001 (720 min) and WS-2026-00009 (480 min), and a pending-subcontract flag on the schedule.\n- Recorded downtime touching the route: PB-02 Energy Mac 100T \u2014 202.21 min, reason *quality_issue* (2025-09-20 \u2192 2025-09-27); PB-01 Amada HFE 1303 \u2014 417.37 min over 2 entries, both *setup_change*, since 2026-07-23; ASSY-01 Assembly & Final Inspection \u2014 45 min, *tool_change*, since 2026-07-23.\n- No projected finish date exists for this order.\n\nCosts are recorded as 0 expected / 0 actual, so there is no cost variance to report.\n\n## What it blocks\ncustomer_impact is **known** \u2014 no sales order is linked to WO-2026-00047 itself, so there is no recorded exposure on it. Nine open work orders *may be affected* (BOM material match, potential only \u2014 stock or another order may cover them): WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00071, WO-2026-00056 (Battery Tray Weldment sub-assy) and, one level further, WO-2026-00106, WO-2026-00091, WO-2026-00076, WO-2026-00061 (EV Battery Tray Assembly 2400).\n\nPotential exposure through those consumers, all Bharat EV Motors Ltd: SO-2026-00021 (delivery 2026-08-18, INR 456,695.40), SO-2026-00171 (2026-07-12, INR 2,219,635.79), SO-2026-00151 (2026-06-10, INR 2,693,620.93), SO-2026-00050 (2026-09-16, INR 1,174,359.60 \u2014 already marked delivered).\n\n## Rescheduling\nI did not propose or write any new dates for this order in this run.\n\n## Not visible to me\nNothing was flagged as out of reach for this seat on these queries.\n\n**Note on record text:** the item and vendor labels on these rows (e.g. the item name text, vendor \"Rajendra Naik\", the WIP account name) are wrapped in record-text markers \u2014 free text typed by whoever created the rows. It read as plain naming here, no attempt to direct me; flagging it so you know which rows carry user-typed text.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00047",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00047",
+      "SCO-2026-00038",
+      "JC-2026-00139",
+      "JC-2026-00140",
+      "JC-2026-00141",
+      "WS-2026-00001",
+      "WS-2026-00009",
+      "PB-01 Amada HFE 1303",
+      "PB-02 Energy Mac 100T",
+      "ASSY-01 Assembly & Final Inspection",
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061",
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "rescheduled": [],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "4cb4bf3c-ea0d-470c-a57c-5d2bfb1b622a",
+    "run_id": "33d3c872c83b"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 107.5,
+  "steps": 5,
+  "tokens": {
+    "prompt": 86788,
+    "completion": 1801,
+    "total": 88589
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "complex_longest_overdue_stopped"
+}

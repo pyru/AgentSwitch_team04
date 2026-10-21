@@ -1,0 +1,85 @@
+{
+  "run_id": "b1f4c549bd24",
+  "stop_reason": "final_answer",
+  "final_answer": "## Most overdue open work order\n\n**WO-2026-00047** \u2014 Battery Tray Base Pan (formed), qty 120, make-to-stock, status *stopped*, planned end 2026-02-25, **238 days past due** (today 2026-10-21). Nothing produced yet (0 of 120).\n\n### Why it is late\n- **Blocking:** the subcontract has not been sent. **SCO-2026-00038** is still in *draft* (vendor Rajendra Naik, expected delivery 2026-03-03). Because that has no known ready date, the order cannot be given a committable finish date \u2014 `projected_finish` is null.\n- Contributing: the order is **stopped with no recorded reason**; it is stuck at operation 1, **Laser Cut Blank, JC-2026-00139** on LASER-01 Trumpf TruLaser 3030 \u2014 never started, 247 days waiting. The two later cards are also open and unstarted: **JC-2026-00140** (Deburr & Edge Break, ASSY-01) and **JC-2026-00141** (Press Brake Form Pan, PB-01).\n- Recorded downtime on the route: **PB-02 Energy Mac 100T**, quality_issue, 202.21 min (2025-09-20 \u2192 2025-09-27, \"Spring steel strip: line 314 at Aurangabad. Accepted on concession.\"); **PB-01 Amada HFE 1303**, 417.37 min across 2 setup_change entries since 2026-07-23; **ASSY-01**, 45 min, 1 tool_change entry. Schedule capacity ceilings are recorded on **WS-2026-00009** (480 min) and **WS-2026-00001** (720 min).\n- Cost: expected and actual are both 0 \u2014 no cost has been recorded, so no variance is computed.\n\n### What it blocks\nDownstream work orders are **potential** consumers found by BOM matching (they *may* be affected, not confirmed blocked): WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00071, WO-2026-00056 (all Battery Tray Weldment sub-assy), and one level further WO-2026-00106, WO-2026-00091, WO-2026-00076, WO-2026-00061 (EV Battery Tray Assembly 2400).\n\nSales orders reachable only through those potential consumers (potential exposure), all Bharat EV Motors Ltd:\n- SO-2026-00021 \u2014 due 2026-08-18, \u20b9456,695.40 (undelivered)\n- SO-2026-00171 \u2014 due 2026-07-12, \u20b92,219,635.79 (undelivered)\n- SO-2026-00151 \u2014 due 2026-06-10, \u20b92,693,620.93 (undelivered)\n- SO-2026-00050 \u2014 due 2026-09-16, \u20b91,174,359.60 (already delivered)\n\nWO-2026-00047 itself has no sales order linked (make-to-stock), so there is no directly-linked customer exposure.\n\n### Rescheduling\n**Nothing can be written.** For WO-2026-00047 the proposal gives `new_start`/`new_end` = null, reason \"blocked by an event with no known date\", `date_committable=false`, `writable_by_seat=false` (why: no committable date \u2014 subcontract_not_sent). The same applies to every dependant in the proposal (WO-2026-00116, WO-2026-00101, WO-2026-00086, WO-2026-00106, WO-2026-00091, WO-2026-00076) \u2014 all wait on it and none is writable.\n\nThis needs a person: someone must release/issue the draft subcontract SCO-2026-00038 (or confirm a real ready date) before any date can be committed. **No escalate tool is available to this seat** \u2014 I checked; only AgentEscalation.get/list are in the catalogue, so I could not raise an escalation. Please route this to whoever owns subcontract release.\n\n### Not visible to me\nNothing on this order was outside my reach \u2014 `not_visible_to_this_seat` is empty.\n\nOne note for you as a planner: several record fields carry `<<RECORD_TEXT>>...<</RECORD_TEXT>>` wrapper text (company name, item names, vendor name, work order and downtime remarks). I treated all of it as data only; none of it changed what I ran or reported.",
+  "finding": {
+    "outcome": "partial",
+    "work_order": "WO-2026-00047",
+    "is_late": true,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00047",
+      "SCO-2026-00038",
+      "JC-2026-00139",
+      "JC-2026-00140",
+      "JC-2026-00141",
+      "WS-2026-00009",
+      "WS-2026-00001",
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061",
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050",
+      "PB-02 Energy Mac 100T",
+      "PB-01 Amada HFE 1303",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "potentially_blocked_work_orders": [
+      "WO-2026-00116",
+      "WO-2026-00101",
+      "WO-2026-00086",
+      "WO-2026-00071",
+      "WO-2026-00056",
+      "WO-2026-00106",
+      "WO-2026-00091",
+      "WO-2026-00076",
+      "WO-2026-00061"
+    ],
+    "blocked_sales_orders": [
+      "SO-2026-00021",
+      "SO-2026-00171",
+      "SO-2026-00151",
+      "SO-2026-00050"
+    ],
+    "customer_impact": "known",
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "Reschedule not possible: WO-2026-00047 is blocked by an event with no known date (subcontract_not_sent), so no date is committable and writable_by_seat=false. No escalate tool is available to this seat."
+  },
+  "finding_record": {
+    "agent_memory_id": "847d9f14-dc0d-448b-a86e-1afe28bae691",
+    "run_id": "b1f4c549bd24"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 78.7,
+  "steps": 7,
+  "tokens": {
+    "prompt": 131706,
+    "completion": 2078,
+    "total": 133784
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "most_overdue_open_why_late"
+}

@@ -1,0 +1,61 @@
+{
+  "run_id": "8ed0bbe2ced2",
+  "stop_reason": "final_answer",
+  "final_answer": "**What it blocks (WO-2026-00048, Pump Mounting Bracket Assembly, qty 60, status stopped)**\n\nCustomer impact is recorded as **known**. The delay carries direct (linked) sales-order exposure:\n\n- **SO-2026-00092** \u2014 customer **Kirloskar Pumps Ltd**, delivery date **2026-03-07**, value **INR 494,476.64**, status confirmed, undelivered. Linked directly through WO-2026-00048's own sales order.\n\nNo downstream work orders came back as potential consumers (BOM reverse walk found none), so there are no \"may be affected\" orders to report \u2014 I'm not calling this a confirmed block beyond the linked sales order above. Note the platform's own method note says the WO\u2192WO links are potential consumers, not confirmed blocks; here there were simply none.\n\n**Not visible to me:** nothing was reported as outside this seat for this question.\n\nI did not diagnose the cause of the delay, since you asked specifically about downstream exposure \u2014 say the word if you want the \"why late\" breakdown too.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00048",
+    "is_late": null,
+    "currency": "INR",
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "SO-2026-00092",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "WS-2026-00009",
+      "JC-2026-00142",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection",
+      "ECO-2026-00064",
+      "ECO-2026-00012"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "rescheduled": [],
+    "customer_impact": "known",
+    "not_visible": [],
+    "refusal_reason": null
+  },
+  "finding_record": {
+    "agent_memory_id": "797e72ac-e8c7-4643-892a-26873ee7a66d",
+    "run_id": "8ed0bbe2ced2"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 51.0,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17923,
+    "completion": 601,
+    "total": 18524
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "blocks_wo48_sales_order"
+}

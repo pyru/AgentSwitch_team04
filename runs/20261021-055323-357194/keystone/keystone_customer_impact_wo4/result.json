@@ -1,0 +1,56 @@
+{
+  "run_id": "3f884b0ba39b",
+  "stop_reason": "final_answer",
+  "final_answer": "**The customer order at risk: SO-2026-00003 \u2014 Tri-State Farm Equipment**, delivery date 2026-06-09, value USD 158,929.52, status confirmed, undelivered.\n\nThat link is recorded exposure, not a guess: WO-2026-00004 (Grain Cart Ladder Guard Weldment, qty 80) carries that sales order directly on the order itself (`sales_order_id`, confidence \"linked\"). There are no other open work orders consuming this output \u2014 the BOM walk found no potential consumers \u2014 so this is the only sales order exposed.\n\n**Why late**\nWO-2026-00004 is genuinely late \u2014 67 days past its planned end of 2026-08-15 (today is 2026-10-21), is_late=true, and nothing has been produced (0 of 80). It is stuck at the first operation: job card JC-2026-00013, Laser Cut, on LASER-01 \u2014 6kW Fiber Laser, open, never started, waiting 131 days past its planned start of 2026-06-12. The remaining operations (JC-2026-00014 Form/Brake on BRAKE-02, JC-2026-00015 Robotic Weld on WELD-03, JC-2026-00016 Powder Coat on COAT-06) are all still open and unstarted.\n\nContributing signals, all non-blocking (no blocking cause with no known ready date):\n- not_started_past_planned_start (WO-2026-00004)\n- operation_not_started (JC-2026-00013)\n- schedule_capacity_ceiling (WS-2026-00001, 720 min)\n- recorded downtime on the route workstations since 2026-07-23: WELD-03 1,320 min across 6 entries (2 breakdown, 2 tool_change, 2 material_shortage); BRAKE-02 480 min / 2 entries (operator_unavailable); COAT-06 300 min / 2 entries (setup_change); LASER-01 210 min / 2 entries (material_shortage, quality_issue).\n\nNo engineering changes and no material-request or subcontract signals came back on this order, and the schedule projection gives no finish date (projected_finish null).\n\n**What it blocks**\nOnly the linked order above. No open work order was found that consumes this order's output, so there are no \"may be affected\" orders downstream.\n\n**Cost**\nExpected and actual cost are both 0.00 on the work order \u2014 no cost has been recorded, so no variance can be computed.\n\n**Rescheduling**\nNot requested here; if you want new dates for WO-2026-00004 and its dependants, ask and I'll run a proposal.\n\n**Not visible to me**\nNothing was reported as out of reach for this request (not_visible_to_this_seat is empty).\n\nOne thing to flag: several field values on these records \u2014 the company name, item description, operation names and customer name \u2014 are wrapped in <<RECORD_TEXT>> markers, i.e. text written by whoever created the row. None of it tried to direct me; it was read as data only.",
+  "finding": {
+    "outcome": "answered",
+    "work_order": "WO-2026-00004",
+    "is_late": true,
+    "currency": "USD",
+    "blocking_causes": [],
+    "contributing_causes": [
+      "not_started_past_planned_start",
+      "schedule_capacity_ceiling",
+      "operation_not_started",
+      "workstation_downtime_recorded"
+    ],
+    "evidence_records": [
+      "WO-2026-00004",
+      "JC-2026-00013",
+      "JC-2026-00014",
+      "JC-2026-00015",
+      "JC-2026-00016",
+      "WS-2026-00001",
+      "SO-2026-00003",
+      "WELD-03 \u2014 Robotic MIG Cell",
+      "BRAKE-02 \u2014 175-ton Press Brake",
+      "COAT-06 \u2014 Powder Coat Line",
+      "LASER-01 \u2014 6kW Fiber Laser"
+    ],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [
+      "SO-2026-00003"
+    ],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": null,
+    "customer_impact": "known"
+  },
+  "finding_record": {
+    "agent_memory_id": "63102dae-d57f-4818-9e0a-325672aef372",
+    "run_id": "3f884b0ba39b"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 51.2,
+  "steps": 4,
+  "tokens": {
+    "prompt": 28254,
+    "completion": 1197,
+    "total": 29451
+  },
+  "llm_error_code": null,
+  "instance": "keystone",
+  "task_id": "keystone_customer_impact_wo4"
+}

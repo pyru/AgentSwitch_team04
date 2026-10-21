@@ -1,0 +1,17 @@
+{
+  "task_id": "reschedule_fixture_chain",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "WO-2026-00185 2026-10-21..2026-10-28; WO-2026-00186 starts 2026-10-29; no other writes",
+  "sample": false,
+  "run_id": "aecf969f28a8",
+  "seconds": 117.2,
+  "steps": 15,
+  "tokens": {
+    "prompt": 405717,
+    "completion": 4886,
+    "total": 410603
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

@@ -1,0 +1,36 @@
+{
+  "run_id": "d2ec90013140",
+  "stop_reason": "final_answer",
+  "final_answer": "**Refused \u2014 that work order does not exist.**\n\nWO-2026-09999 is not found on this instance (Suryodaya Precision Works, currency INR). There is no work order with that number or id, so I cannot diagnose a cause, report downstream impact, or reschedule it.\n\n**Why late** \u2014 not answered: the order does not exist.\n**What it blocks** \u2014 not answered: the order does not exist.\n**Rescheduling** \u2014 not done: nothing to reschedule.\n\nI have deliberately not substituted a similar or \"closest\" order \u2014 if you mistyped the number, please check it and I'll pull the real one.",
+  "finding": {
+    "work_order": "WO-2026-09999",
+    "is_late": null,
+    "currency": "INR",
+    "outcome": "refused",
+    "blocking_causes": [],
+    "contributing_causes": [],
+    "evidence_records": [],
+    "potentially_blocked_work_orders": [],
+    "blocked_sales_orders": [],
+    "rescheduled": [],
+    "not_visible": [],
+    "refusal_reason": "WO-2026-09999 does not exist on this instance: no work order has that number or id. Refusing rather than substituting a similar order."
+  },
+  "finding_record": {
+    "agent_memory_id": "96f71b5d-1ad1-4d75-a501-9b093872a79a",
+    "run_id": "d2ec90013140"
+  },
+  "escalations": [],
+  "agent_session_id": null,
+  "conflicts": [],
+  "seconds": 14.3,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17228,
+    "completion": 516,
+    "total": 17744
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "refuse_unknown_work_order"
+}

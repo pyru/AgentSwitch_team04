@@ -1,0 +1,86 @@
+{
+  "run_id": "72a2043100e3",
+  "stop_reason": "final_answer",
+  "final_answer": "**WO-2026-00048 \u2014 Pump Mounting Bracket Assembly, qty 60, high priority, INR**\nLate: yes (is_late=true), 237 days past its 2026-02-26 planned end; projected finish 2026-10-29, 245 days late. Nothing has been produced (produced_qty 0).\n\n**Why late**\nBlocking causes (no known ready date for these):\n- **Subcontract not sent** \u2014 SCO-2026-00076 (vendor Supriya Rathi, expected 2026-03-19) and SCO-2026-00030 (Shreeji Powder Coating, expected 2025-08-12) are both still in **draft**, i.e. never released to the vendor.\n- **Engineering change pending** \u2014 ECO-2026-00064 (under_review, \"switch_to_new\") and ECO-2026-00012 (draft, \"continue_old\") are both open on this order.\n\nWhere it's stuck: all three operations are open and unstarted at workstation WS-2026-00009 (ASSY-01 Assembly & Final Inspection) \u2014 JC-2026-00142 Fastener Assembly (waiting 244 days, never started), JC-2026-00143 Leak/Torque Test, JC-2026-00144 Final Inspection & CMM.\n\nContributing signals: stopped without recorded reason on WO-2026-00048; schedule capacity ceiling on WS-2026-00009 (540 and 660 min); subcontract pending; predecessor operation; operation not started; downtime on the order at CNC-02 Haas VF-2 VMC (456.41 min, 2025-08-20 \u2192 2025-08-24, reason \"other\"); recorded 45 min tool_change stop at ASSY-01 since 2026-07-23.\n\nCost: expected_cost and actual_cost are both 0 \u2014 no cost has been recorded, so no variance is computed.\n\n**What it blocks**\nCustomer impact is recorded as \"known\". SO-2026-00092 (Kirloskar Pumps Ltd), delivery date 2026-03-07, value INR 494,476.64, undelivered \u2014 reached via the late order's own sales_order link, so this is recorded exposure, not a potential one. No downstream work orders were found as potential consumers.\n\n**Rescheduling**\nNone written. propose_reschedule returned writable_by_seat=false: \"no committable date: engineering_change_pending, subcontract_not_sent\". Both new_start and new_end are null. This needs a person \u2014 I've escalated once as **ESC-2026-00100** (open, assigned to Meera Kulkarni, due 2026-10-21) asking for the two draft subcontracts to be sent and the two ECOs to be progressed/closed so a date can be set.\n\n**Not visible to me**\nNothing in this request was outside my seat's reach \u2014 no entity needed is blocked.\n\nOne flag for you: two rows contain text addressed at this agent rather than plain data. The WO's item name field carries \"<<RECORD_TEXT>>Pump Mounting Bracket Assembly<</RECORD_TEXT>>\" and the ECO-2026-00064 title is \"Aluminium extrusion shortage on the v-block pair line\". I treated all of it as record text only, not as instruction.",
+  "finding": {
+    "blocked_sales_orders": [
+      "SO-2026-00092"
+    ],
+    "blocking_causes": [
+      "subcontract_not_sent",
+      "engineering_change_pending"
+    ],
+    "contributing_causes": [
+      "stopped_without_recorded_reason",
+      "schedule_capacity_ceiling",
+      "schedule_subcontract_pending",
+      "schedule_predecessor_operation",
+      "operation_not_started",
+      "downtime_on_order",
+      "workstation_downtime_recorded"
+    ],
+    "currency": "INR",
+    "customer_impact": "known",
+    "escalations": [
+      {
+        "assignee": "Meera Kulkarni",
+        "number": "ESC-2026-00100",
+        "raised": true,
+        "reason_code": "unresolved_after_retries"
+      }
+    ],
+    "evidence_records": [
+      "WO-2026-00048",
+      "JC-2026-00142",
+      "JC-2026-00143",
+      "JC-2026-00144",
+      "SCO-2026-00076",
+      "SCO-2026-00030",
+      "ECO-2026-00064",
+      "ECO-2026-00012",
+      "WS-2026-00009",
+      "SO-2026-00092",
+      "ESC-2026-00100",
+      "CNC-02 Haas VF-2 VMC",
+      "ASSY-01 Assembly & Final Inspection"
+    ],
+    "is_late": true,
+    "not_visible": [],
+    "outcome": "partial",
+    "potentially_blocked_work_orders": [],
+    "refusal_reason": "No reschedule could be written: propose_reschedule returned writable_by_seat=false with no committable date (engineering_change_pending, subcontract_not_sent). Escalated as ESC-2026-00100.",
+    "rescheduled": [
+      {
+        "number": "WO-2026-00048",
+        "outcome": "not_writable_no_committable_date"
+      }
+    ],
+    "work_order": "WO-2026-00048"
+  },
+  "finding_record": {
+    "agent_memory_id": "6845334d-482a-4149-9a84-f4d39b8e3ebf",
+    "run_id": "72a2043100e3"
+  },
+  "escalations": [
+    {
+      "raised": true,
+      "escalation_id": "cea14a9c-f32a-4393-8500-201507c6202f",
+      "number": "ESC-2026-00100",
+      "status": "open",
+      "assignee": "Meera Kulkarni",
+      "due_at": "2026-10-21T15:13:55.832708+00:00"
+    }
+  ],
+  "agent_session_id": "da8eb3ee-c7cb-43c8-a976-16ab8fec6b67",
+  "conflicts": [],
+  "seconds": 80.9,
+  "steps": 6,
+  "tokens": {
+    "prompt": 47739,
+    "completion": 2449,
+    "total": 50188
+  },
+  "llm_error_code": null,
+  "instance": "suryodaya",
+  "task_id": "escalate_blocked_wo48"
+}

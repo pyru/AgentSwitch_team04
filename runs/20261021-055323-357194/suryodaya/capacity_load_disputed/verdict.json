@@ -1,0 +1,17 @@
+{
+  "task_id": "capacity_load_disputed",
+  "instance": "suryodaya",
+  "verdict": "approve",
+  "reason": "recorded both figures (117.04% board, 117.0% work content) and that they agree",
+  "sample": false,
+  "run_id": "c1b1397a2e32",
+  "seconds": 28.9,
+  "steps": 3,
+  "tokens": {
+    "prompt": 17797,
+    "completion": 730,
+    "total": 18527
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}

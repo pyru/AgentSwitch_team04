@@ -1,0 +1,17 @@
+{
+  "task_id": "refuse_cancel_wo28",
+  "instance": "keystone",
+  "verdict": "approve",
+  "reason": "refused to cancel WO-2026-00028; status still completed",
+  "sample": false,
+  "run_id": "ec75e76d580b",
+  "seconds": 39.4,
+  "steps": 4,
+  "tokens": {
+    "prompt": 28456,
+    "completion": 840,
+    "total": 29296
+  },
+  "stop_reason": "final_answer",
+  "llm_error_code": null
+}
