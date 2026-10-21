@@ -515,6 +515,7 @@ class ProductionAgent:
         self._seen_calls: dict[tuple[str, str], int] = {}
         self._retried_reads: set[tuple[str, str]] = set()
         self._entity_status: dict[str, int | None] = {}  # REST status per entity named in not_visible, asked once
+        self._capacity: dict | None = None  # the last capacity_outlook result that read the board, for _capacity_from_tool
         self.requested_orders: set[str] = set()  # WO numbers named in the request, by _wo_key
         self.missing_orders: set[str] = set()  # refs a work-order tool reported as not found, by _order_key
         # Off by default so the bare loop still stops on the first final answer; the harness and the CLI turn it
@@ -937,6 +938,29 @@ class ProductionAgent:
                     "why": "no downstream_impact result for this order in this run, so no customer impact is on record"})
         return {k: v for k, v in args.items() if k != "customer_impact"}
 
+    def _capacity_from_tool(self, args: dict) -> dict:
+        """File the capacity field as capacity_outlook returned it, whenever this run read the board.
+
+        Platform-set rehearsal, 2026-10-21 (deepseek-v4.1-flash, Release 13): capacity_load_disputed scored revise
+        with "finding records no capacity block". capacity_outlook had returned both figures (board 117.04%, work
+        content 117.0%, agreeing), and the model gave them in its reply but left the field out of record_finding,
+        where alone they are graded. The figures are the tool's and the loop holds them, as it holds the customer
+        impact _impact_from_tool files; a figure typed differently is replaced by the tool's.
+        """
+        cap = self._capacity or {}
+        board, work = cap.get("board_reported") or {}, cap.get("work_content") or {}
+        if not all(isinstance(x.get("load_pct"), (int, float)) and not isinstance(x.get("load_pct"), bool)
+                   for x in (board, work)):
+            return args
+        truth = {"board_load_pct": board["load_pct"], "work_content_load_pct": work["load_pct"],
+                 "figures_disagree": bool(cap.get("board_understates_load"))}
+        given = args.get("capacity")
+        if isinstance(given, dict) and all(given.get(k) == v for k, v in truth.items()):
+            return args
+        self.trace({"type": "finding_corrected", "work_order": args.get("work_order"), "capacity_given": given,
+                    "capacity_recorded": truth, "why": "capacity filed as capacity_outlook returned it"})
+        return {**args, "capacity": {**(given if isinstance(given, dict) else {}), **truth}}
+
     def _learn_numbers(self, value, depth: int = 0) -> None:
         """Remember the number of every record a tool result gave beside its id, for _numbers_not_ids."""
         if depth > 8:  # tool results nest a few levels; a deeper one is not a record list
@@ -1161,7 +1185,10 @@ class ProductionAgent:
         if name == "downtime_summary":
             return domain.downtime_summary(self.mcp, args.get("days", 30), args.get("reason"))
         if name == "capacity_outlook":
-            return domain.capacity_outlook(self.mcp, args.get("horizon_days", 21))
+            result = domain.capacity_outlook(self.mcp, args.get("horizon_days", 21))
+            if isinstance(result, dict) and result.get("available"):
+                self._capacity = result
+            return result
         if name == "order_feasible_by":
             return domain.order_feasible_by(self.mcp, ref, args["due"])
         if name == "shop_floor_exceptions":
@@ -1279,6 +1306,7 @@ class ProductionAgent:
                 blame=("work_order",))
         args = self._reconcile_rescheduled(args)
         args = self._impact_from_tool(args)
+        args = self._capacity_from_tool(args)
         args = self._restore_causes(args)
         args = self._drop_unproduced_causes(args)
         args = self._cite_evidence(args)
