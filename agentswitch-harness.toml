@@ -2,6 +2,8 @@
 # It checks out the commit on the saved branch, runs `install` (internet allowed), then `run` once per instance
 # below against a fresh copy of that instance (writes are thrown away, no internet), and reads `results`.
 # One run per team every 3 days: check with `python scripts/check_results.py` before submitting.
+# A submission runs every instance below whichever server it is pressed on, so submit once per commit (round 3
+# review, 2026-10-19: our two submissions of 5016196 ran the same 8 tasks twice).
 # Each submission also has one LLM token budget shared by every instance (300k per run on the panel), so each
 # instance runs only its platform tasks ("platform": true, or a list naming the instances) with its own 148k share,
 # one task at a time.
